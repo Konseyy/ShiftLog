@@ -1,7 +1,8 @@
 import React, {useState, useEffect} from 'react';
-import {View, Text, Button } from 'react-native';
+import {View, Text, Button, FlatList } from 'react-native';
 import SimpleCircleButton from '../SimpleCircleButton';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import { useFocusEffect } from '@react-navigation/native';
 const ShiftList = ({navigation, route}) => {
   const [shiftList, setShiftList] = useState([]);
   const [lastUpdated, setLastUpdated] = useState(null);
@@ -18,30 +19,50 @@ const ShiftList = ({navigation, route}) => {
     });
     await AsyncStorage.setItem("savedShifts",JSONShifts);
   }
-  useEffect(()=>{
-    (async()=>{
-      const savedShiftsRetrieved = await AsyncStorage.getItem("savedShifts");
-      if(savedShiftsRetrieved){
-        const convertedShifts = JSON.parse(savedShiftsRetrieved);
-        setShiftList(convertedShifts.shifts);
-        const retrievedLastUpdated = new Date(convertedShifts.lastUpdated);
-        setLastUpdated(retrievedLastUpdated.toLocaleString());
-      }
-      else{
-        const defaultStorage = {
-          shifts:[],
-          lastUpdated: new Date().getTime(),
-        };
-        await AsyncStorage.setItem("savedShifts",JSON.stringify(defaultStorage));
-        setLastUpdated(new Date(defaultStorage.lastUpdated).toLocaleString());
-      }
-      await saveShiftLogStorage();
-    })();
-  },[]);
+  async function refreshFromStorage(){
+    const savedShiftsRetrieved = await AsyncStorage.getItem("savedShifts");
+    if(savedShiftsRetrieved){
+      const convertedShifts = JSON.parse(savedShiftsRetrieved);
+      setShiftList(convertedShifts.shifts);
+      const retrievedLastUpdated = new Date(convertedShifts.lastUpdated);
+      setLastUpdated(retrievedLastUpdated.toLocaleString());
+    }
+    else{
+      const defaultStorage = {
+        shifts:[],
+        lastUpdated: new Date().getTime(),
+      };
+      await AsyncStorage.setItem("savedShifts",JSON.stringify(defaultStorage));
+      setLastUpdated(new Date(defaultStorage.lastUpdated).toLocaleString());
+    }
+  }
+  async function clearData(){
+    const defaultStorage = {
+      shifts:[],
+      lastUpdated: new Date().getTime(),
+    };
+    await AsyncStorage.setItem("savedShifts",JSON.stringify(defaultStorage));
+    setLastUpdated(new Date(defaultStorage.lastUpdated).toLocaleString());
+    setShiftList(defaultStorage.shifts);
+  }
+  useEffect(() => { //Refresh every time load this scene
+    const unsubscribe = navigation.addListener('focus', () => {
+     refreshFromStorage();
+    });
+    return unsubscribe;
+  }, [navigation]);
   
   useEffect(()=>{
     console.log("currentinfo",shiftList,lastUpdated);
-  },[shiftList,lastUpdated])
+  },[shiftList,lastUpdated]);
+  function renderItem(item){
+    console.log("item is",item);
+    return(
+      <Text>
+        {item.item.notes}
+      </Text>
+    )
+  }
   return (
     <View
       style={{
@@ -50,7 +71,12 @@ const ShiftList = ({navigation, route}) => {
       }}>
       <View style={{flex: 1}}>
         <Text>Log last updated {lastUpdated}</Text>
-        <Button color={"#343434"} title="Add Shift" onPress={()=>addShift()}/>
+        <FlatList
+        data={shiftList}
+        renderItem={renderItem}
+        extraData={shiftList}
+        />
+        <Button title="delete data" onPress={()=>clearData()}/>
         <SimpleCircleButton
           style={{
             flex: 1,
@@ -62,9 +88,7 @@ const ShiftList = ({navigation, route}) => {
             backgroundColor: 'transparent',
           }}
           circleDiameter={55}
-          onPress={() => {
-            navigation.navigate('AddShift');
-          }}
+          onPress={() =>addShift()}
         />
       </View>
     </View>
