@@ -10,7 +10,7 @@ const ShiftList = ({navigation}) => {
       }}>
       <View style={{flex: 1}}>
         <Text>Home Screen</Text>
-        <Button title="Add Shift"  />
+        <Button title="Add Shift" onPress={()=>navigation.push('AddShift')}/>
         <SimpleCircleButton
           style={{
             flex: 1,
