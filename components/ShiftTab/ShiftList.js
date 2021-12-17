@@ -3,6 +3,7 @@ import {View, Text, Button, FlatList } from 'react-native';
 import SimpleCircleButton from '../SimpleCircleButton';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useFocusEffect } from '@react-navigation/native';
+import ShiftItem from './ShiftItem';
 const ShiftList = ({navigation, route}) => {
   const [shiftList, setShiftList] = useState([]);
   const [lastUpdated, setLastUpdated] = useState(null);
@@ -55,14 +56,6 @@ const ShiftList = ({navigation, route}) => {
   useEffect(()=>{
     console.log("currentinfo",shiftList,lastUpdated);
   },[shiftList,lastUpdated]);
-  function renderItem(item){
-    console.log("item is",item);
-    return(
-      <Text>
-        {item.item.notes}
-      </Text>
-    )
-  }
   return (
     <View
       style={{
@@ -70,10 +63,12 @@ const ShiftList = ({navigation, route}) => {
         justifyContent: 'flex-start',
       }}>
       <View style={{flex: 1}}>
-        <Text>Log last updated {lastUpdated}</Text>
+        {/* <Text>Log last updated {lastUpdated}</Text> */}
         <FlatList
         data={shiftList}
-        renderItem={renderItem}
+        renderItem={(item)=>{
+          return <ShiftItem item={item} navigation={navigation}/>;
+        }}
         extraData={shiftList}
         />
         <Button title="delete data" onPress={()=>clearData()}/>
