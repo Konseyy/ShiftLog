@@ -4,16 +4,17 @@ import DateTimePicker from '@react-native-community/datetimepicker';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const AddShift = ({navigation, route}) => {
-  const [startDate, setStartDate] = useState(new Date());
-  const [startTime, setStartTime] = useState(new Date());
-  const [endDate, setEndDate] = useState(new Date());
-  const [endTime, setEndDateTime] = useState(new Date());
+  const {params} = route;
+  const saveShift = params.saveShift;
+  const [startDate, setStartDate] = useState(params.current?new Date(params.current.startTime):new Date());
+  const [startTime, setStartTime] = useState(params.current?new Date(params.current.startTime):new Date());
+  const [endDate, setEndDate] = useState(params.current?new Date(params.current.endTime):new Date());
+  const [endTime, setEndDateTime] = useState(params.current?new Date(params.current.endTime):new Date());
   const [showStartDateSelect, setShowStartDateSelect] = useState(false);
   const [showStartTimeSelect, setShowStartTimeSelect] = useState(false);
   const [showEndDateSelect, setShowEndDateSelect] = useState(false);
   const [showEndTimeSelect, setShowEndTimeSelect] = useState(false);
-  const [notes,setNotes] = useState("");
-  const {params} = route;
+  const [notes,setNotes] = useState(params.current?params.current.notes:"");
   function stringDateFromDate(date){
     let year = date.getFullYear();
     let month = (date.getMonth()+1).toString();
@@ -50,23 +51,11 @@ const AddShift = ({navigation, route}) => {
     dateToAddStart.setHours(startTime.getHours(),startTime.getMinutes(),0,0);
     let dateToAddEnd = new Date(endDate);
     dateToAddEnd.setHours(endTime.getHours(),endTime.getMinutes(),0,0);
-    console.log("start",dateToAddStart);
-    console.log("emd",dateToAddEnd);
-    console.log("notes",notes);
-    const shiftLogsJson = await AsyncStorage.getItem("savedShifts");
-    if(shiftLogsJson){
-      const shiftLogs = JSON.parse(shiftLogsJson);
-      const shifts = shiftLogs.shifts;
-      shifts.push({
-        startTime:dateToAddStart.getTime(),
-        endTime: dateToAddEnd.getTime(),
-        notes: notes,
-      });
-      await AsyncStorage.setItem("savedShifts",JSON.stringify({
-        shifts: shifts,
-        lastUpdated: new Date().getTime(),
-      }))
-    }
+    await saveShift({
+      startTime:dateToAddStart.getTime(),
+      endTime: dateToAddEnd.getTime(),
+      notes: notes,
+    });
     navigation.navigate("ShiftList");
   }
   useEffect(()=>{
@@ -87,9 +76,9 @@ const AddShift = ({navigation, route}) => {
           </View>
           <View style={{paddingBottom:20}}>
             <Text>Additional notes</Text>
-            <TextInput style={{backgroundColor:"#FFFFFF"}} onChangeText={(txt)=>setNotes(txt)}/>
+            <TextInput defaultValue={notes} style={{backgroundColor:"#FFFFFF"}} onChangeText={(txt)=>setNotes(txt)}/>
           </View>
-          <Button title="Add Shift" onPress={()=>addShift()}/>
+          <Button title="Save" onPress={()=>addShift()}/>
           {showStartDateSelect&&<DateTimePicker mode="date" value={startDate} onChange={(e,s)=>onSelect(e,s,setStartDate,setShowStartDateSelect)}/>}
           {showStartTimeSelect&&<DateTimePicker mode="time" value={startTime} onChange={(e,s)=>onSelect(e,s,setStartTime,setShowStartTimeSelect)}/>}
           {showEndDateSelect&&<DateTimePicker mode="date" value={endDate} onChange={(e,s)=>onSelect(e,s,setEndDate,setShowEndDateSelect)}/>}

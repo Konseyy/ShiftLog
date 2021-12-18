@@ -11,20 +11,41 @@ const ShiftList = ({navigation, route}) => {
   useEffect(()=>{
     console.log("currentinfo",shiftList.length);
   },[shiftList,lastUpdated]);
+  function refresh()
+  {
+    setRefreshList(!refreshList);
+  }
   async function addShiftScene(){
     await saveShiftLogStorage();
     navigation.navigate('AddShift',{
-      shiftList: shiftList,
+      saveShift: async (shiftObject) =>{
+        shiftList.push(shiftObject);
+        await saveShiftLogStorage();
+        refresh();
+      }
     })
   }
   async function deleteShift(index){
     console.log("delete",index)
     shiftList.splice(index,1)
-    setRefreshList(!refreshList);
+    refresh();
     await saveShiftLogStorage();
   }
   async function editShift(index){
-    console.log("edit",index)
+    console.log("edit",index);
+    navigation.navigate('AddShift',{
+      saveShift: async (shiftObject) => {
+        let newList = shiftList;
+        newList[index]=shiftObject;
+        setShiftList(newList);
+        await saveShiftLogStorage();
+        refresh();
+      },
+      current: {
+        ...shiftList[index],
+        index:index
+      }
+    })
   }
   async function saveShiftLogStorage(){
     const JSONShifts = JSON.stringify({
