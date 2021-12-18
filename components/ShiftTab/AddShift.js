@@ -129,7 +129,7 @@ const AddShift = ({navigation, route}) => {
               <Text style={{fontWeight:"bold", alignSelf:"flex-start"}}>
                 Additional notes
               </Text>
-              <TextInput multiline={true} textAlignVertical="top" defaultValue={notes} style={{marginTop:10, backgroundColor:"#FFFFFF", alignSelf:"stretch"}} onChangeText={(txt)=>setNotes(txt)}/>
+              <TextInput multiline={true} textAlignVertical="top" defaultValue={notes} style={{marginTop:10, backgroundColor:"#FFFFFF", color:"#000000", alignSelf:"stretch"}} onChangeText={(txt)=>setNotes(txt)}/>
             </View>
           </View>
         </View>
