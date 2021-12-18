@@ -20,7 +20,7 @@ export const ShiftTab = [
         name:"ShiftList",
         component:ShiftList,
         options:{
-            title:"Shift overview"
+            title:"Archive"
         }
     },
     {
