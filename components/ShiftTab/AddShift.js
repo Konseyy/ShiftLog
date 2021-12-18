@@ -2,7 +2,9 @@ import React, { useEffect,useState } from "react";
 import { View, Text, Button, TextInput, TouchableOpacity, Alert } from "react-native";
 import { Picker } from '@react-native-picker/picker';
 import DateTimePicker from '@react-native-community/datetimepicker';
+import { stringDateFromDate, stringTimeFromDate } from "../../helperFunctions/dateFormatFunctions";
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import { softHaptic } from "../../helperFunctions/hapticFeedback";
 
 const AddShift = ({navigation, route}) => {
   const {params} = route;
@@ -17,22 +19,6 @@ const AddShift = ({navigation, route}) => {
   const [showEndTimeSelect, setShowEndTimeSelect] = useState(false);
   const [breakTime, setBreakTime] = useState(params.current?params.current.break:0);
   const [notes,setNotes] = useState(params.current?params.current.notes:"");
-  function stringDateFromDate(date){
-    let year = date.getFullYear();
-    let month = (date.getMonth()+1).toString();
-    if(month.length===1)month='0'+month;
-    let day = date.getDate().toString();
-    if(day.length===1)day='0'+day;
-    return year+"-"+month+"-"+day;
-  }
-  function stringTimeFromDate(date){
-    new Date().getMonth();
-    let hours = date.getHours().toString();
-    if(hours.length===1) hours="0"+hours;
-    let minutes = date.getMinutes().toString();
-    if(minutes.length===1) minutes="0"+minutes;
-    return hours+":"+minutes;
-  }
   function onSelect(event, selectedDate, dateSetter, modalSetter){
     modalSetter(false);
     if(!selectedDate){
@@ -77,12 +63,22 @@ const AddShift = ({navigation, route}) => {
               </Text>
               <View style={{flexDirection:"row", marginTop:10}}>
                 <View style={{flex:1}}/>
-                <TouchableOpacity style={{flex:2, alignItems:"center"}} onPress={()=>setShowStartDateSelect(true)}>
+                <TouchableOpacity 
+                style={{flex:2, alignItems:"center"}} 
+                onPress={()=>{
+                  softHaptic();
+                  setShowStartDateSelect(true);
+                }}>
                   <Text>
                     {stringDateFromDate(startDate)}
                   </Text>
                 </TouchableOpacity>
-                <TouchableOpacity style={{flex:2, alignItems:"center"}} onPress={()=>setShowStartTimeSelect(true)}>
+                <TouchableOpacity 
+                style={{flex:2, alignItems:"center"}} 
+                onPress={()=>{
+                  softHaptic();
+                  setShowStartTimeSelect(true);
+                }}>
                   <Text>
                     {stringTimeFromDate(startTime)}
                   </Text>
@@ -96,12 +92,22 @@ const AddShift = ({navigation, route}) => {
               </Text>
               <View style={{flexDirection:"row", marginTop:10}}>
                 <View style={{flex:1}}/>
-                <TouchableOpacity style={{flex:2, alignItems:"center"}} onPress={()=>setShowEndDateSelect(true)}>
+                <TouchableOpacity 
+                style={{flex:2, alignItems:"center"}} 
+                onPress={()=>{
+                  softHaptic();
+                  setShowEndDateSelect(true);
+                }}>
                   <Text>
                     {stringDateFromDate(endDate)}
                   </Text>
                 </TouchableOpacity>
-                <TouchableOpacity style={{flex:2, alignItems:"center"}} onPress={()=>setShowEndTimeSelect(true)}>
+                <TouchableOpacity 
+                style={{flex:2, alignItems:"center"}} 
+                onPress={()=>{
+                  softHaptic();
+                  setShowEndTimeSelect(true);
+                }}>
                   <Text>
                     {stringTimeFromDate(endTime)}
                   </Text>

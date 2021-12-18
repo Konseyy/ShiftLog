@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { Text, TouchableOpacity, View, Button } from "react-native";
+import { stringDateFromDate, stringTimeFromDate, differenceInMinutes, displayHoursAndMinutes } from "../../helperFunctions/dateFormatFunctions";
 import { softHaptic } from '../../helperFunctions/hapticFeedback';
 const ShiftItem = ({item,navigation,deleteShift,editShift}) => {
     const [expanded,setExpanded] = useState(false);
@@ -8,16 +9,8 @@ const ShiftItem = ({item,navigation,deleteShift,editShift}) => {
         return i;
     }
     function dateDifference(timeStamp1, timeStamp2){
-        const diffMinutes = (timeStamp2-timeStamp1)/1000/60-breakTime;
-        if(diffMinutes%60===0){
-            return `${diffMinutes/60}h`
-        }
-        else{
-            return `${(diffMinutes-diffMinutes%60)/60}h ${diffMinutes%60}min`
-        }
-    }
-    function dateToDateString(date){
-        return date.getFullYear()+"/"+(date.getMonth()+1)+"/"+date.getDate();
+        const diffMinutes = differenceInMinutes(timeStamp1,timeStamp2)-breakTime;
+        return displayHoursAndMinutes(diffMinutes);
     }
     function dateToTimeString(date){
         return addZero(date.getHours())+":"+addZero(date.getMinutes());
@@ -39,18 +32,18 @@ const ShiftItem = ({item,navigation,deleteShift,editShift}) => {
                 <View style={{flexDirection:"row"}}>
                     <View style={{flex:1, flexDirection:"column", alignItems:"center"}}>
                         <Text>
-                            {dateToTimeString(startDate)}
+                            {stringTimeFromDate(startDate)}
                         </Text>
                         <Text>
-                            {dateToDateString(startDate)}
+                            {stringDateFromDate(startDate,"/")}
                         </Text>
                     </View>
                     <View style={{flex:1, flexDirection:"column", alignItems:"center"}}>
                         <Text>
-                            {dateToTimeString(endDate)}
+                            {stringTimeFromDate(endDate)}
                         </Text>
                         <Text>
-                            {dateToDateString(endDate)}
+                            {stringDateFromDate(endDate,"/")}
                         </Text>
                     </View>
                     <View style={{flex:2, marginHorizontal:5, maxWidth:150, alignItems:"center"}}>

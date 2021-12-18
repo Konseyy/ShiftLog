@@ -37,7 +37,6 @@ const ShiftList = ({navigation, route}) => {
       {text:"Yes",onPress:async ()=>{
         shiftList.splice(index,1)
         await saveShiftLogStorage();
-        softHaptic();
         refresh();
       }},
       {text:"No"}
