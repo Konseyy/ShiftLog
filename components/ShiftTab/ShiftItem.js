@@ -60,24 +60,22 @@ const ShiftItem = ({item,navigation,deleteShift,editShift}) => {
                 <View style={{flex:2, marginHorizontal:25, marginVertical:10}}>
                     <View>
                         <Text>
-                            <Text style={{fontWeight:"bold"}}>Break time: </Text>
+                            <Text style={{fontWeight:"bold"}}>Break duration: </Text>
                             <Text>{breakTime}m</Text>
                         </Text>
                     </View>
-                    {ShiftData.notes?
                     <View style={{marginTop:5}}>
                         <Text style={{fontWeight:"bold"}}>
                             Additional notes:
                         </Text>
-                        <Text>
+                        {ShiftData.notes?<Text>
                             {ShiftData.notes}
                         </Text>
+                        :
+                        <Text style={{fontStyle:"italic"}}>
+                            No additional notes
+                        </Text>}
                     </View>
-                    :
-                    <Text style={{fontStyle:"italic"}}>
-                        No additional notes
-                    </Text>
-                    }
                 </View>
                 <View style={{flexDirection:"row"}}>
                     <View style={{flex:1}}>
