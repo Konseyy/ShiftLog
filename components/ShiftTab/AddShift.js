@@ -53,7 +53,12 @@ const AddShift = ({navigation, route}) => {
     if(params.current){
       navigation.setOptions({
         title:"Edit Shift"
-      })
+      });
+    }
+    else{
+      navigation.setOptions({
+        title:"Add new Shift"
+      });
     }
     console.log("params",params);
   },[]);

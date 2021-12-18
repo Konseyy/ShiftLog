@@ -25,10 +25,7 @@ export const ShiftTab = [
     },
     {
         name:"AddShift",
-        component:AddShift,
-        options:{
-            title:"Add new shift"
-        }
+        component:AddShift
     },
     
 ]
