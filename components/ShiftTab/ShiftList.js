@@ -2,6 +2,7 @@ import React, {useState, useEffect} from 'react';
 import {View, Text, Button, FlatList, Alert } from 'react-native';
 import SimpleCircleButton from '../SimpleCircleButton';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import { softHaptic } from '../../helperFunctions/hapticFeedback';
 import { useFocusEffect } from '@react-navigation/native';
 import ShiftItem from './ShiftItem';
 const ShiftList = ({navigation, route}) => {
@@ -17,23 +18,27 @@ const ShiftList = ({navigation, route}) => {
   }
   async function addShiftScene(){
     await saveShiftLogStorage();
+    softHaptic();
     navigation.navigate('AddShift',{
       saveShift: async (shiftObject) =>{
         shiftList.push(shiftObject);
         await saveShiftLogStorage();
+        softHaptic();
         refresh();
       }
     })
   }
   async function deleteShift(index){
-    console.log("delete",index)
+    console.log("delete",index);
+    softHaptic();
     Alert.alert("Delete Shift",
     "Are you sure you want to delete the selected shift?",
     [
       {text:"Yes",onPress:async ()=>{
         shiftList.splice(index,1)
-        refresh();
         await saveShiftLogStorage();
+        softHaptic();
+        refresh();
       }},
       {text:"No"}
     ])
@@ -41,12 +46,14 @@ const ShiftList = ({navigation, route}) => {
   }
   async function editShift(index){
     console.log("edit",index);
+    softHaptic();
     navigation.navigate('AddShift',{
       saveShift: async (shiftObject) => {
         let newList = shiftList;
         newList[index]=shiftObject;
         setShiftList(newList);
         await saveShiftLogStorage();
+        softHaptic();
         refresh();
       },
       current: {
