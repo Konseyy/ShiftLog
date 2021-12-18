@@ -1,5 +1,6 @@
 import React, { useEffect,useState } from "react";
-import { View, Text, Button, TextInput } from "react-native";
+import { View, Text, Button, TextInput, TouchableOpacity } from "react-native";
+import { Picker } from '@react-native-picker/picker';
 import DateTimePicker from '@react-native-community/datetimepicker';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
@@ -14,6 +15,7 @@ const AddShift = ({navigation, route}) => {
   const [showStartTimeSelect, setShowStartTimeSelect] = useState(false);
   const [showEndDateSelect, setShowEndDateSelect] = useState(false);
   const [showEndTimeSelect, setShowEndTimeSelect] = useState(false);
+  const [breakTime, setBreakTime] = useState(params.current?params.current.break:0);
   const [notes,setNotes] = useState(params.current?params.current.notes:"");
   function stringDateFromDate(date){
     let year = date.getFullYear();
@@ -54,6 +56,7 @@ const AddShift = ({navigation, route}) => {
     await saveShift({
       startTime:dateToAddStart.getTime(),
       endTime: dateToAddEnd.getTime(),
+      break: breakTime,
       notes: notes,
     });
     navigation.navigate("ShiftList");
@@ -61,29 +64,81 @@ const AddShift = ({navigation, route}) => {
   useEffect(()=>{
     console.log("parm",params);
   },[]);
-    return (
-        <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
-          <Text>Add Shift Screen</Text>
-            <Text>Start</Text>
-          <View style={{flexDirection:"row", paddingBottom:20}}>
-            <Button title={stringDateFromDate(startDate)} onPress={()=>setShowStartDateSelect(true)}/>
-            <Button title={stringTimeFromDate(startTime)} onPress={()=>setShowStartTimeSelect(true)}/>
+  return (
+    <>
+      <View style={{flexDirection:"column"}}>
+        <View style={{ flexDirection: "column", alignItems: 'center', justifyContent: 'center' }}>
+          <View style={{marginHorizontal:20, marginTop:15, alignSelf:"stretch"}}>
+            <View style={{flexDirection:"column"}}>
+              <Text style={{alignSelf:"center", fontWeight:"bold"}}>
+                Start of Shift
+              </Text>
+              <View style={{flexDirection:"row", marginTop:10}}>
+                <View style={{flex:1}}/>
+                <TouchableOpacity style={{flex:2, alignItems:"center"}} onPress={()=>setShowStartDateSelect(true)}>
+                  <Text>
+                    {stringDateFromDate(startDate)}
+                  </Text>
+                </TouchableOpacity>
+                <TouchableOpacity style={{flex:2, alignItems:"center"}} onPress={()=>setShowStartTimeSelect(true)}>
+                  <Text>
+                    {stringTimeFromDate(startTime)}
+                  </Text>
+                </TouchableOpacity>
+                <View style={{flex:1}}/>
+              </View>
+            </View>
+            <View style={{flexDirection:"column", marginVertical:10}}>
+              <Text style={{alignSelf:"center", fontWeight:"bold"}}>
+                End of Shift
+              </Text>
+              <View style={{flexDirection:"row", marginTop:10}}>
+                <View style={{flex:1}}/>
+                <TouchableOpacity style={{flex:2, alignItems:"center"}} onPress={()=>setShowEndDateSelect(true)}>
+                  <Text>
+                    {stringDateFromDate(endDate)}
+                  </Text>
+                </TouchableOpacity>
+                <TouchableOpacity style={{flex:2, alignItems:"center"}} onPress={()=>setShowEndTimeSelect(true)}>
+                  <Text>
+                    {stringTimeFromDate(endTime)}
+                  </Text>
+                </TouchableOpacity>
+                <View style={{flex:1}}/>
+              </View>
+            </View>
+            <View style={{flexDirection:"column", marginTop:10}}>
+              <Text style={{fontWeight:"bold", alignSelf:"center"}}>
+                Break Time
+              </Text>
+              <Picker
+              style={{backgroundColor:"white", marginTop:10}}
+              selectedValue={breakTime}
+              onValueChange={(value)=>setBreakTime(value)}
+              >
+                <Picker.Item label="0m" value={0}/>
+                <Picker.Item label="15m" value={15}/>
+                <Picker.Item label="30m" value={30}/>
+                <Picker.Item label="45m" value={45}/>
+                <Picker.Item label="60m" value={60}/>
+              </Picker>
+            </View>
           </View>
-            <Text>End</Text>
-          <View style={{flexDirection:"row", paddingBottom:20}}>
-            <Button title={stringDateFromDate(endDate)} onPress={()=>setShowEndDateSelect(true)}/>
-            <Button title={stringTimeFromDate(endTime)} onPress={()=>setShowEndTimeSelect(true)}/>
+          <View style={{marginTop:20, marginBottom:20, alignSelf:"stretch", flexDirection:"column", alignItems:"center"}}>
+            <Text style={{fontWeight:"bold"}}>
+              Additional notes
+            </Text>
+            <TextInput multiline={true} textAlignVertical="top" defaultValue={notes} style={{marginTop:10, backgroundColor:"#FFFFFF", width:"90%"}} onChangeText={(txt)=>setNotes(txt)}/>
           </View>
-          <View style={{paddingBottom:20}}>
-            <Text>Additional notes</Text>
-            <TextInput defaultValue={notes} style={{backgroundColor:"#FFFFFF"}} onChangeText={(txt)=>setNotes(txt)}/>
-          </View>
-          <Button title="Save" onPress={()=>addShift()}/>
-          {showStartDateSelect&&<DateTimePicker mode="date" value={startDate} onChange={(e,s)=>onSelect(e,s,setStartDate,setShowStartDateSelect)}/>}
-          {showStartTimeSelect&&<DateTimePicker mode="time" value={startTime} onChange={(e,s)=>onSelect(e,s,setStartTime,setShowStartTimeSelect)}/>}
-          {showEndDateSelect&&<DateTimePicker mode="date" value={endDate} onChange={(e,s)=>onSelect(e,s,setEndDate,setShowEndDateSelect)}/>}
-          {showEndTimeSelect&&<DateTimePicker mode="time" value={endTime} onChange={(e,s)=>onSelect(e,s,setEndDateTime,setShowEndTimeSelect)}/>}
         </View>
-    );
+      </View>
+      <Button title="Save" onPress={()=>addShift()}/>
+      {showStartDateSelect&&<DateTimePicker mode="date" value={startDate} onChange={(e,s)=>onSelect(e,s,setStartDate,setShowStartDateSelect)}/>}
+      {showStartTimeSelect&&<DateTimePicker mode="time" value={startTime} onChange={(e,s)=>onSelect(e,s,setStartTime,setShowStartTimeSelect)}/>}
+      {showEndDateSelect&&<DateTimePicker mode="date" value={endDate} onChange={(e,s)=>onSelect(e,s,setEndDate,setShowEndDateSelect)}/>}
+      {showEndTimeSelect&&<DateTimePicker mode="time" value={endTime} onChange={(e,s)=>onSelect(e,s,setEndDateTime,setShowEndTimeSelect)}/>}
+    </>
+      
+  );
 }
 export default AddShift;
