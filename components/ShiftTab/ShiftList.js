@@ -101,12 +101,12 @@ const ShiftList = ({navigation, route}) => {
       <View style={{flexDirection:"row", marginHorizontal:2, marginBottom:4, marginTop:6}}>
         <View style={{flex:1, alignItems:"center"}}>
           <Text style={{fontWeight:"bold"}}>
-            Start Time
+            Shift Start
           </Text>
         </View>
         <View style={{flex:1, alignItems:"center"}}>
           <Text style={{fontWeight:"bold"}}>
-            End Time
+            Shift End
           </Text>
         </View>
         <View style={{flex:2, alignItems:"center", maxWidth:150, marginHorizontal:5}}>

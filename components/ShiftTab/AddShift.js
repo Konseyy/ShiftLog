@@ -1,5 +1,5 @@
 import React, { useEffect,useState } from "react";
-import { View, Text, Button, TextInput, TouchableOpacity } from "react-native";
+import { View, Text, Button, TextInput, TouchableOpacity, Alert } from "react-native";
 import { Picker } from '@react-native-picker/picker';
 import DateTimePicker from '@react-native-community/datetimepicker';
 import AsyncStorage from '@react-native-async-storage/async-storage';
@@ -40,19 +40,21 @@ const AddShift = ({navigation, route}) => {
     }
     dateSetter(selectedDate);
   }
-  function dateCheck(){
-    //TODO
-    return true;
+  function dateCheck(start, end){
+    return end>start;
   }
   async function addShift(){
-    if(!dateCheck()){
-      //TODO show alert
-      return;
-    }
     let dateToAddStart = new Date(startDate);
     dateToAddStart.setHours(startTime.getHours(),startTime.getMinutes(),0,0);
     let dateToAddEnd = new Date(endDate);
     dateToAddEnd.setHours(endTime.getHours(),endTime.getMinutes(),0,0);
+    if(!dateCheck(dateToAddStart,dateToAddEnd)){
+      Alert.alert(
+        "Invalid Dates",
+        "Shift end time must be greater than shift start time"
+      );
+      return;
+    }
     await saveShift({
       startTime:dateToAddStart.getTime(),
       endTime: dateToAddEnd.getTime(),
@@ -108,7 +110,7 @@ const AddShift = ({navigation, route}) => {
               </View>
             </View>
             <View style={{flexDirection:"column", marginTop:10}}>
-              <Text style={{fontWeight:"bold", alignSelf:"center"}}>
+              <Text style={{fontWeight:"bold"}}>
                 Break Time
               </Text>
               <Picker
@@ -123,12 +125,12 @@ const AddShift = ({navigation, route}) => {
                 <Picker.Item label="60m" value={60}/>
               </Picker>
             </View>
-          </View>
-          <View style={{marginTop:20, marginBottom:20, alignSelf:"stretch", flexDirection:"column", alignItems:"center"}}>
-            <Text style={{fontWeight:"bold"}}>
-              Additional notes
-            </Text>
-            <TextInput multiline={true} textAlignVertical="top" defaultValue={notes} style={{marginTop:10, backgroundColor:"#FFFFFF", width:"90%"}} onChangeText={(txt)=>setNotes(txt)}/>
+            <View style={{marginTop:20, marginBottom:20, alignSelf:"stretch", flexDirection:"column", alignItems:"center"}}>
+              <Text style={{fontWeight:"bold", alignSelf:"flex-start"}}>
+                Additional notes
+              </Text>
+              <TextInput multiline={true} textAlignVertical="top" defaultValue={notes} style={{marginTop:10, backgroundColor:"#FFFFFF", alignSelf:"stretch"}} onChangeText={(txt)=>setNotes(txt)}/>
+            </View>
           </View>
         </View>
       </View>
