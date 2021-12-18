@@ -1,5 +1,5 @@
 import React, {useState, useEffect} from 'react';
-import {View, Text, Button, FlatList } from 'react-native';
+import {View, Text, Button, FlatList, Alert } from 'react-native';
 import SimpleCircleButton from '../SimpleCircleButton';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useFocusEffect } from '@react-navigation/native';
@@ -27,9 +27,17 @@ const ShiftList = ({navigation, route}) => {
   }
   async function deleteShift(index){
     console.log("delete",index)
-    shiftList.splice(index,1)
-    refresh();
-    await saveShiftLogStorage();
+    Alert.alert("Delete Shift",
+    "Are you sure you want to delete the selected shift?",
+    [
+      {text:"Yes",onPress:async ()=>{
+        shiftList.splice(index,1)
+        refresh();
+        await saveShiftLogStorage();
+      }},
+      {text:"No"}
+    ])
+    
   }
   async function editShift(index){
     console.log("edit",index);
@@ -90,7 +98,7 @@ const ShiftList = ({navigation, route}) => {
   
   const listHeader = () => {
     return(
-      <View style={{flexDirection:"row", marginHorizontal:2, marginBottom:4}}>
+      <View style={{flexDirection:"row", marginHorizontal:2, marginBottom:4, marginTop:6}}>
         <View style={{flex:1, alignItems:"center"}}>
           <Text style={{fontWeight:"bold"}}>
             Start Time

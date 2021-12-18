@@ -23,7 +23,7 @@ const ShiftItem = ({item,navigation,deleteShift,editShift}) => {
     const startDate = new Date(ShiftData.startTime);
     const endDate = new Date(ShiftData.endTime);
     return(
-        <TouchableOpacity style={{marginHorizontal:2, marginTop:5}} onPress={()=>setExpanded(!expanded)}>
+        <TouchableOpacity style={{marginHorizontal:2, paddingTop:5}} onPress={()=>setExpanded(!expanded)}>
             <View style={{flexDirection:"column"}}>
                 <View style={{flexDirection:"row"}}>
                     <View style={{flex:1, flexDirection:"column", alignItems:"center"}}>
