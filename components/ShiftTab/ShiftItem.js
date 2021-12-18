@@ -57,7 +57,7 @@ const ShiftItem = ({item,navigation,deleteShift,editShift}) => {
                         </Text>
                         :
                         <Text style={{fontStyle:"italic"}}>
-                            No description
+                            No additional notes
                         </Text>
                         }
                 </View>
