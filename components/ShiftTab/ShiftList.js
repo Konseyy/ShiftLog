@@ -54,7 +54,7 @@ const ShiftList = ({navigation, route}) => {
   }, [navigation]);
   
   useEffect(()=>{
-    console.log("currentinfo",shiftList,lastUpdated);
+    console.log("currentinfo",shiftList);
   },[shiftList,lastUpdated]);
   return (
     <View
@@ -65,6 +65,25 @@ const ShiftList = ({navigation, route}) => {
       <View style={{flex: 1}}>
         {/* <Text>Log last updated {lastUpdated}</Text> */}
         <FlatList
+        ListHeaderComponent={
+          <View style={{flexDirection:"row", marginHorizontal:2, marginBottom:4}}>
+            <View style={{flex:1, alignItems:"center"}}>
+              <Text style={{fontWeight:"bold"}}>
+                Start Time
+              </Text>
+            </View>
+            <View style={{flex:1, alignItems:"center"}}>
+              <Text style={{fontWeight:"bold"}}>
+                End Time
+              </Text>
+            </View>
+            <View style={{flex:2, alignItems:"center", maxWidth:150, marginHorizontal:5}}>
+              <Text style={{fontWeight:"bold"}}>
+                Duration
+              </Text>
+            </View>
+          </View>
+        }
         data={shiftList}
         renderItem={(item)=>{
           return <ShiftItem item={item} navigation={navigation}/>;
