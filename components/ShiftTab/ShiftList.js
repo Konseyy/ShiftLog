@@ -80,13 +80,20 @@ const ShiftList = ({navigation, route}) => {
     }
   }
   async function clearData(){
-    const defaultStorage = {
-      shifts:[],
-      lastUpdated: new Date().getTime(),
-    };
-    await AsyncStorage.setItem("savedShifts",JSON.stringify(defaultStorage));
-    setLastUpdated(new Date(defaultStorage.lastUpdated).toLocaleString());
-    setShiftList(defaultStorage.shifts);
+    Alert.alert("Clear all shifts",
+    "Are you sure you want to delete all shifts?",
+    [
+      {text:"Yes",onPress:async ()=>{
+        const defaultStorage = {
+          shifts:[],
+          lastUpdated: new Date().getTime(),
+        };
+        await AsyncStorage.setItem("savedShifts",JSON.stringify(defaultStorage));
+        setLastUpdated(new Date(defaultStorage.lastUpdated).toLocaleString());
+        setShiftList(defaultStorage.shifts);
+      }},
+      {text:"No"}
+    ])
   }
   useEffect(() => { //Refresh every time load this scene
     const unsubscribe = navigation.addListener('focus', () => {
