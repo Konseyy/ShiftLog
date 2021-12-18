@@ -7,11 +7,24 @@ import ShiftItem from './ShiftItem';
 const ShiftList = ({navigation, route}) => {
   const [shiftList, setShiftList] = useState([]);
   const [lastUpdated, setLastUpdated] = useState(null);
-  async function addShift(){
+  const [refreshList, setRefreshList] = useState(false);
+  useEffect(()=>{
+    console.log("currentinfo",shiftList.length);
+  },[shiftList,lastUpdated]);
+  async function addShiftScene(){
     await saveShiftLogStorage();
     navigation.navigate('AddShift',{
       shiftList: shiftList,
     })
+  }
+  async function deleteShift(index){
+    console.log("delete",index)
+    shiftList.splice(index,1)
+    setRefreshList(!refreshList);
+    await saveShiftLogStorage();
+  }
+  async function editShift(index){
+    console.log("edit",index)
   }
   async function saveShiftLogStorage(){
     const JSONShifts = JSON.stringify({
@@ -53,9 +66,28 @@ const ShiftList = ({navigation, route}) => {
     return unsubscribe;
   }, [navigation]);
   
-  useEffect(()=>{
-    console.log("currentinfo",shiftList);
-  },[shiftList,lastUpdated]);
+  
+  const listHeader = () => {
+    return(
+      <View style={{flexDirection:"row", marginHorizontal:2, marginBottom:4}}>
+        <View style={{flex:1, alignItems:"center"}}>
+          <Text style={{fontWeight:"bold"}}>
+            Start Time
+          </Text>
+        </View>
+        <View style={{flex:1, alignItems:"center"}}>
+          <Text style={{fontWeight:"bold"}}>
+            End Time
+          </Text>
+        </View>
+        <View style={{flex:2, alignItems:"center", maxWidth:150, marginHorizontal:5}}>
+          <Text style={{fontWeight:"bold"}}>
+            Duration
+          </Text>
+        </View>
+      </View>
+    )
+  }
   return (
     <View
       style={{
@@ -65,30 +97,15 @@ const ShiftList = ({navigation, route}) => {
       <View style={{flex: 1}}>
         {/* <Text>Log last updated {lastUpdated}</Text> */}
         <FlatList
-        ListHeaderComponent={
-          <View style={{flexDirection:"row", marginHorizontal:2, marginBottom:4}}>
-            <View style={{flex:1, alignItems:"center"}}>
-              <Text style={{fontWeight:"bold"}}>
-                Start Time
-              </Text>
-            </View>
-            <View style={{flex:1, alignItems:"center"}}>
-              <Text style={{fontWeight:"bold"}}>
-                End Time
-              </Text>
-            </View>
-            <View style={{flex:2, alignItems:"center", maxWidth:150, marginHorizontal:5}}>
-              <Text style={{fontWeight:"bold"}}>
-                Duration
-              </Text>
-            </View>
-          </View>
-        }
+        ListHeaderComponent={listHeader}
         data={shiftList}
         renderItem={(item)=>{
-          return <ShiftItem item={item} navigation={navigation}/>;
+          return <ShiftItem item={item} navigation={navigation} deleteShift={deleteShift} editShift={editShift}/>;
         }}
-        extraData={shiftList}
+        keyExtractor={(item,index)=>{
+          return item.endTime.toString()+item.startTime.toString()+item.notes;
+        }}
+        extraData={refreshList}
         />
         <Button title="delete data" onPress={()=>clearData()}/>
         <SimpleCircleButton
@@ -102,7 +119,7 @@ const ShiftList = ({navigation, route}) => {
             backgroundColor: 'transparent',
           }}
           circleDiameter={55}
-          onPress={() =>addShift()}
+          onPress={() =>addShiftScene()}
         />
       </View>
     </View>
