@@ -50,7 +50,12 @@ const AddShift = ({navigation, route}) => {
     navigation.navigate("ShiftList");
   }
   useEffect(()=>{
-    console.log("parm",params);
+    if(params.current){
+      navigation.setOptions({
+        title:"Edit Shift"
+      })
+    }
+    console.log("params",params);
   },[]);
   return (
     <>
