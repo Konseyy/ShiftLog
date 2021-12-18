@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { Text, TouchableOpacity, View, Button } from "react-native";
+import { softHaptic } from '../../helperFunctions/hapticFeedback';
 const ShiftItem = ({item,navigation,deleteShift,editShift}) => {
     const [expanded,setExpanded] = useState(false);
     function addZero(i) {
@@ -31,6 +32,7 @@ const ShiftItem = ({item,navigation,deleteShift,editShift}) => {
     const breakTime = ShiftData.break??0;
     return(
         <TouchableOpacity style={{marginHorizontal:2, paddingTop:5}} onPress={()=>{
+            softHaptic();
             setExpanded(!expanded);
             }}>
             <View style={{flexDirection:"column"}}>
