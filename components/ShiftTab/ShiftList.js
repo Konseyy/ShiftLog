@@ -10,7 +10,7 @@ const ShiftList = ({navigation, route}) => {
   const [lastUpdated, setLastUpdated] = useState(null);
   const [refreshList, setRefreshList] = useState(false);
   useEffect(()=>{
-    console.log("currentinfo",shiftList.length);
+    console.log("length of shift list",shiftList.length);
   },[shiftList,lastUpdated]);
   function refresh()
   {
@@ -29,7 +29,6 @@ const ShiftList = ({navigation, route}) => {
     })
   }
   async function deleteShift(index){
-    console.log("delete",index);
     softHaptic();
     Alert.alert("Delete Shift",
     "Are you sure you want to delete the selected shift?",
@@ -44,7 +43,6 @@ const ShiftList = ({navigation, route}) => {
     
   }
   async function editShift(index){
-    console.log("edit",index);
     softHaptic();
     navigation.navigate('AddShift',{
       saveShift: async (shiftObject) => {

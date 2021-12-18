@@ -4,7 +4,10 @@ import { NavigationContainer } from '@react-navigation/native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import FooterNav from './components/NavBar';
 import {tabs} from './scenes';
-
+import { LogBox } from 'react-native';
+LogBox.ignoreLogs([
+  'Non-serializable values were found in the navigation state',
+]);
 const Tab = createBottomTabNavigator();
 
 const App = () => {
