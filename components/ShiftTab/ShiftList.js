@@ -11,14 +11,14 @@ const ShiftList = ({navigation, route}) => {
   const [shiftList, setShiftList] = useState([]);
   const [lastUpdated, setLastUpdated] = useState(null);
   const [refreshList, setRefreshList] = useState(false);
-  const [currentFilter, setCurrentFilter] = useState("all");
+  const [currentFilter, setCurrentFilter] = useState("week");
   const [minutesInInterval, setMinutesInInterval] = useState();
   const [loading, setLoading] = useState(true);
   const [sorter, setSorter] = useState("start");
   const [sortingDirection, setSortingDirection] = useState("descending");
-  useEffect(()=>{
-    console.log("length of shift list",shiftList.length);
-  },[shiftList,lastUpdated]);
+  // useEffect(()=>{
+  //   console.log("length of shift list",shiftList.length);
+  // },[shiftList,lastUpdated]);
   function refresh()
   {
     setRefreshList(!refreshList);
