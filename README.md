@@ -3,6 +3,7 @@ Mobile application made with [React Native](https://reactnative.dev/) for tracki
 ## Download
 Not yet available on any app stores (coming later)
 # Repository installation
+## [Set up](https://reactnative.dev/docs/environment-setup) the react native environment
 ## Clone the repository
 ```git clone https://github.com/Konseyy/ShiftLog.git```
 ## Install npm packages
