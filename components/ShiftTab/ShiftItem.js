@@ -17,7 +17,6 @@ const ShiftItem = ({item,navigation,deleteShift,editShift}) => {
     }
     useEffect(()=>{
         console.log("current item is",item);
-        console.log("navigation is",navigation)
     },[])
     const ShiftData = item.item;
     const startDate = new Date(ShiftData.startTime);
