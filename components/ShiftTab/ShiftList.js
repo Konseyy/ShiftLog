@@ -1,6 +1,5 @@
 import React, {useState, useEffect, useMemo} from 'react';
 import {View, Text, Button, FlatList, Alert, TouchableOpacity } from 'react-native';
-import SimpleCircleButton from '../SimpleCircleButton';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { softHaptic } from '../../helperFunctions/hapticFeedback';
 import { getShiftDurationInMinutes, displayHoursAndMinutes } from '../../helperFunctions/dateFormatFunctions';
