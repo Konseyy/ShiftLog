@@ -27,3 +27,6 @@ export const displayHoursAndMinutes = (minutes) => {
         return `${(minutes-minutes%60)/60}h ${minutes%60}min`
     }
 }
+export const getShiftDurationInMinutes = (shiftObject) => {
+    return differenceInMinutes(shiftObject.startTime,shiftObject.endTime)-shiftObject.break;
+}
