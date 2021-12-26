@@ -12,11 +12,8 @@ const ShiftItem = ({item,navigation,deleteShift,editShift}) => {
         const diffMinutes = differenceInMinutes(timeStamp1,timeStamp2)-breakTime;
         return displayHoursAndMinutes(diffMinutes);
     }
-    function dateToTimeString(date){
-        return addZero(date.getHours())+":"+addZero(date.getMinutes());
-    }
     useEffect(()=>{
-        console.log("current item is",item);
+        // console.log("current item is",item);
     },[])
     const ShiftData = item.item;
     const startDate = new Date(ShiftData.startTime);
@@ -45,10 +42,13 @@ const ShiftItem = ({item,navigation,deleteShift,editShift}) => {
                             {stringDateFromDate(endDate,"/")}
                         </Text>
                     </View>
-                    <View style={{flex:2, marginHorizontal:5, maxWidth:150, alignItems:"center"}}>
-                        <Text>
-                            {dateDifference(ShiftData.startTime,ShiftData.endTime)}
-                        </Text>
+                    <View style={{flex:2, marginHorizontal:5,maxWidth:150, flexDirection:"row"}}>
+                        <View style={{flex:1}}/>
+                        <View style={{flex:2}}>
+                            <Text>
+                                {dateDifference(ShiftData.startTime,ShiftData.endTime)}
+                            </Text>
+                        </View>
                     </View>
                 </View>
                 {expanded&&
