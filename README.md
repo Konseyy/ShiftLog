@@ -1,6 +1,6 @@
-# ShiftLog
+# ShiftLog Overview
 Mobile application made with [React Native](https://reactnative.dev/) for tracking work shifts
-## Download
+# Download
 Not yet available on any app stores (coming later)
 # Repository installation
 Before executing further instructions it is necessary to [set up](https://reactnative.dev/docs/environment-setup) your React Native development environment if you have not already done so
