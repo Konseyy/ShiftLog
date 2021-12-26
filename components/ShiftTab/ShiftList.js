@@ -145,20 +145,6 @@ const ShiftList = ({navigation, route}) => {
   useEffect(()=>{
     updateTimeClocked();
   },[currentFilter]);
-  const styles = {
-    filterText:{
-      fontSize:20,
-    },
-    filterContainer:{
-      flex:1, 
-      alignItems:"center",
-      paddingVertical:5,
-      borderRightWidth:.5,
-      borderLeftWidth:.5,
-      borderRightColor:"#000000",
-      borderLeftColor:"#000000",
-    }
-  }
   
   const ListHeader = () => {
     return(
@@ -166,7 +152,10 @@ const ShiftList = ({navigation, route}) => {
         <View style={{height:50, backgroundColor:"#d6d6d6"}}>
           <Picker
             selectedValue={currentFilter}
-            onValueChange={(value)=>setCurrentFilter(value)}
+            onValueChange={(value)=>{
+              softHaptic();
+              setCurrentFilter(value);
+            }}
           >
             <Picker.Item label="Current week" value={1}/>
             <Picker.Item label="Current month" value={2}/>
