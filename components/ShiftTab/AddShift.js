@@ -27,7 +27,23 @@ const AddShift = ({navigation, route}) => {
     dateSetter(selectedDate);
   }
   function dateCheck(start, end){
-    return end>start;
+    if(!(end>start)){
+      Alert.alert(
+        "Invalid Dates",
+        "Shift end time must be greater than shift start time"
+      );
+      return false;
+    }
+    else if(!(end-breakTime*60*1000>start)){
+      Alert.alert(
+        "Shift Time Negative",
+        "Change Start/End times or adjust break time"
+      );
+      return false;
+    }
+    else{
+      return true;
+    }
   }
   async function addShift(){
     let dateToAddStart = new Date(startDate);
@@ -35,10 +51,7 @@ const AddShift = ({navigation, route}) => {
     let dateToAddEnd = new Date(endDate);
     dateToAddEnd.setHours(endTime.getHours(),endTime.getMinutes(),0,0);
     if(!dateCheck(dateToAddStart,dateToAddEnd)){
-      Alert.alert(
-        "Invalid Dates",
-        "Shift end time must be greater than shift start time"
-      );
+      
       return;
     }
     await saveShift({
@@ -150,7 +163,20 @@ const AddShift = ({navigation, route}) => {
           </View>
         </View>
       </View>
-      <Button title="Save" onPress={()=>addShift()}/>
+      {/* <Button title="Save" onPress={()=>addShift()}/> */}
+      <TouchableOpacity onPress={()=>addShift()}
+        style={{
+          position:"absolute",
+          right:15,
+          bottom:15
+        }}
+        >
+          <View style={{backgroundColor:"#26a5ff", paddingVertical:7, paddingHorizontal:18, borderRadius:8}}>
+            <Text style={{fontSize:18, color:"white", fontWeight:"bold"}}>
+              Save
+            </Text>
+          </View>
+        </TouchableOpacity>
       {showStartDateSelect&&<DateTimePicker mode="date" value={startDate} onChange={(e,s)=>onSelect(e,s,setStartDate,setShowStartDateSelect)}/>}
       {showStartTimeSelect&&<DateTimePicker mode="time" value={startTime} onChange={(e,s)=>onSelect(e,s,setStartTime,setShowStartTimeSelect)}/>}
       {showEndDateSelect&&<DateTimePicker mode="date" value={endDate} onChange={(e,s)=>onSelect(e,s,setEndDate,setShowEndDateSelect)}/>}
