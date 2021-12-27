@@ -24,13 +24,11 @@ const App = () => {
     <NavigationContainer>
     <Tab.Navigator
     screenOptions={({route})=>{
-      console.log("route is", route);
       return {
         headerShown: false,
         tabBarIcon: ({ focused, color, size }) => {
           switch(route.name){
             case "Shifts":
-              console.log("YESS")
               return <View style={tabStyle(focused)}><Image style={{height:25, width:25}} source={require('./img/icons8-list-90.png')}/></View>
             case "Data":
               return <View style={tabStyle(focused)}><Image style={{height:25, width:25}} source={require('./img/icons8-cloud-100.png')}/></View>
