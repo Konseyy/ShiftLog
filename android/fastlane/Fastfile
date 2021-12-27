@@ -1,0 +1,71 @@
+# This file contains the fastlane.tools configuration
+# You can find the documentation at https://docs.fastlane.tools
+#
+# For a list of all available actions, check out
+#
+#     https://docs.fastlane.tools/actions
+#
+# For a list of all available plugins, check out
+#
+#     https://docs.fastlane.tools/plugins/available-plugins
+#
+
+# Uncomment the line if you want fastlane to automatically update itself
+# update_fastlane
+
+fastlane_require 'dotenv'
+
+before_all do
+  Dotenv.overload '.env.default'
+end
+
+default_platform(:android)
+
+platform :android do
+  desc "Runs all the tests"
+  lane :test do
+    puts "STUFF: #{ENV['JSON_KEY_PATH']}"
+  end
+
+  desc "Submit a new Beta Build to Crashlytics Beta"
+  lane :beta do
+    gradle(task: "clean assembleRelease")
+    crashlytics
+  
+    # sh "your_script.sh"
+    # You can also use other beta testing services here
+  end
+
+  desc "Deploy a new version to the Google Play"
+  lane :deploy do
+    gradle(task: "clean assembleRelease")
+    upload_to_play_store
+  end
+
+  desc "Builds the release code"
+  lane :buildRelease do
+    # Get the last version code and increment it.
+    versionCode = File.read("metadata/versionCode").to_i
+    versionCode = versionCode +1
+    versionName = "#{versionCode}.0"
+    puts("Version code : #{versionCode}")
+    puts("version name : #{versionName}")
+    gradle(task: "bundleRelease", properties: {
+      "android.injected.signing.store.file" => "keystorePersonal.jks",
+      "android.injected.signing.store.password" => "#{ENV["KEYSTORE_PASS"]}",
+      "android.injected.signing.key.alias" => "#{ENV["KEYSTORE_ALIAS"]}",
+      "android.injected.signing.key.password" => "#{ENV["KEYSTORE_KEYPASS"]}",
+      "android.injected.version.code" => versionCode,
+      "android.injected.version.name" => versionName,
+    })   
+    f = File.new("metadata/versionCode", "w")
+    f.write(versionCode)
+    f.close 
+  end
+  
+  desc "Submit a new Internal Build to Play Store"
+  lane :internal do
+    upload_to_play_store(track: 'internal', aab: 'app/build/outputs/bundle/release/app-release.aab', json_key:"#{ENV["JSON_KEY_PATH"]}")
+  end
+
+end
