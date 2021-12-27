@@ -23,7 +23,6 @@ const ShiftList = ({navigation, route}) => {
     updateTimeClocked();
   }
   async function addShiftScene(){
-    await saveShiftLogStorage();
     softHaptic();
     navigation.navigate('AddShift');
   }
@@ -44,8 +43,8 @@ const ShiftList = ({navigation, route}) => {
     softHaptic();
     navigation.navigate('AddShift',{
       current: {
-        ...shifts[index],
-        index:index
+        ...filteredData[index],
+        index:filteredData[index].index
       }
     })
   }

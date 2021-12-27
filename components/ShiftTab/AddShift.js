@@ -8,8 +8,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import { softHaptic } from "../../helperFunctions/hapticFeedback";
 
 const AddShift = ({navigation, route}) => {
-  const {params} = route;
-  const {modifyShifts} = useShiftList();
+  const params = route.params??{};
   const [startDate, setStartDate] = useState(params.current?new Date(params.current.startTime):new Date());
   const [startTime, setStartTime] = useState(params.current?new Date(params.current.startTime):new Date());
   const [endDate, setEndDate] = useState(params.current?new Date(params.current.endTime):new Date());
@@ -20,6 +19,7 @@ const AddShift = ({navigation, route}) => {
   const [showEndTimeSelect, setShowEndTimeSelect] = useState(false);
   const [breakTime, setBreakTime] = useState(params.current?params.current.break:0);
   const [notes,setNotes] = useState(params.current?params.current.notes:"");
+  const {modifyShifts} = useShiftList();
   function onSelect(event, selectedDate, dateSetter, modalSetter){
     modalSetter(false);
     if(!selectedDate){

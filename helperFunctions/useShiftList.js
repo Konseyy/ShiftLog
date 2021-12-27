@@ -28,7 +28,8 @@ const useShiftList = () => {
         switch(type){
             case "add":
                 console.log("new one",value)
-                shiftList.push(value.data);
+                await refreshFromStorage();
+                shiftList.push({...value.data,index:shiftList.length});
                 await saveShiftLogStorage();
                 break;
             case "delete":
