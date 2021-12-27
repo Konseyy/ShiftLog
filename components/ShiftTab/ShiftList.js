@@ -4,20 +4,19 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import { softHaptic } from '../../helperFunctions/hapticFeedback';
 import { getShiftDurationInMinutes, displayHoursAndMinutes } from '../../helperFunctions/dateFormatFunctions';
 import { Picker } from '@react-native-picker/picker';
+import useShiftList from '../../helperFunctions/useShiftList';
 import { useFocusEffect } from '@react-navigation/native';
 import ShiftItem from './ShiftItem';
 const ShiftList = ({navigation, route}) => {
-  const [shiftList, setShiftList] = useState([]);
-  const [lastUpdated, setLastUpdated] = useState(null);
   const [refreshList, setRefreshList] = useState(false);
   const [currentFilter, setCurrentFilter] = useState("week");
   const [minutesInInterval, setMinutesInInterval] = useState();
-  const [loading, setLoading] = useState(true);
   const [sorter, setSorter] = useState("start");
   const [sortingDirection, setSortingDirection] = useState("descending");
-  // useEffect(()=>{
-  //   console.log("length of shift list",shiftList.length);
-  // },[shiftList,lastUpdated]);
+  const {shifts, loading, refreshFromStorage, modifyShifts} = useShiftList();
+  useEffect(()=>{
+    console.log("length of shift list",shifts.length);
+  },[shifts]);
   function refresh()
   {
     setRefreshList(!refreshList);
@@ -26,14 +25,7 @@ const ShiftList = ({navigation, route}) => {
   async function addShiftScene(){
     await saveShiftLogStorage();
     softHaptic();
-    navigation.navigate('AddShift',{
-      saveShift: async (shiftObject) =>{
-        shiftList.push(shiftObject);
-        await saveShiftLogStorage();
-        softHaptic();
-        refresh();
-      }
-    })
+    navigation.navigate('AddShift');
   }
   async function deleteShift(index){
     softHaptic();
@@ -41,8 +33,7 @@ const ShiftList = ({navigation, route}) => {
     "Are you sure you want to delete the selected shift?",
     [
       {text:"Yes",onPress:async ()=>{
-        shiftList.splice(index,1)
-        await saveShiftLogStorage();
+        modifyShifts({type:"delete",value:{index:index}});
         refresh();
       }},
       {text:"No"}
@@ -52,44 +43,11 @@ const ShiftList = ({navigation, route}) => {
   async function editShift(index){
     softHaptic();
     navigation.navigate('AddShift',{
-      saveShift: async (shiftObject) => {
-        let newList = shiftList;
-        newList[index]=shiftObject;
-        setShiftList(filterData(newList,"start","descending","all"));
-        await saveShiftLogStorage();
-        softHaptic();
-        refresh();
-      },
       current: {
-        ...shiftList[index],
+        ...shifts[index],
         index:index
       }
     })
-  }
-  async function saveShiftLogStorage(){
-    const JSONShifts = JSON.stringify({
-      shifts: shiftList,
-      lastUpdated: new Date().getTime(),
-    });
-    await AsyncStorage.setItem("savedShifts",JSONShifts);
-  }
-  async function refreshFromStorage(){
-    const savedShiftsRetrieved = await AsyncStorage.getItem("savedShifts");
-    if(savedShiftsRetrieved){
-      const convertedShifts = JSON.parse(savedShiftsRetrieved);
-      setShiftList(convertedShifts.shifts);
-      updateTimeClocked();
-      const retrievedLastUpdated = new Date(convertedShifts.lastUpdated);
-      setLastUpdated(retrievedLastUpdated.toLocaleString());
-    }
-    else{
-      const defaultStorage = {
-        shifts:[],
-        lastUpdated: new Date().getTime(),
-      };
-      await AsyncStorage.setItem("savedShifts",JSON.stringify(defaultStorage));
-      setLastUpdated(new Date(defaultStorage.lastUpdated).toLocaleString());
-    }
   }
   function filterData(data, sort=sorter, direction=sortingDirection,filter=currentFilter){
     let returnData;
@@ -110,10 +68,11 @@ const ShiftList = ({navigation, route}) => {
         let startOfMonth = new Date();
         startOfMonth.setDate(1);
         startOfMonth.setHours(0,0,0,0);
-        let startOfNext = new Date(startOfMonth.getTime()).setMonth(startOfMonth.getMonth()+1);
+        let startOfNext = new Date(startOfMonth.getTime());
+        startOfNext.setMonth(startOfMonth.getMonth()+1);
         returnData = data.filter((value)=>{
-          const currentDate = new Date(value.startTime);
-          return (currentDate>startOfMonth && currentDate < startOfNext);
+        const currentDate = new Date(value.startTime);
+        return (currentDate>startOfMonth && currentDate < startOfNext);
         });
         break;
       case "all":
@@ -162,7 +121,8 @@ const ShiftList = ({navigation, route}) => {
     })
     return returnData;
   }
-  const filteredData = useMemo(()=>filterData(shiftList),[shiftList,sortingDirection,sorter,currentFilter]);
+  // const filteredData = useMemo(()=>filterData(shifts),[shifts,sortingDirection,sorter,currentFilter]);
+  const filteredData = filterData(shifts);
   function updateTimeClocked(shifts=filteredData){
     let newMinutes = 0;
     filterData(shifts,currentFilter).forEach((shiftObject)=>{
@@ -170,24 +130,20 @@ const ShiftList = ({navigation, route}) => {
     });
     setMinutesInInterval(displayHoursAndMinutes(newMinutes));
   }
-  // useEffect(() => { //Refresh every time load this scene
-  //   const unsubscribe = navigation.addListener('focus', () => {
-  //     setLoading(true);
-  //     refreshFromStorage()
-  //     .then(()=>setLoading(false));
-  //   });
-  //   return unsubscribe;
-  // }, [navigation]);
+
+  useEffect(() => { //Refresh every time load this scene
+    const unsubscribe = navigation.addListener('focus', () => {
+      refreshFromStorage();
+    });
+    return unsubscribe;
+  }, [navigation]);
   useEffect(()=>{
     updateTimeClocked();
-  },[shiftList,currentFilter])
-  useEffect(()=>{
-    refreshFromStorage()
-    .then(()=>setLoading(false));
-  },[])
+  },[shifts,currentFilter])
   useEffect(()=>{
     setSortingDirection("descending");
   },[sorter]);
+
   const FilterSelect = useMemo(()=>()=>{
     return(
     <View style={{height:50, marginHorizontal:5}}>

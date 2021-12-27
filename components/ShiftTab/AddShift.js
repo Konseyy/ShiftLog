@@ -3,12 +3,13 @@ import { View, Text, Button, TextInput, TouchableOpacity, Alert } from "react-na
 import { Picker } from '@react-native-picker/picker';
 import DateTimePicker from '@react-native-community/datetimepicker';
 import { stringDateFromDate, stringTimeFromDate } from "../../helperFunctions/dateFormatFunctions";
+import useShiftList from "../../helperFunctions/useShiftList";
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { softHaptic } from "../../helperFunctions/hapticFeedback";
 
 const AddShift = ({navigation, route}) => {
   const {params} = route;
-  const saveShift = params.saveShift;
+  const {modifyShifts} = useShiftList();
   const [startDate, setStartDate] = useState(params.current?new Date(params.current.startTime):new Date());
   const [startTime, setStartTime] = useState(params.current?new Date(params.current.startTime):new Date());
   const [endDate, setEndDate] = useState(params.current?new Date(params.current.endTime):new Date());
@@ -43,6 +44,14 @@ const AddShift = ({navigation, route}) => {
     }
     else{
       return true;
+    }
+  }
+  const saveShift = async (shiftObject) => {
+    if(!params.current){
+      await modifyShifts({type:"add",value:{data:shiftObject}})
+    }
+    else{
+      await modifyShifts({type:"edit",value:{data:shiftObject,index:params.current.index}})
     }
   }
   async function addShift(){
