@@ -5,7 +5,53 @@ on:
     branches:
       master
 jobs:
-  Build-and-upload-bundle-internal:
+  build_bundle:
+    runs-on: ubuntu-latest
+    steps: 
+      - uses: actions/checkout@v2
+      - uses: actions/setup-ruby@v1
+      - name: Install npm dependencies
+        run: |
+          npm install
+      - name: Bundle Install
+        run: |
+          cd android
+          bundle install
+      - name: Get .env
+        env:
+          run_id: ${{github.run_number}}
+        run: |
+          cd android
+          echo "${{ secrets.FASTLANE_ENV }}" > fastlane/.env
+          echo "${{ secrets.ENCRYPTED_KEYSTORE }}" > keystore.asc
+          gpg -d --passphrase "${{ secrets.ENCRYPTED_KEYSTORE_PASS }}" --batch keystore.asc > keystorePersonal.jks
+          cd app
+          gpg -d --passphrase "${{ secrets.ENCRYPTED_KEYSTORE_PASS }}" --batch ../keystore.asc > keystorePersonal.jks
+          cd ../fastlane
+          gpg -d --passphrase "${{ secrets.ENCRYPTED_KEYSTORE_PASS }}" --batch ../keystore.asc > keystorePersonal.jks
+          mkdir metadata
+          echo $(($run_id+20)) > metadata/versionCode
+      - name: FastLane Build bundle
+        run: |
+          cd android
+          bundle exec fastlane buildRelease
+      - name: Remove .env
+        if: always()
+        run: | 
+          cd android
+          rm -f fastlane/.env
+          rm -f fastlane/keystorePersonal.jks
+          rm -f keystore.asc
+          rm -f app/keystorePersonal.jks
+          rm -f keystorePersonal.jks
+          rm -r fastlane/metadata
+      - name: Upload Artifact
+        uses: actions/upload-artifact@v1
+        with:
+          name: app-release.aab
+          path: android/app/build/outputs/bundle/release/
+  publish_internal:
+    needs: build_bundle
     runs-on: ubuntu-latest
     steps: 
       - uses: actions/checkout@v2
@@ -56,6 +102,7 @@ jobs:
         uses: actions/upload-artifact@v1
         with:
           name: app-release.aab
-          path: android/app/build/outputs/bundle/release/    
+          path: android/app/build/outputs/bundle/release/
+      
 
     
