@@ -29,6 +29,7 @@ jobs:
         run: |
           ls -a
           cd android
+          ls -a
           echo $google_key > google_key.json
           echo ${{ secrets.ENCRYPTED_KEYSTORE }} > keystore.asc
           gpg -d --passphrase "${{ secrets.ENCRYPTED_KEYSTORE_PASS }}" --batch keystore.asc > keystorePersonal.jks
