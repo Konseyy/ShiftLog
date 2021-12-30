@@ -23,7 +23,7 @@ jobs:
         run: |
           cd android
           bundle exec fastlane buildRelease
-      - name: Fastlane Upload to Internal track
+      - name: Get .env
         env:
           google_key: ${{ secrets.GOOGLE_API_JSON }}
         run: |
@@ -33,9 +33,13 @@ jobs:
           gpg -d --passphrase "${{ secrets.ENCRYPTED_KEYSTORE_PASS }}" --batch keystore.asc > keystorePersonal.jks
           cd fastlane
           echo ${{ secrets.FASTLANE_ENV }} > .env
-          cd ..
+      - name: Fastlane upload to Internal track
+        run: |
+          cd android
           bundle exec fastlane internal
-          cd fastlane
+      - name: Remove .env
+        run: | 
+          cd android/fastlane
           rm -f .env
           cd ..
           rm -f google_key.json
