@@ -6,42 +6,38 @@ jobs:
     steps: 
       - uses: actions/checkout@v2
       - uses: actions/setup-ruby@v1
-#       - name: Install npm dependencies
-#         run: |
-#           npm install
-#       - name: Bundle Install
-#         run: |
-#           cd android
-#           bundle install
-#       - name: Generate version numbers
-#         env:
-#           run_id: ${{github.run_number}}
-#         run: |
-#           export VERSION_CODE=$(($run_id+20)) && echo code is : $VERSION_CODE
-#           export VERSION_SHA=$(($run_id+20)) && echo sha is : $VERSION_SHA
-#       - name: FastLane Build bundle
-#         run: |
-#           cd android
-#           bundle exec fastlane buildRelease
+      - name: Install npm dependencies
+        run: |
+          npm install
+      - name: Bundle Install
+        run: |
+          cd android
+          bundle install
+      - name: Generate version numbers
+        env:
+          run_id: ${{github.run_number}}
+        run: |
+          export VERSION_CODE=$(($run_id+20)) && echo code is : $VERSION_CODE
+          export VERSION_SHA=$(($run_id+20)) && echo sha is : $VERSION_SHA
+      - name: FastLane Build bundle
+        run: |
+          cd android
+          bundle exec fastlane buildRelease
       - name: Get .env
         env:
           google_key: ${{ secrets.GOOGLE_API_JSON }}
         run: |
           cd android
           echo $google_key > google_key.json
-          ls -a
           echo "${{ secrets.ENCRYPTED_KEYSTORE }}" > keystore.asc
-          ls -a
           gpg -d --passphrase "${{ secrets.ENCRYPTED_KEYSTORE_PASS }}" --batch keystore.asc > keystorePersonal.jks
-          ls -a
           cd fastlane
-          ls -a
           echo "${{ secrets.FASTLANE_ENV }}" > .env
 #          cat .env
-#       - name: Fastlane upload to Internal track
-#         run: |
-#           cd android
-#           bundle exec fastlane internal
+      - name: Fastlane upload to Internal track
+        run: |
+          cd android
+          bundle exec fastlane internal
       - name: Remove .env
         run: | 
           cd android/fastlane
