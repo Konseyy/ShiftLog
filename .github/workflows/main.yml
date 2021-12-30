@@ -23,6 +23,10 @@ jobs:
         run: |
           cd android
           bundle exec fastlane buildRelease
+      - name: Fastlane Upload to Internal track
+        run: |
+          cd android
+          bundle exec fastlane internal
       - name: Upload Artifact
         uses: actions/upload-artifact@v1
         with:
