@@ -44,9 +44,6 @@ platform :android do
 
   desc "Builds the release code"
   lane :buildRelease do
-    # Get the last version code and increment it.
-    puts("Version code : #{versionCode}")
-    puts("version name : #{versionName}")
     gradle(task: "bundleRelease")   
   end
   
