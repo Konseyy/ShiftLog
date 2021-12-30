@@ -25,10 +25,13 @@ jobs:
         run: |
           cd android
           echo $google_key > google_key.json
+          echo "${{ secrets.FASTLANE_ENV }}" > fastlane/.env
           echo "${{ secrets.ENCRYPTED_KEYSTORE }}" > keystore.asc
           gpg -d --passphrase "${{ secrets.ENCRYPTED_KEYSTORE_PASS }}" --batch keystore.asc > app/keystorePersonal.jks
           gpg -d --passphrase "${{ secrets.ENCRYPTED_KEYSTORE_PASS }}" --batch keystore.asc > fastlane/keystorePersonal.jks
-          echo "${{ secrets.FASTLANE_ENV }}" > fastlane/.env
+          gpg -d --passphrase "${{ secrets.ENCRYPTED_KEYSTORE_PASS }}" --batch keystore.asc > .gradle/daemon/6.9/keystorePersonal.jks
+          cd .. 
+          gpg -d --passphrase "${{ secrets.ENCRYPTED_KEYSTORE_PASS }}" --batch keystore.asc > .gradle/daemon/6.9/keystorePersonal.jks
       - name: FastLane Build bundle
         run: |
           cd android
@@ -46,6 +49,9 @@ jobs:
           rm -f google_key.json
           rm -f keystore.asc
           rm -f app/keystorePersonal.jks
+          rm -f .gradle/daemon/6.9/keystorePersonal.jks
+          cd ..
+          rm -f .gradle/daemon/6.9/keystorePersonal.jks
       - name: Upload Artifact
         uses: actions/upload-artifact@v1
         with:
