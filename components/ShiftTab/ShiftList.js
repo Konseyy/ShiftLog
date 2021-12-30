@@ -237,17 +237,22 @@ const ShiftList = ({navigation, route}) => {
   },[minutesInInterval, currentFilter, addShiftScene]);
   const emptyComponent = useMemo(()=>()=>{
     return(
-      <View style={{ height:"100%", alignItems:"center", justifyContent:"center"}}>
-        <View style={{marginBottom:30}}>
-          <Text style={{fontSize:20, fontStyle:"italic", fontWeight:"bold"}}>
+      <View style={{ height:"100%", position:"relative", alignItems:"center"}}>
+        <View style={{marginTop:"30%"}}>
+          <Text style={{fontSize:20, fontStyle:"italic", fontWeight:"bold", color:"#a3a3a3"}}>
             No entries
           </Text>
         </View>
-        <TouchableOpacity style={{paddingHorizontal:12, paddingVertical:8, backgroundColor:"#26a5ff", borderRadius:8}} onPress={() =>addShiftScene()}>
+        <View style={{marginTop:"5%"}}>
+          <Text style={{fontSize:15, fontWeight:"bold", color:"#a3a3a3"}}>
+            Add new with button bellow
+          </Text>
+        </View>
+        {/* <TouchableOpacity style={{paddingHorizontal:12, paddingVertical:8, backgroundColor:"#26a5ff", borderRadius:8, position:"absolute", top:"50%"}} onPress={() =>addShiftScene()}>
           <Text style={{color:"white", fontWeight:"bold", fontSize:15}}>
             Add New
           </Text>
-        </TouchableOpacity>
+        </TouchableOpacity> */}
       </View>
     );
   },[addShiftScene])
