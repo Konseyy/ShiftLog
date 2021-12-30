@@ -16,8 +16,8 @@ jobs:
       - name: FastLane Build bundle
         run: |
           cd android
-          export VERSION_CODE=(${{enev.GITHUB_RUN_ID}}+16) && echo code is : $VERSION_CODE
-          export VERSION_SHA=(${{enev.GITHUB_RUN_ID}}+16) && echo sha is : $VERSION_SHA
+          export VERSION_CODE=(${{env.GITHUB_RUN_ID}}+16) && echo code is : $VERSION_CODE
+          export VERSION_SHA=(${{env.GITHUB_RUN_ID}}+16) && echo sha is : $VERSION_SHA
           bundle exec fastlane buildRelease
       - name: Upload Artifact
         uses: actions/upload-artifact@v1
