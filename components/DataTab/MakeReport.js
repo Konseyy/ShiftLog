@@ -1,10 +1,10 @@
 import React from "react";
 import { Text } from "react-native";
-const SettingsMain = () => {
+const MakeReport = () => {
     return (
         <Text>
-            Not yet implemented
+            Report stuff
         </Text>
     );
 }
-export default SettingsMain;
+export default MakeReport;

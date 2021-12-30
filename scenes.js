@@ -3,6 +3,8 @@ import ShiftList from "./components/ShiftTab/ShiftList";
 import AddShift from "./components/ShiftTab/AddShift";
 import DataOptions from "./components/DataTab/DataOptions";
 import SettingsMain from "./components/SettingsTab/SettingsMain";
+import MakeReport from "./components/DataTab/MakeReport";
+import MakeBackup from "./components/DataTab/MakeBackup";
 export const Tabs = [
     {
         name: "Shifts",
@@ -37,6 +39,20 @@ export const DataTab = [
         component:DataOptions,
         options:{
             title:"Data"
+        }
+    },
+    {
+        name:"MakeReport",
+        component:MakeReport,
+        options:{
+            title:"New Report"
+        }
+    },
+    {
+        name:"MakeBackup",
+        component:MakeBackup,
+        options:{
+            title:"Generate Backup"
         }
     },
 ]

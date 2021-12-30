@@ -1,10 +1,10 @@
 import React from "react";
 import { Text } from "react-native";
-const SettingsMain = () => {
+const MakeBackup = () => {
     return (
         <Text>
-            Not yet implemented
+            Backup stuff
         </Text>
     );
 }
-export default SettingsMain;
+export default MakeBackup;
