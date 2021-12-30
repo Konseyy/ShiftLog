@@ -30,13 +30,13 @@ jobs:
           cd android
           echo $google_key > google_key.json
           ls -a
-          echo ${{ secrets.ENCRYPTED_KEYSTORE }} > keystore.asc
+          echo "${{ secrets.ENCRYPTED_KEYSTORE }}" > keystore.asc
           ls -a
           gpg -d --passphrase "${{ secrets.ENCRYPTED_KEYSTORE_PASS }}" --batch keystore.asc > keystorePersonal.jks
           ls -a
           cd fastlane
           ls -a
-          echo ${{ secrets.FASTLANE_ENV }} > .env
+          echo "${{ secrets.FASTLANE_ENV }}" > .env
 #          cat .env
 #       - name: Fastlane upload to Internal track
 #         run: |
