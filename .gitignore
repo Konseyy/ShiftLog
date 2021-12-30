@@ -68,3 +68,4 @@ android/app/release/app-release.aab
 android/keystorePersonal.jks
 android/app/keystorePersonal.jks
 android/fastlane/keystorePersonal.jks
+android/fastlane/metadata
