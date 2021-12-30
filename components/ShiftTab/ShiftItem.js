@@ -43,8 +43,8 @@ const ShiftItem = ({item,navigation,deleteShift,editShift}) => {
                         </Text>
                     </View>
                     <View style={{flex:2, marginHorizontal:5,maxWidth:150, flexDirection:"row"}}>
-                        <View style={{flex:1}}/>
-                        <View style={{flex:2}}>
+                        <View style={{flex:2}}/>
+                        <View style={{flex:5}}>
                             <Text>
                                 {dateDifference(ShiftData.startTime,ShiftData.endTime)}
                             </Text>
