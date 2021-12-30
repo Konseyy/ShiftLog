@@ -24,9 +24,14 @@ jobs:
           cd android
           bundle exec fastlane buildRelease
       - name: Fastlane Upload to Internal track
+        env:
+          google_key: ${{ secrets.GOOGLE_API_JSON }}
         run: |
           cd android
+          echo $google_key > google_key.json
+          echo $google_key is the secret
           bundle exec fastlane internal
+          rm -f google_key.json
       - name: Upload Artifact
         uses: actions/upload-artifact@v1
         with:
