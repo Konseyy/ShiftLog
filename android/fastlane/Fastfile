@@ -49,7 +49,7 @@ platform :android do
   
   desc "Submit a new Internal Build to Play Store"
   lane :internal do
-    upload_to_play_store(track: 'internal', aab: 'app/build/outputs/bundle/release/app-release.aab', json_key:"#{ENV["JSON_KEY_PATH"]}")
+    upload_to_play_store(track: 'internal', aab: 'app/build/outputs/bundle/release/app-release.aab', json_key:"./google_key.json")
   end
 
 end
