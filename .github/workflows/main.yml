@@ -1,7 +1,7 @@
-name: react-native-android-build-apk
+name: android-build-bundle-internal
 on: workflow_dispatch
 jobs:
-  build-bundle:
+  Build-and-upload-bundle-internal:
     runs-on: ubuntu-latest
     steps: 
       - uses: actions/checkout@v2
@@ -24,9 +24,23 @@ jobs:
           cd android
           bundle exec fastlane buildRelease
       - name: Fastlane Upload to Internal track
+        env:
+          google_key: ${{ secrets.GOOGLE_API_JSON }}
         run: |
           cd android
+          echo $google_key > google_key.json
+          echo ${{ secrets.ENCRYPTED_KEYSTORE }} > keystore.asc
+          gpg -d --passphrase "${{ secrets.ENCRYPTED_KEYSTORE_PASS }}" --batch keystore.asc > keystorePersonal.jks
+          cd fastlane
+          echo ${{ secrets.FASTLANE_ENV }} > .env
+          cd ..
           bundle exec fastlane internal
+          cd fastlane
+          rm -f .env
+          cd ..
+          rm -f google_key.json
+          rm -f keystore.asc
+          rm -f keystorePersonal.jks
       - name: Upload Artifact
         uses: actions/upload-artifact@v1
         with:
