@@ -31,7 +31,9 @@ jobs:
           echo $google_key > google_key.json
           echo ${{ secrets.ENCRYPTED_KEYSTORE }} > keystore.asc
           gpg -d --passphrase "${{ secrets.ENCRYPTED_KEYSTORE_PASS }}" --batch keystore.asc > keystorePersonal.jks
+          ls -a
           cd fastlane
+          ls -a
           echo ${{ secrets.FASTLANE_ENV }} > .env
           cat .env
 #       - name: Fastlane upload to Internal track
