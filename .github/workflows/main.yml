@@ -18,7 +18,7 @@ jobs:
           run_id: ${{env.GITHUB_RUN_ID}}
         run: |
           echo ${{github.run_id}} is this current run id
-          echo "${{github}}" as current job in string
+          echo "${{github.run_number}}" as current job in string
           echo environment version number is $run_id
           export VERSION_CODE=(20+$run_id) && echo code is : $VERSION_CODE
           export VERSION_SHA=(20+$run_id) && echo sha is : $VERSION_SHA
