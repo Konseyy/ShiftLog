@@ -23,7 +23,9 @@ jobs:
           SUPER_SECRET: ${{ secrets.TEST_SECRET2 }}
         run: | 
           echo "$SUPER_SECRET" is the secret
-
+      - name: test env
+        run: |
+          echo ${{GITHUB_JOB}} is this current job
       # Runs a set of commands using the runners shell
       - name: Run a multi-line script
         run: |
