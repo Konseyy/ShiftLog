@@ -27,6 +27,7 @@ jobs:
         env:
           google_key: ${{ secrets.GOOGLE_API_JSON }}
         run: |
+          ls -a
           cd android
           echo $google_key > google_key.json
           echo ${{ secrets.ENCRYPTED_KEYSTORE }} > keystore.asc
