@@ -20,8 +20,9 @@ jobs:
           bundle install
       - name: FastLane Build bundle
         run: |
+          pwd
+          cd android
           bundle exec fastlane buildRelease
-          cd ..
       - name: Upload Artifact
         uses: actions/upload-artifact@v1
         with:
