@@ -6,19 +6,21 @@ jobs:
     steps: 
       - uses: actions/checkout@v2
       - uses: actions/setup-ruby@v1
-      - name: Install npm dependencies
+#       - name: Install npm dependencies
+#         run: |
+#           npm install
+#       - name: Bundle Install
+#         run: |
+#           cd android
+#           bundle install
+      - name: Generate version numbers
         run: |
-          npm install
-      - name: Bundle Install
-        run: |
-          cd android
-          bundle install
-      - name: FastLane Build bundle
-        run: |
-          cd android
-          export VERSION_CODE=$(${{env.GITHUB_RUN_ID}} + 16) && echo code is : $VERSION_CODE
-          export VERSION_SHA=$(${{env.GITHUB_RUN_ID}} + 16) && echo sha is : $VERSION_SHA
-          bundle exec fastlane buildRelease
+          export VERSION_CODE=(20+$($Env:GITHUB_RUN_NUMBER)) && echo code is : $VERSION_CODE
+          export VERSION_SHA=(20+$($Env:GITHUB_RUN_NUMBER)) && echo sha is : $VERSION_SHA
+#       - name: FastLane Build bundle
+#         run: |
+#           cd android
+#           bundle exec fastlane buildRelease
       - name: Upload Artifact
         uses: actions/upload-artifact@v1
         with:
