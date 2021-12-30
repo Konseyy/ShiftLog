@@ -10,7 +10,7 @@ LogBox.ignoreLogs([
 const Tab = createBottomTabNavigator();
 
 const App = () => {
-	const tabStyle = (focused) => {
+	const tabStyle = (focused: Boolean) => {
 		return {
 			// borderRadius:5, 
 			// borderColor:focused?"#000000":"#ff1234", 
@@ -40,12 +40,11 @@ const App = () => {
 					}
 				}}
 				initialRouteName="Shifts"
-				backBehavior="history"
-				tabBarActiveTintColor='#000000'
-			>
+				backBehavior="history"			
+				>
 				{Tabs.map((scene) => {
 					return (
-						<Tab.Screen key={scene.name} name={scene.name} component={scene.component} options={scene.options ?? null} />
+						<Tab.Screen key={scene.name} name={scene.name} component={scene.component} options={scene.options ?? {}} />
 					);
 				})}
 			</Tab.Navigator>

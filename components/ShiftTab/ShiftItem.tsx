@@ -1,14 +1,22 @@
 import React, { useEffect, useState } from 'react';
+import { ListRenderItemInfo } from 'react-native';
 import { Text, TouchableOpacity, View, Button } from "react-native";
 import { stringDateFromDate, stringTimeFromDate, differenceInMinutes, displayHoursAndMinutes } from "../../helperFunctions/dateFormatFunctions";
 import { softHaptic } from '../../helperFunctions/hapticFeedback';
-const ShiftItem = ({ item, navigation, deleteShift, editShift }) => {
+import { shift } from '../types/shifts';
+interface Props {
+	item:ListRenderItemInfo<shift>,
+	navigation: any,
+	deleteShift:(index: number)=> Promise<void>,
+	editShift:(index: number)=> Promise<void>
+}
+const ShiftItem = ({ item, navigation, deleteShift, editShift }:Props) => {
 	const [expanded, setExpanded] = useState(false);
-	function addZero(i) {
-		if (i < 10) { i = "0" + i }
+	function addZero(i:number) {
+		if (i < 10) { return "0" + i }
 		return i;
 	}
-	function dateDifference(timeStamp1, timeStamp2) {
+	function dateDifference(timeStamp1:number, timeStamp2:number) {
 		const diffMinutes = differenceInMinutes(timeStamp1, timeStamp2) - breakTime;
 		return displayHoursAndMinutes(diffMinutes);
 	}
