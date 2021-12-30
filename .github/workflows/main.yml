@@ -46,7 +46,7 @@ jobs:
           rm -f keystorePersonal.jks
           rm -r fastlane/metadata
       - name: Upload Artifact
-        uses: actions/upload-artifact@v1
+        uses: actions/upload-artifact@v2
         with:
           name: app-release.aab
           path: android/app/build/outputs/bundle/release/
@@ -59,9 +59,7 @@ jobs:
       - uses: actions/download-artifact@v2
         with:
           name: app-release.aab
-      - name: Install npm dependencies
-        run: |
-          npm install
+          path: android/app/build/outputs/bundle/release/
       - name: Bundle Install
         run: |
           cd android
