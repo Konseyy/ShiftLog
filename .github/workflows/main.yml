@@ -15,16 +15,16 @@ jobs:
 #           bundle install
       - name: Generate version numbers
         run: |
-          export VERSION_CODE=(20+$($Env:GITHUB_RUN_NUMBER)) && echo code is : $VERSION_CODE
-          export VERSION_SHA=(20+$($Env:GITHUB_RUN_NUMBER)) && echo sha is : $VERSION_SHA
+          export VERSION_CODE=(20+$(${{env.GITHUB_RUN_NUMBER}})) && echo code is : $VERSION_CODE
+          export VERSION_SHA=(20+$(${{env.GITHUB_RUN_NUMBER}})) && echo sha is : $VERSION_SHA
 #       - name: FastLane Build bundle
 #         run: |
 #           cd android
 #           bundle exec fastlane buildRelease
-      - name: Upload Artifact
-        uses: actions/upload-artifact@v1
-        with:
-          name: app-release.aab
-          path: android/app/build/outputs/bundle/release/
+#       - name: Upload Artifact
+#         uses: actions/upload-artifact@v1
+#         with:
+#           name: app-release.aab
+#           path: android/app/build/outputs/bundle/release/
 
     
