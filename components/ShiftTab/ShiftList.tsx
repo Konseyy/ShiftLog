@@ -22,14 +22,11 @@ interface Props {
 }
 import { shift } from '../types/shifts';
 const ShiftList = ({ navigation, route }: Props) => {
-	const [currentFilter, setCurrentFilter] = useState('week');
+	const [currentFilter, setCurrentFilter] = useState<"week"|"month"|"all">('week');
 	const [minutesInInterval, setMinutesInInterval] = useState("");
-	const [sorter, setSorter] = useState('start');
-	const [sortingDirection, setSortingDirection] = useState('descending');
+	const [sorter, setSorter] = useState<"start"|"end"|"duration">('start');
+	const [sortingDirection, setSortingDirection] = useState<"descending"|"ascending">('descending');
 	const { shifts, loading, refreshFromStorage, modifyShifts } = useShiftList();
-	useEffect(()=>{
-		console.log("lissst",shifts);
-	},[shifts,loading])
 	async function addShiftScene() {
 		softHaptic();
 		navigation.navigate('AddShift');
@@ -61,9 +58,9 @@ const ShiftList = ({ navigation, route }: Props) => {
 	}
 	function filterData(
 		data:shift[],
+		filter = currentFilter,
 		sort = sorter,
 		direction = sortingDirection,
-		filter = currentFilter,
 	) {
 		let returnData;
 		switch (filter) {
@@ -110,7 +107,7 @@ const ShiftList = ({ navigation, route }: Props) => {
 					if (direction === 'ascending') {
 						return firstDate - secondDate;
 					} else{
-						return firstDate - secondDate;
+						return -firstDate + secondDate;
 					}
 				case 'end':
 					firstDate = first.endTime;
@@ -118,7 +115,7 @@ const ShiftList = ({ navigation, route }: Props) => {
 					if (direction === 'ascending') {
 						return firstDate - secondDate;
 					} else {
-						return firstDate - secondDate;
+						return -firstDate + secondDate;
 					}
 				case 'duration':
 					firstDate = getShiftDurationInMinutes(first);
@@ -126,7 +123,7 @@ const ShiftList = ({ navigation, route }: Props) => {
 					if (direction === 'ascending') {
 						return firstDate - secondDate;
 					} else {
-						return firstDate - secondDate;
+						return -firstDate + secondDate;
 					}
 				default:
 					return 0;
