@@ -26,4 +26,4 @@ jobs:
         run: |
           echo Add other actions to build,
           echo test, and deploy your project.
-          echo {{secrets.TEST_SECRET}} is the secret of this repo.
+          echo ${{secrets.TEST_SECRET}} is the secret of this repo.
