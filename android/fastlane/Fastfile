@@ -51,13 +51,14 @@ platform :android do
     puts("Version code : #{versionCode}")
     puts("version name : #{versionName}")
     gradle(task: "bundleRelease", properties: {
-      "android.injected.signing.store.file" => "keystorePersonal.jks",
-      "android.injected.signing.store.password" => "#{ENV["KEYSTORE_PASS"]}",
-      "android.injected.signing.key.alias" => "#{ENV["KEYSTORE_ALIAS"]}",
-      "android.injected.signing.key.password" => "#{ENV["KEYSTORE_KEYPASS"]}",
+      # "android.injected.signing.store.file" => "keystorePersonal.jks",
+      # "android.injected.signing.store.password" => "#{ENV["KEYSTORE_PASS"]}",
+      # "android.injected.signing.key.alias" => "#{ENV["KEYSTORE_ALIAS"]}",
+      # "android.injected.signing.key.password" => "#{ENV["KEYSTORE_KEYPASS"]}",
       "android.injected.version.code" => versionCode,
       "android.injected.version.name" => versionName,
-    })   
+    }
+    )   
     f = File.new("metadata/versionCode", "w")
     f.write(versionCode)
     f.close 
