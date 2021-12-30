@@ -46,7 +46,7 @@ jobs:
           rm -f keystorePersonal.jks
           rm -r fastlane/metadata
       - name: Upload Artifact
-        uses: actions/upload-artifact@v1
+        uses: actions/upload-artifact@v2
         with:
           name: app-release.aab
           path: android/app/build/outputs/bundle/release/
