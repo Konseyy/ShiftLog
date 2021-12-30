@@ -26,7 +26,8 @@ jobs:
           cd android
           echo $google_key > google_key.json
           echo "${{ secrets.ENCRYPTED_KEYSTORE }}" > keystore.asc
-          gpg -d --passphrase "${{ secrets.ENCRYPTED_KEYSTORE_PASS }}" --batch keystore.asc > keystorePersonal.jks
+          gpg -d --passphrase "${{ secrets.ENCRYPTED_KEYSTORE_PASS }}" --batch keystore.asc > app/keystorePersonal.jks
+          gpg -d --passphrase "${{ secrets.ENCRYPTED_KEYSTORE_PASS }}" --batch keystore.asc > fastlane/keystorePersonal.jks
           cd fastlane
           echo "${{ secrets.FASTLANE_ENV }}" > .env
       - name: FastLane Build bundle
