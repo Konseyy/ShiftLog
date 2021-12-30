@@ -16,6 +16,7 @@ jobs:
       - name: Bundle Install
         run: |
           cd android
+          gem install bundler
           bundle install
       - name: FastLane Build bundle
         run: |
