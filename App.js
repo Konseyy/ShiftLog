@@ -2,8 +2,7 @@ import 'react-native-gesture-handler';
 import React from 'react';
 import { NavigationContainer } from '@react-navigation/native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
-import FooterNav from './components/NavBar';
-import {tabs} from './scenes';
+import {Tabs} from './scenes';
 import { LogBox, Image, View } from 'react-native';
 LogBox.ignoreLogs([
   'Non-serializable values were found in the navigation state',
@@ -45,7 +44,7 @@ const App = () => {
     tabBarActiveTintColor= '#000000'
     // tabBar={FooterNav}
     >
-      {tabs.map((scene)=>{
+      {Tabs.map((scene)=>{
         return (
           <Tab.Screen key={scene.name} name={scene.name} component={scene.component} options={scene.options??null}/>
         );

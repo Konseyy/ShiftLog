@@ -1,18 +1,20 @@
-import ShiftsScene from "./components/ShiftsScene";
+import { ShiftsScene, DataScene, SettingsScene } from "./components/TabStacks";
 import ShiftList from "./components/ShiftTab/ShiftList";
 import AddShift from "./components/ShiftTab/AddShift";
-export const tabs = [
+import DataOptions from "./components/DataTab/DataOptions";
+import SettingsMain from "./components/SettingsTab/SettingsMain";
+export const Tabs = [
     {
         name: "Shifts",
         component: ShiftsScene,
     },
     {
         name: "Data",
-        component: ShiftsScene ,
+        component: DataScene ,
     },
     {
         name: "Settings",
-        component: ShiftsScene ,
+        component: SettingsScene ,
     },
 ];
 export const ShiftTab = [
@@ -28,4 +30,22 @@ export const ShiftTab = [
         component:AddShift
     },
     
+]
+export const DataTab = [
+    {
+        name:"DataOptions",
+        component:DataOptions,
+        options:{
+            title:"Data"
+        }
+    },
+]
+export const SettingsTab = [
+    {
+        name:"SettingsMain",
+        component:SettingsMain,
+        options:{
+            title:"Settings"
+        }
+    },
 ]
