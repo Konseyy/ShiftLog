@@ -1,5 +1,9 @@
 name: android-build-bundle-internal
-on: workflow_dispatch
+on: 
+  workflow_dispatch:
+  push:
+    branches:
+      master
 jobs:
   Build-and-upload-bundle-internal:
     runs-on: ubuntu-latest
