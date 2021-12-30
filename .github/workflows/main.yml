@@ -1,4 +1,4 @@
-name: react-native-android-build-apk
+name: android-build-bundle-internal
 on: workflow_dispatch
 jobs:
   Build-and-upload-bundle-internal:
@@ -29,9 +29,12 @@ jobs:
         run: |
           cd android
           echo $google_key > google_key.json
-          echo $google_key is the secret
+          echo ${{ secrets.ENCRYPTED_KEYSTORE }} > keystore.asc
+          gpg -d --passphrase "${{ secrets.ENCRYPTED_KEYSTORE_PASS }}" --batch keystore.asc > keystorePersonal.jks
           bundle exec fastlane internal
           rm -f google_key.json
+          rm -f keystore.asc
+          rm -f keystorePersonal.jks
       - name: Upload Artifact
         uses: actions/upload-artifact@v1
         with:
