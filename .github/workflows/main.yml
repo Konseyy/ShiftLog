@@ -13,10 +13,10 @@ jobs:
     runs-on: ubuntu-latest
     steps: 
       - uses: actions/checkout@v2
+      - uses: actions/setup-ruby@v1
       - name: Bundle Install
         run: |
           cd android
-          gem install bundler
           bundle install
       - name: FastLane Build bundle
         run: |
