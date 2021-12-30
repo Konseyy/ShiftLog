@@ -24,3 +24,17 @@ jobs:
         with:
           name: app-release.aab
           path: android/app/build/outputs/bundle/release/
+  publish_internal:
+    needs: build-android
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: Bundle install
+        run : |
+          bundle install
+      - name: Publish Bundle to app store
+        run: |
+          cd android
+          exec fastlane supply()
+      
+    
