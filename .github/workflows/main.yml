@@ -17,7 +17,7 @@ jobs:
         env:
           run_id: ${{env.GITHUB_RUN_ID}}
         run: |
-          echo ${{env.GITHUB_RUN_ID}} as current run id
+          echo ${{env.GITHUB_RUN_ID}} is this current run id
           echo "${{env.GITHUB_RUN_ID}}" as current run id in styring
           echo environment version number is $run_id
           export VERSION_CODE=(20+$run_id) && echo code is : $VERSION_CODE
