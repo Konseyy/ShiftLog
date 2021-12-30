@@ -19,10 +19,6 @@ jobs:
         run: |
           export VERSION_CODE=$(($run_id+20)) && echo code is : $VERSION_CODE
           export VERSION_SHA=$(($run_id+20)) && echo sha is : $VERSION_SHA
-      - name: FastLane Build bundle
-        run: |
-          cd android
-          bundle exec fastlane buildRelease
       - name: Get .env
         env:
           google_key: ${{ secrets.GOOGLE_API_JSON }}
@@ -33,7 +29,10 @@ jobs:
           gpg -d --passphrase "${{ secrets.ENCRYPTED_KEYSTORE_PASS }}" --batch keystore.asc > keystorePersonal.jks
           cd fastlane
           echo "${{ secrets.FASTLANE_ENV }}" > .env
-#          cat .env
+      - name: FastLane Build bundle
+        run: |
+          cd android
+          bundle exec fastlane buildRelease
       - name: Fastlane upload to Internal track
         run: |
           cd android
