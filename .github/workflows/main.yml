@@ -38,6 +38,7 @@ jobs:
           cd android
           bundle exec fastlane internal
       - name: Remove .env
+        if: always()
         run: | 
           cd android/fastlane
           rm -f .env
@@ -49,6 +50,6 @@ jobs:
         uses: actions/upload-artifact@v1
         with:
           name: app-release.aab
-          path: android/app/build/outputs/bundle/release/
+          path: android/app/build/outputs/bundle/release/    
 
     
