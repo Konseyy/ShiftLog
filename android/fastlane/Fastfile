@@ -44,7 +44,12 @@ platform :android do
 
   desc "Builds the release code"
   lane :buildRelease do
-    gradle(task: "bundleRelease")   
+    gradle(task: "bundleRelease", properties: {
+      "android.injected.signing.store.file" => "./keystorePersonal.jks",
+      "android.injected.signing.store.password" => "#{ENV["KEYSTORE_PASS"]}",
+      "android.injected.signing.key.alias" => "#{ENV["KEYSTORE_ALIAS"]}",
+      "android.injected.signing.key.password" => "#{ENV["KEYSTORE_KEYPASS"]}",
+    })   
   end
   
   desc "Submit a new Internal Build to Play Store"
