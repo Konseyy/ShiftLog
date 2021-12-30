@@ -2,7 +2,7 @@ import React from 'react';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { ShiftTab, DataTab, SettingsTab } from '../scenes';
 const Stack = createNativeStackNavigator();
-export const ShiftsScene = ({ navigation }) => {
+export const ShiftsScene = () => {
 	return (
 		<Stack.Navigator>
 			{ShiftTab.map((shiftTabScene) => {
@@ -14,7 +14,7 @@ export const ShiftsScene = ({ navigation }) => {
 		</Stack.Navigator>
 	);
 };
-export const DataScene = ({ navigation }) => {
+export const DataScene = () => {
 	return (
 		<Stack.Navigator>
 			{DataTab.map((shiftTabScene) => {
@@ -26,7 +26,7 @@ export const DataScene = ({ navigation }) => {
 		</Stack.Navigator>
 	);
 };
-export const SettingsScene = ({ navigation }) => {
+export const SettingsScene = () => {
 	return (
 		<Stack.Navigator>
 			{SettingsTab.map((shiftTabScene) => {

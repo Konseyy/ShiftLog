@@ -1,6 +1,6 @@
-import React from "react";
+import React, { FC } from "react";
 import { Text } from "react-native";
-const MakeBackup = () => {
+const MakeBackup : FC = () => {
 	return (
 		<Text>
 			Backup stuff

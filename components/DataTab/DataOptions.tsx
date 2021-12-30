@@ -1,10 +1,10 @@
-import React from "react";
+import React, { FC } from "react";
 import { Button, View } from "react-native";
-const DataOptions = ({ navigation }) => {
-	const goToReport = () => {
+const DataOptions: FC<any> = ({ navigation }: {navigation: any}) => {
+	const goToReport = (): void => {
 		navigation.navigate("MakeReport");
 	}
-	const goToBackup = () => {
+	const goToBackup = (): void => {
 		navigation.navigate("MakeBackup");
 	}
 	return (

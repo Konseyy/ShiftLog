@@ -1,6 +1,6 @@
-import React from "react";
+import React, { FC } from "react";
 import { Text } from "react-native";
-const MakeReport = () => {
+const MakeReport: FC = () => {
 	return (
 		<Text>
 			Report stuff
