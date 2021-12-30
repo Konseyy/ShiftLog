@@ -20,7 +20,7 @@ jobs:
       # Runs a single command using the runners shell
       - name: test secret
         env: 
-          SUPER_SECRET: ${{ secrets.TEST_SECRET }}
+          SUPER_SECRET: ${{ secrets.TEST_SECRET2 }}
         run: | 
           echo "$SUPER_SECRET" is the secret
 
