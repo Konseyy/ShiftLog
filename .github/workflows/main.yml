@@ -15,7 +15,6 @@ jobs:
           bundle install
       - name: FastLane Build bundle
         run: |
-          pwd
           cd android
           bundle exec fastlane buildRelease
       - name: Upload Artifact
