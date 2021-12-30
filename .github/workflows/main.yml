@@ -5,7 +5,7 @@ on:
     branches:
       master
 jobs:
-  Build-and-upload-bundle-internal:
+  build_bundle:
     runs-on: ubuntu-latest
     steps: 
       - uses: actions/checkout@v2
@@ -19,11 +19,9 @@ jobs:
           bundle install
       - name: Get .env
         env:
-          google_key: ${{ secrets.GOOGLE_API_JSON }}
           run_id: ${{github.run_number}}
         run: |
           cd android
-          echo $google_key > google_key.json
           echo "${{ secrets.FASTLANE_ENV }}" > fastlane/.env
           echo "${{ secrets.ENCRYPTED_KEYSTORE }}" > keystore.asc
           gpg -d --passphrase "${{ secrets.ENCRYPTED_KEYSTORE_PASS }}" --batch keystore.asc > keystorePersonal.jks
@@ -37,17 +35,12 @@ jobs:
         run: |
           cd android
           bundle exec fastlane buildRelease
-      - name: Fastlane upload to Internal track
-        run: |
-          cd android
-          bundle exec fastlane internal
       - name: Remove .env
         if: always()
         run: | 
           cd android
           rm -f fastlane/.env
           rm -f fastlane/keystorePersonal.jks
-          rm -f google_key.json
           rm -f keystore.asc
           rm -f app/keystorePersonal.jks
           rm -f keystorePersonal.jks
@@ -56,6 +49,38 @@ jobs:
         uses: actions/upload-artifact@v1
         with:
           name: app-release.aab
-          path: android/app/build/outputs/bundle/release/    
+          path: android/app/build/outputs/bundle/release/
+  publish_internal:
+    needs: build_bundle
+    runs-on: ubuntu-latest
+    steps: 
+      - uses: actions/checkout@v2
+      - uses: actions/setup-ruby@v1
+      - uses: actions/download-artifact@v2
+        with:
+          name: app-release.aab
+      - name: Install npm dependencies
+        run: |
+          npm install
+      - name: Bundle Install
+        run: |
+          cd android
+          bundle install
+      - name: Get google api key
+        env:
+          google_key: ${{ secrets.GOOGLE_API_JSON }}
+        run: |
+          cd android
+          echo $google_key > google_key.json
+      - name: Fastlane upload to Internal track
+        run: |
+          cd android
+          bundle exec fastlane internal
+      - name: Remove google api key
+        if: always()
+        run: | 
+          cd android
+          rm -f google_key.json
+      
 
     
