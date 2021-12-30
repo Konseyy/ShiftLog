@@ -28,8 +28,7 @@ jobs:
           echo "${{ secrets.ENCRYPTED_KEYSTORE }}" > keystore.asc
           gpg -d --passphrase "${{ secrets.ENCRYPTED_KEYSTORE_PASS }}" --batch keystore.asc > app/keystorePersonal.jks
           gpg -d --passphrase "${{ secrets.ENCRYPTED_KEYSTORE_PASS }}" --batch keystore.asc > fastlane/keystorePersonal.jks
-          cd fastlane
-          echo "${{ secrets.FASTLANE_ENV }}" > .env
+          echo "${{ secrets.FASTLANE_ENV }}" > fastlane/.env
       - name: FastLane Build bundle
         run: |
           cd android
@@ -41,12 +40,12 @@ jobs:
       - name: Remove .env
         if: always()
         run: | 
-          cd android/fastlane
-          rm -f .env
-          cd ..
+          cd android
+          rm -f fastlane/.env
+          rm -f fastlane/keystorePersonal.jks
           rm -f google_key.json
           rm -f keystore.asc
-          rm -f keystorePersonal.jks
+          rm -f app/keystorePersonal.jks
       - name: Upload Artifact
         uses: actions/upload-artifact@v1
         with:
