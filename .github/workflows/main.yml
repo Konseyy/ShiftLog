@@ -29,9 +29,9 @@ jobs:
           echo "${{ secrets.ENCRYPTED_KEYSTORE }}" > keystore.asc
           gpg -d --passphrase "${{ secrets.ENCRYPTED_KEYSTORE_PASS }}" --batch keystore.asc > keystorePersonal.jks
           cd app
-          gpg -d --passphrase "${{ secrets.ENCRYPTED_KEYSTORE_PASS }}" --batch keystore.asc > keystorePersonal.jks
+          gpg -d --passphrase "${{ secrets.ENCRYPTED_KEYSTORE_PASS }}" --batch ../keystore.asc > keystorePersonal.jks
           cd ../fastlane
-          gpg -d --passphrase "${{ secrets.ENCRYPTED_KEYSTORE_PASS }}" --batch keystore.asc > keystorePersonal.jks
+          gpg -d --passphrase "${{ secrets.ENCRYPTED_KEYSTORE_PASS }}" --batch ../keystore.asc > keystorePersonal.jks
       - name: FastLane Build bundle
         run: |
           cd android
