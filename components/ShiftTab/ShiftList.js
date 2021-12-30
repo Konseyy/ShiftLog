@@ -248,11 +248,6 @@ const ShiftList = ({navigation, route}) => {
             Add new entry bellow
           </Text>
         </View>
-        {/* <TouchableOpacity style={{paddingHorizontal:12, paddingVertical:8, backgroundColor:"#26a5ff", borderRadius:8, position:"absolute", top:"50%"}} onPress={() =>addShiftScene()}>
-          <Text style={{color:"white", fontWeight:"bold", fontSize:15}}>
-            Add New
-          </Text>
-        </TouchableOpacity> */}
       </View>
     );
   },[addShiftScene])
