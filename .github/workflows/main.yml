@@ -1,4 +1,4 @@
-name: android-build-bundle-internal
+name: Android publish internal
 on: 
   workflow_dispatch:
   push:
@@ -79,6 +79,3 @@ jobs:
         run: | 
           cd android
           rm -f google_key.json
-      
-
-    
