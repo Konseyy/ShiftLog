@@ -1,27 +1,23 @@
 name: react-native-android-build-apk
 on: workflow_dispatch
 jobs:
-#   install-and-test:
-#     runs-on: ubuntu-latest
-#     steps:
-#       - uses: actions/checkout@v2
-#       - name: Install npm dependencies
-#         run: |
-#           npm install
   build-bundle:
-#     needs: install-and-test
     runs-on: ubuntu-latest
     steps: 
       - uses: actions/checkout@v2
       - uses: actions/setup-ruby@v1
+      - name: Install npm dependencies
+        run: |
+          npm install
       - name: Bundle Install
         run: |
           cd android
           bundle install
       - name: FastLane Build bundle
         run: |
-          pwd
           cd android
+          export VERSION_CODE=(${{env.GITHUB_RUN_ID}}+16) && echo code is : $VERSION_CODE
+          export VERSION_SHA=(${{env.GITHUB_RUN_ID}}+16) && echo sha is : $VERSION_SHA
           bundle exec fastlane buildRelease
       - name: Upload Artifact
         uses: actions/upload-artifact@v1
