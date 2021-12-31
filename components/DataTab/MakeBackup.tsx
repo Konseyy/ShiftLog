@@ -11,6 +11,7 @@ import DateTimePicker, { Event } from '@react-native-community/datetimepicker';
 import { MakeBackupProps } from '../../types';
 import { stringDateFromDate } from '../../helperFunctions/dateFormatFunctions';
 import RNFetchBlob from 'rn-fetch-blob';
+import { softHaptic } from '../../helperFunctions/hapticFeedback';
 const MakeBackup: FC<MakeBackupProps> = () => {
 	const [periodFilter, setPeriodFilter] = useState<'all' | 'custom'>('all');
 	const [startPickerVisible, setStartPickerVisible] = useState(false);
@@ -89,7 +90,10 @@ const MakeBackup: FC<MakeBackupProps> = () => {
 					<View style={{ flexDirection: 'row', flex: 5 }}>
 						<TouchableOpacity
 							style={{ flex: 1 }}
-							onPress={() => setPeriodFilter('all')}
+							onPress={() => {
+								softHaptic();
+								setPeriodFilter('all');
+							}}
 						>
 							<View
 								style={{
@@ -106,7 +110,10 @@ const MakeBackup: FC<MakeBackupProps> = () => {
 						</TouchableOpacity>
 						<TouchableOpacity
 							style={{ alignSelf: 'flex-end', flex: 1 }}
-							onPress={() => setPeriodFilter('custom')}
+							onPress={() => {
+								softHaptic();
+								setPeriodFilter('custom');
+							}}
 						>
 							<View
 								style={{
@@ -161,7 +168,10 @@ const MakeBackup: FC<MakeBackupProps> = () => {
 										padding: 8,
 										borderRadius: 10,
 									}}
-									onPress={() => setStartPickerVisible(true)}
+									onPress={() => {
+										softHaptic();
+										setStartPickerVisible(true);
+									}}
 								>
 									<Text style={{ fontWeight: 'bold' }}>
 										{stringDateFromDate(startDate)}
@@ -187,7 +197,10 @@ const MakeBackup: FC<MakeBackupProps> = () => {
 										padding: 8,
 										borderRadius: 10,
 									}}
-									onPress={() => setEndPickerVisible(true)}
+									onPress={() => {
+										softHaptic();
+										setEndPickerVisible(true);
+									}}
 								>
 									<Text style={{ fontWeight: 'bold' }}>
 										{stringDateFromDate(endDate)}
@@ -214,7 +227,10 @@ const MakeBackup: FC<MakeBackupProps> = () => {
 			>
 				<TouchableOpacity
 					style={{ backgroundColor: '#26a5ff', padding: 10, borderRadius: 5 }}
-					onPress={generateReport}
+					onPress={() => {
+						softHaptic();
+						generateReport();
+					}}
 				>
 					<View>
 						<Text style={{ color: 'white', fontWeight: 'bold', fontSize: 15 }}>
@@ -228,6 +244,7 @@ const MakeBackup: FC<MakeBackupProps> = () => {
 					mode="date"
 					value={startDate}
 					onChange={(e: Event, s: Date | undefined) => {
+						softHaptic();
 						setStartPickerVisible(false);
 						if (s) {
 							setStartDate(s);
@@ -240,6 +257,7 @@ const MakeBackup: FC<MakeBackupProps> = () => {
 					mode="date"
 					value={startDate}
 					onChange={(e: Event, s: Date | undefined) => {
+						softHaptic();
 						setEndPickerVisible(false);
 						if (s) {
 							setEndDate(s);
