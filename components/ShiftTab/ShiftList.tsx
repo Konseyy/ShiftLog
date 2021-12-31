@@ -15,21 +15,22 @@ import {
 } from '../../helperFunctions/dateFormatFunctions';
 import { Picker } from '@react-native-picker/picker';
 import useShiftList from '../../helperFunctions/useShiftList';
+import { ShiftListProps } from '../../types';
 import ShiftItem from './ShiftItem';
-interface Props {
-	navigation: any,
-	route: any,
-}
-import { shift } from '../types/shifts';
-const ShiftList = ({ navigation, route }: Props) => {
-	const [currentFilter, setCurrentFilter] = useState<"week"|"month"|"all">('week');
-	const [minutesInInterval, setMinutesInInterval] = useState("");
-	const [sorter, setSorter] = useState<"start"|"end"|"duration">('start');
-	const [sortingDirection, setSortingDirection] = useState<"descending"|"ascending">('descending');
+import { shift } from '../../types';
+const ShiftList: React.FC<ShiftListProps> = ({ navigation }) => {
+	const [currentFilter, setCurrentFilter] = useState<'week' | 'month' | 'all'>(
+		'week'
+	);
+	const [minutesInInterval, setMinutesInInterval] = useState('');
+	const [sorter, setSorter] = useState<'start' | 'end' | 'duration'>('start');
+	const [sortingDirection, setSortingDirection] = useState<
+		'descending' | 'ascending'
+	>('descending');
 	const { shifts, loading, refreshFromStorage, modifyShifts } = useShiftList();
 	async function addShiftScene() {
 		softHaptic();
-		navigation.navigate('AddShift');
+		navigation.navigate('AddShift', { current: null });
 	}
 	async function deleteShift(index: number) {
 		softHaptic();
@@ -44,7 +45,7 @@ const ShiftList = ({ navigation, route }: Props) => {
 					},
 				},
 				{ text: 'No' },
-			],
+			]
 		);
 	}
 	async function editShift(index: number) {
@@ -57,10 +58,10 @@ const ShiftList = ({ navigation, route }: Props) => {
 		});
 	}
 	function filterData(
-		data:shift[],
+		data: shift[],
 		filter = currentFilter,
 		sort = sorter,
-		direction = sortingDirection,
+		direction = sortingDirection
 	) {
 		let returnData;
 		switch (filter) {
@@ -68,12 +69,12 @@ const ShiftList = ({ navigation, route }: Props) => {
 				let today = new Date();
 				let dayOTW = today.getDay();
 				let monday = new Date(
-					today.setDate(today.getDate() - (dayOTW === 0 ? 6 : dayOTW - 1)),
+					today.setDate(today.getDate() - (dayOTW === 0 ? 6 : dayOTW - 1))
 				);
 				monday.setHours(0, 0, 0, 0);
 				let nextMonday = new Date(monday.getTime());
 				nextMonday.setDate(nextMonday.getDate() + 7);
-				returnData = data.filter(value => {
+				returnData = data.filter((value) => {
 					const currentDate = new Date(value.startTime);
 					return currentDate > monday && currentDate < nextMonday;
 				});
@@ -84,7 +85,7 @@ const ShiftList = ({ navigation, route }: Props) => {
 				startOfMonth.setHours(0, 0, 0, 0);
 				let startOfNext = new Date(startOfMonth.getTime());
 				startOfNext.setMonth(startOfMonth.getMonth() + 1);
-				returnData = data.filter(value => {
+				returnData = data.filter((value) => {
 					const currentDate = new Date(value.startTime);
 					return currentDate > startOfMonth && currentDate < startOfNext;
 				});
@@ -106,7 +107,7 @@ const ShiftList = ({ navigation, route }: Props) => {
 					secondDate = second.startTime;
 					if (direction === 'ascending') {
 						return firstDate - secondDate;
-					} else{
+					} else {
 						return -firstDate + secondDate;
 					}
 				case 'end':
@@ -135,7 +136,7 @@ const ShiftList = ({ navigation, route }: Props) => {
 	const filteredData = filterData(shifts);
 	function updateTimeClocked(shifts = filteredData) {
 		let newMinutes = 0;
-		filterData(shifts, currentFilter).forEach(shiftObject => {
+		filterData(shifts, currentFilter).forEach((shiftObject) => {
 			newMinutes += getShiftDurationInMinutes(shiftObject);
 		});
 		setMinutesInInterval(displayHoursAndMinutes(newMinutes));
@@ -156,25 +157,27 @@ const ShiftList = ({ navigation, route }: Props) => {
 	}, [sorter]);
 	const SortDisplay = useMemo(
 		() =>
-			({ style, opacity = 1 }: {style?:object, opacity?:number}) => {
+			({ style, opacity = 1 }: { style?: object; opacity?: number }) => {
 				return (
 					<Image
 						style={{
 							height: 10,
 							width: 10,
 							transform: [
-								{ rotateX: sortingDirection === 'ascending' ? '0deg' : '180deg' },
+								{
+									rotateX: sortingDirection === 'ascending' ? '0deg' : '180deg',
+								},
 							],
 							marginLeft: 5,
 							marginTop: 5,
 							...style,
-							opacity:opacity
+							opacity: opacity,
 						}}
 						source={require('../../img/icons8-triangle-96.png')}
 					/>
 				);
 			},
-		[sortingDirection],
+		[sortingDirection]
 	);
 	const FilterSelect = useMemo(
 		() => () => {
@@ -182,10 +185,11 @@ const ShiftList = ({ navigation, route }: Props) => {
 				<View style={{ height: 50, marginHorizontal: 5 }}>
 					<Picker
 						selectedValue={currentFilter}
-						onValueChange={value => {
+						onValueChange={(value) => {
 							softHaptic();
 							setCurrentFilter(value);
-						}}>
+						}}
+					>
 						<Picker.Item label="Current week" value={'week'} />
 						<Picker.Item label="Current month" value={'month'} />
 						<Picker.Item label="All" value={'all'} />
@@ -193,88 +197,101 @@ const ShiftList = ({ navigation, route }: Props) => {
 				</View>
 			);
 		},
-		[currentFilter],
+		[currentFilter]
 	);
 	const ListHeader = useMemo(
-		() => ({style}:{style?:object}) => {
-			return (
-				<View>
-					<View
-						style={{
-							flexDirection: 'row',
-							marginHorizontal: 2,
-							paddingBottom: 4,
-							paddingTop: 6,
-							borderBottomColor: '#000000',
-							borderBottomWidth: 0.5,
-							borderTopWidth: 0.5,
-							borderTopColor: '#000000',
-						}}>
-						<TouchableOpacity
-							style={{ flex: 1, justifyContent: 'center', flexDirection: 'row' }}
-							onPress={() => {
-								if (sorter === 'start') {
-									if (sortingDirection === 'ascending') {
-										setSortingDirection('descending');
-									} else {
-										setSortingDirection('ascending');
-									}
-								} else {
-									setSorter('start');
-								}
-							}}>
-							<Text style={{ fontWeight: 'bold' }}>Shift Start</Text>
-							<SortDisplay opacity={sorter === 'start' ? 1 : 0} />
-						</TouchableOpacity>
-						<TouchableOpacity
-							style={{ flex: 1, justifyContent: 'center', flexDirection: 'row' }}
-							onPress={() => {
-								if (sorter === 'end') {
-									if (sortingDirection === 'ascending') {
-										setSortingDirection('descending');
-									} else {
-										setSortingDirection('ascending');
-									}
-								} else {
-									setSorter('end');
-									setSortingDirection('descending');
-								}
-							}}>
-							<Text style={{ fontWeight: 'bold' }}>Shift End</Text>
-							<SortDisplay opacity={sorter === 'end' ? 1 : 0} />
-						</TouchableOpacity>
-						<TouchableOpacity
+		() =>
+			({ style }: { style?: object }) => {
+				return (
+					<View>
+						<View
 							style={{
-								flex: 2,
-								justifyContent: 'center',
 								flexDirection: 'row',
-								maxWidth: 150,
-								marginHorizontal: 5,
+								marginHorizontal: 2,
+								paddingBottom: 4,
+								paddingTop: 6,
+								borderBottomColor: '#000000',
+								borderBottomWidth: 0.5,
+								borderTopWidth: 0.5,
+								borderTopColor: '#000000',
 							}}
-							onPress={() => {
-								if (sorter === 'duration') {
-									if (sortingDirection === 'ascending') {
-										setSortingDirection('descending');
+						>
+							<TouchableOpacity
+								style={{
+									flex: 1,
+									justifyContent: 'center',
+									flexDirection: 'row',
+								}}
+								onPress={() => {
+									if (sorter === 'start') {
+										if (sortingDirection === 'ascending') {
+											setSortingDirection('descending');
+										} else {
+											setSortingDirection('ascending');
+										}
 									} else {
-										setSortingDirection('ascending');
+										setSorter('start');
 									}
-								} else {
-									setSorter('duration');
-									setSortingDirection('descending');
-								}
-							}}>
-							<Text style={{ fontWeight: 'bold' }}>Duration</Text>
-							<SortDisplay opacity={sorter === 'duration' ? 1 : 0} />
-						</TouchableOpacity>
+								}}
+							>
+								<Text style={{ fontWeight: 'bold' }}>Shift Start</Text>
+								<SortDisplay opacity={sorter === 'start' ? 1 : 0} />
+							</TouchableOpacity>
+							<TouchableOpacity
+								style={{
+									flex: 1,
+									justifyContent: 'center',
+									flexDirection: 'row',
+								}}
+								onPress={() => {
+									if (sorter === 'end') {
+										if (sortingDirection === 'ascending') {
+											setSortingDirection('descending');
+										} else {
+											setSortingDirection('ascending');
+										}
+									} else {
+										setSorter('end');
+										setSortingDirection('descending');
+									}
+								}}
+							>
+								<Text style={{ fontWeight: 'bold' }}>Shift End</Text>
+								<SortDisplay opacity={sorter === 'end' ? 1 : 0} />
+							</TouchableOpacity>
+							<TouchableOpacity
+								style={{
+									flex: 2,
+									justifyContent: 'center',
+									flexDirection: 'row',
+									maxWidth: 150,
+									marginHorizontal: 5,
+								}}
+								onPress={() => {
+									if (sorter === 'duration') {
+										if (sortingDirection === 'ascending') {
+											setSortingDirection('descending');
+										} else {
+											setSortingDirection('ascending');
+										}
+									} else {
+										setSorter('duration');
+										setSortingDirection('descending');
+									}
+								}}
+							>
+								<Text style={{ fontWeight: 'bold' }}>Duration</Text>
+								<SortDisplay opacity={sorter === 'duration' ? 1 : 0} />
+							</TouchableOpacity>
+						</View>
 					</View>
-				</View>
-			);
-		},
-		[currentFilter, sortingDirection, sorter],
+				);
+			},
+		[currentFilter, sortingDirection, sorter]
 	);
 	const ListFooter = useMemo(
 		() =>
-			({ style }:{style?:object}) => {
+			({ style }: { style?: object }) => {
 				return (
 					<View style={{ ...style }}>
 						<Text
@@ -283,7 +300,8 @@ const ShiftList = ({ navigation, route }: Props) => {
 								fontWeight: 'bold',
 								marginLeft: 15,
 								marginVertical: 3,
-							}}>
+							}}
+						>
 							{`Selected Period: ${minutesInInterval}`}
 						</Text>
 						<Button
@@ -294,13 +312,14 @@ const ShiftList = ({ navigation, route }: Props) => {
 					</View>
 				);
 			},
-		[minutesInInterval, currentFilter, addShiftScene],
+		[minutesInInterval, currentFilter, addShiftScene]
 	);
 	const emptyComponent = useMemo(
 		() => () => {
 			return (
 				<View
-					style={{ height: '100%', position: 'relative', alignItems: 'center' }}>
+					style={{ height: '100%', position: 'relative', alignItems: 'center' }}
+				>
 					<View style={{ marginTop: '15%' }}>
 						<Text
 							style={{
@@ -308,19 +327,22 @@ const ShiftList = ({ navigation, route }: Props) => {
 								fontStyle: 'italic',
 								fontWeight: 'bold',
 								color: '#a3a3a3',
-							}}>
+							}}
+						>
 							No entries
 						</Text>
 					</View>
 					<View style={{ marginTop: '5%' }}>
-						<Text style={{ fontSize: 15, fontWeight: 'bold', color: '#a3a3a3' }}>
+						<Text
+							style={{ fontSize: 15, fontWeight: 'bold', color: '#a3a3a3' }}
+						>
 							Add new entry bellow
 						</Text>
 					</View>
 				</View>
 			);
 		},
-		[addShiftScene],
+		[addShiftScene]
 	);
 	return (
 		<View
@@ -328,7 +350,8 @@ const ShiftList = ({ navigation, route }: Props) => {
 				flex: 1,
 				justifyContent: 'flex-start',
 				alignItems: 'stretch',
-			}}>
+			}}
+		>
 			{!loading && (
 				<View style={{ flex: 1, flexDirection: 'column' }}>
 					<FilterSelect />
@@ -336,11 +359,10 @@ const ShiftList = ({ navigation, route }: Props) => {
 					<View style={{ flex: 8 }}>
 						<FlatList
 							data={loading ? null : filteredData}
-							renderItem={item => {
+							renderItem={(item) => {
 								return (
 									<ShiftItem
 										item={item}
-										navigation={navigation}
 										deleteShift={deleteShift}
 										editShift={editShift}
 									/>
