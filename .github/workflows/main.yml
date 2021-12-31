@@ -79,7 +79,7 @@ jobs:
         run: | 
           cd android
           rm -f google_key.json
-  publish_internal:
+  publish_alpha:
     needs: build_bundle
     runs-on: ubuntu-latest
     steps: 
