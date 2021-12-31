@@ -80,15 +80,11 @@ jobs:
           cd android
           rm -f google_key.json
   publish_alpha:
-    needs: build_bundle
+    needs: [build_bundle, publish_internal]
     runs-on: ubuntu-latest
     steps: 
       - uses: actions/checkout@v2
       - uses: actions/setup-ruby@v1
-      - uses: actions/download-artifact@v2
-        with:
-          name: app-release.aab
-          path: android/app/build/outputs/bundle/release/
       - name: Bundle Install
         run: |
           cd android
