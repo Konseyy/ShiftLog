@@ -53,9 +53,9 @@ const MakeReport: FC<MakeReportProps> = () => {
 				new Date(shift.startTime)
 			)}, ${stringDateFromDate(new Date(shift.endTime))}, ${stringTimeFromDate(
 				new Date(shift.endTime)
-			)}, ${dateDifference(shift.startTime, shift.endTime, shift.break)},"${
+			)}, ${dateDifference(shift.startTime, shift.endTime, shift.break)},${
 				shift.notes
-			}"\n`;
+			}\n`;
 			saveString += line;
 		});
 
@@ -67,14 +67,14 @@ const MakeReport: FC<MakeReportProps> = () => {
 				const dirs = RNFetchBlob.fs.dirs;
 				console.log(dirs);
 				const fs = RNFetchBlob.fs;
-				const NEW_FILE_PATH = `${dirs.DownloadDir}/${fileName}.csv`;
+				const NEW_FILE_PATH = `${dirs.DownloadDir}/${fileName}.txt`;
 				console.log('dir', NEW_FILE_PATH);
 				await fs.createFile(NEW_FILE_PATH, saveString, 'utf8');
 				Alert.alert(
 					'Report generated',
 					`Report has been downloaded to \n ${NEW_FILE_PATH}`
 				);
-				RNFetchBlob.android.actionViewIntent(NEW_FILE_PATH, 'text/plain');
+				// RNFetchBlob.android.actionViewIntent(NEW_FILE_PATH, 'text/plain');
 			} else {
 				Alert.alert(
 					'Permission required',
