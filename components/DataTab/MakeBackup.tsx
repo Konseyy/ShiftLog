@@ -32,9 +32,9 @@ const MakeBackup: FC<MakeBackupProps> = () => {
 		} else if (periodFilter === 'custom') {
 			let startTime = startDate.setHours(0, 0, 0, 0);
 			let tempEndDate = new Date(endDate);
-			tempEndDate.setDate(tempEndDate.getDate()+1);
-			tempEndDate.setHours(0,0,0,0)
-			tempEndDate.setMilliseconds(tempEndDate.getMilliseconds()-1);
+			tempEndDate.setDate(tempEndDate.getDate() + 1);
+			tempEndDate.setHours(0, 0, 0, 0);
+			tempEndDate.setMilliseconds(tempEndDate.getMilliseconds() - 1);
 			let endTime = tempEndDate.getTime();
 			saveString = JSON.stringify(
 				shifts.filter((shift) => {
@@ -53,7 +53,10 @@ const MakeBackup: FC<MakeBackupProps> = () => {
 				const NEW_FILE_PATH = `${dirs.DownloadDir}/${fileName}.txt`;
 				console.log('dir', NEW_FILE_PATH);
 				await fs.createFile(NEW_FILE_PATH, saveString, 'utf8');
-				Alert.alert("Backup generated",`Backup has been downloaded to \n ${NEW_FILE_PATH}`)
+				Alert.alert(
+					'Backup generated',
+					`Backup has been downloaded to \n ${NEW_FILE_PATH}`
+				);
 			} else {
 				Alert.alert(
 					'Permission required',

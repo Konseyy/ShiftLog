@@ -4,8 +4,7 @@ import { Text, TouchableOpacity, View, Button } from 'react-native';
 import {
 	stringDateFromDate,
 	stringTimeFromDate,
-	differenceInMinutes,
-	displayHoursAndMinutes,
+	dateDifference,
 } from '../../helperFunctions/dateFormatFunctions';
 import { softHaptic } from '../../helperFunctions/hapticFeedback';
 import { shift } from '../../types';
@@ -22,10 +21,7 @@ const ShiftItem = ({ item, deleteShift, editShift }: Props) => {
 		}
 		return i;
 	}
-	function dateDifference(timeStamp1: number, timeStamp2: number) {
-		const diffMinutes = differenceInMinutes(timeStamp1, timeStamp2) - breakTime;
-		return displayHoursAndMinutes(diffMinutes);
-	}
+
 	useEffect(() => {
 		// console.log("current item is",item);
 	}, []);
@@ -74,7 +70,11 @@ const ShiftItem = ({ item, deleteShift, editShift }: Props) => {
 						<View style={{ flex: 2 }} />
 						<View style={{ flex: 5 }}>
 							<Text>
-								{dateDifference(ShiftData.startTime, ShiftData.endTime)}
+								{dateDifference(
+									ShiftData.startTime,
+									ShiftData.endTime,
+									ShiftData.break
+								)}
 							</Text>
 						</View>
 					</View>
