@@ -1,40 +1,59 @@
 import React from 'react';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { ShiftTab, DataTab, SettingsTab } from '../scenes';
-const Stack = createNativeStackNavigator();
+import {
+	ShiftStackParamList,
+	DataStackParamList,
+	SettingsStackParamList,
+} from '../types';
+const ShiftStack = createNativeStackNavigator<ShiftStackParamList>();
+const DataStack = createNativeStackNavigator<DataStackParamList>();
+const SettingsStack = createNativeStackNavigator<SettingsStackParamList>();
 export const ShiftsScene = () => {
 	return (
-		<Stack.Navigator>
-			{ShiftTab.map((shiftTabScene) => {
+		<ShiftStack.Navigator>
+			{ShiftTab.map((scene) => {
 				return (
-					<Stack.Screen key={"subScreen" + shiftTabScene.name} name={shiftTabScene.name} component={shiftTabScene.component} options={shiftTabScene.options} />
-				)
+					<ShiftStack.Screen
+						key={'subScreen' + scene.name}
+						name={scene.name}
+						component={scene.component}
+						options={scene.options}
+					/>
+				);
 			})}
-
-		</Stack.Navigator>
+		</ShiftStack.Navigator>
 	);
 };
 export const DataScene = () => {
 	return (
-		<Stack.Navigator>
-			{DataTab.map((shiftTabScene) => {
+		<DataStack.Navigator>
+			{DataTab.map((scene) => {
 				return (
-					<Stack.Screen key={"subScreen" + shiftTabScene.name} name={shiftTabScene.name} component={shiftTabScene.component} options={shiftTabScene.options} />
-				)
+					<DataStack.Screen
+						key={'subScreen' + scene.name}
+						name={scene.name}
+						component={scene.component}
+						options={scene.options}
+					/>
+				);
 			})}
-
-		</Stack.Navigator>
+		</DataStack.Navigator>
 	);
 };
 export const SettingsScene = () => {
 	return (
-		<Stack.Navigator>
-			{SettingsTab.map((shiftTabScene) => {
+		<SettingsStack.Navigator>
+			{SettingsTab.map((scene) => {
 				return (
-					<Stack.Screen key={"subScreen" + shiftTabScene.name} name={shiftTabScene.name} component={shiftTabScene.component} options={shiftTabScene.options} />
-				)
+					<SettingsStack.Screen
+						key={'subScreen' + scene.name}
+						name={scene.name}
+						component={scene.component}
+						options={scene.options}
+					/>
+				);
 			})}
-
-		</Stack.Navigator>
+		</SettingsStack.Navigator>
 	);
 };

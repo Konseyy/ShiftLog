@@ -5,10 +5,19 @@ import DataOptions from './components/DataTab/DataOptions';
 import SettingsMain from './components/SettingsTab/SettingsMain';
 import MakeReport from './components/DataTab/MakeReport';
 import MakeBackup from './components/DataTab/MakeBackup';
-interface Tab {
-	name: string,
-	component: ()=>JSX.Element,
-	options?: object
+import {
+	RootStackParamList,
+	ShiftStackParamList,
+	DataStackParamList,
+	SettingsStackParamList,
+	ShiftStackComponent,
+	DataStackComponent,
+	SettingsStackComponent,
+} from './types';
+export interface Tab {
+	name: keyof RootStackParamList;
+	component: () => JSX.Element;
+	options?: object;
 }
 export const Tabs: Tab[] = [
 	{
@@ -24,7 +33,14 @@ export const Tabs: Tab[] = [
 		component: SettingsScene,
 	},
 ];
-export const ShiftTab = [
+interface ShiftTab {
+	name: keyof ShiftStackParamList;
+	component: ShiftStackComponent;
+	options?: {
+		title: string;
+	};
+}
+export const ShiftTab: ShiftTab[] = [
 	{
 		name: 'ShiftList',
 		component: ShiftList,
@@ -37,7 +53,14 @@ export const ShiftTab = [
 		component: AddShift,
 	},
 ];
-export const DataTab = [
+interface DataTab {
+	name: keyof DataStackParamList;
+	component: DataStackComponent;
+	options?: {
+		title: string;
+	};
+}
+export const DataTab: DataTab[] = [
 	{
 		name: 'DataOptions',
 		component: DataOptions,
@@ -60,7 +83,14 @@ export const DataTab = [
 		},
 	},
 ];
-export const SettingsTab = [
+interface SettingsTab {
+	name: keyof SettingsStackParamList;
+	component: SettingsStackComponent;
+	options?: {
+		title: string;
+	};
+}
+export const SettingsTab: SettingsTab[] = [
 	{
 		name: 'SettingsMain',
 		component: SettingsMain,
