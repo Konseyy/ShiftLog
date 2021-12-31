@@ -1,5 +1,5 @@
 # ShiftLog Overview
-Mobile application made with [React Native](https://reactnative.dev/) for tracking work shifts
+Mobile application made with [React Native](https://reactnative.dev/) in [TypeScript](https://www.typescriptlang.org/) for tracking work shifts
 # Download
 Not yet available on any app stores (coming later)
 # Repository installation
