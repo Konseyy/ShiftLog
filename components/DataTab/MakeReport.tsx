@@ -240,11 +240,11 @@ const MakeReport: FC<MakeReportProps> = () => {
 				style={{
 					flexDirection: 'row',
 					justifyContent: 'center',
-					marginTop: '20%',
+					marginTop: '5%',
 				}}
 			>
 				<TouchableOpacity
-					style={{ backgroundColor: 'green', padding: 10, borderRadius: 5 }}
+					style={{ backgroundColor: 'green', padding: 10, borderRadius: 10 }}
 					onPress={() => {
 						softHaptic();
 						generateReport();
