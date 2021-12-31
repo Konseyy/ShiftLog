@@ -69,4 +69,9 @@ platform :android do
     upload_to_play_store(track: 'internal', skip_upload_changelogs: true, track_promote_to: 'alpha', json_key:"./google_key.json")
   end
 
+  desc "Submit a new Open Beta Build to Play Store"
+  lane :beta do
+    upload_to_play_store(track: 'alpha', skip_upload_changelogs: true, track_promote_to: 'beta', json_key:"./google_key.json")
+  end
+
 end
