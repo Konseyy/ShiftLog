@@ -1,7 +1,7 @@
 # ShiftLog Overview
 Mobile application made with [React Native](https://reactnative.dev/) in [TypeScript](https://www.typescriptlang.org/) for tracking work shifts
 # Download
-Not yet available on any app stores (coming later)
+Available on [Google Play](https://play.google.com/store/apps/details?id=com.shiftlog)
 # Repository installation
 Before executing further instructions it is necessary to [set up](https://reactnative.dev/docs/environment-setup) your React Native development environment if you have not already done so
 ## Clone the repository
