@@ -64,4 +64,9 @@ platform :android do
     upload_to_play_store(track: 'internal', aab: 'app/build/outputs/bundle/release/app-release.aab', json_key:"./google_key.json")
   end
 
+  desc "Submit a new Closed Beta Build to Play Store"
+  lane :alpha do
+    upload_to_play_store(track: 'alpha', aab: 'app/build/outputs/bundle/release/app-release.aab', json_key:"./google_key.json")
+  end
+
 end
