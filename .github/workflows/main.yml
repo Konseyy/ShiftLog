@@ -104,7 +104,7 @@ jobs:
         run: | 
           cd android
           rm -f google_key.json
-  publish_alpha:
+  publish_beta:
     needs: [publish_alpha]
     runs-on: ubuntu-latest
     steps: 
