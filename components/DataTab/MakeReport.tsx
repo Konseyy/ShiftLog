@@ -55,7 +55,7 @@ const MakeReport: FC<MakeReportProps> = () => {
 			)}, ${stringDateFromDate(new Date(shift.endTime))}, ${stringTimeFromDate(
 				new Date(shift.endTime)
 			)}, ${dateDifference(shift.startTime, shift.endTime, shift.break)},${
-				shift.notes
+				shift.notes.length?shift.notes:"no additional notes"
 			}\n`;
 			saveString += line;
 		});
@@ -68,7 +68,7 @@ const MakeReport: FC<MakeReportProps> = () => {
 				const dirs = RNFetchBlob.fs.dirs;
 				console.log(dirs);
 				const fs = RNFetchBlob.fs;
-				const NEW_FILE_PATH = `${dirs.DownloadDir}/${fileName}.txt`;
+				const NEW_FILE_PATH = `${dirs.DownloadDir}/${fileName}.csv`;
 				console.log('dir', NEW_FILE_PATH);
 				await fs.createFile(NEW_FILE_PATH, saveString, 'utf8');
 				Alert.alert(
