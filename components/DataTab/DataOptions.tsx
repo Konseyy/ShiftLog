@@ -1,7 +1,7 @@
 import React, { FC } from 'react';
 import { Alert, TouchableOpacity, View, Text, ViewStyle } from 'react-native';
 import { DataOptionsProps } from '../../types';
-import { pickSingle } from 'react-native-document-picker';
+import { pickSingle, isCancel } from 'react-native-document-picker';
 import useShiftList from '../../helperFunctions/useShiftList';
 import { shift } from '../../types';
 import RNFetchBlob from 'rn-fetch-blob';
@@ -46,12 +46,14 @@ const DataOptions: FC<DataOptionsProps> = ({ navigation }) => {
 			}
 			return false;
 		};
-		const resp = await pickSingle();
-		if (resp.type !== 'text/plain') {
-			Alert.alert('Wrong file format', 'Backup should be a .txt file');
-			return;
-		}
 		try {
+			const resp = await pickSingle();
+			if (!resp) return;
+			console.log('res', resp);
+			if (resp.type !== 'text/plain') {
+				Alert.alert('Wrong file format', 'Backup should be a .txt file');
+				return;
+			}
 			const backupFile = await RNFetchBlob.fs.readFile(resp.uri, 'utf8');
 			let readData = JSON.parse(backupFile);
 			if (!isDataRightType(readData)) {
@@ -64,6 +66,9 @@ const DataOptions: FC<DataOptionsProps> = ({ navigation }) => {
 			await overwriteFromBackup(readData);
 			Alert.alert('Backup restored', 'Backup successfully restored');
 		} catch (err) {
+			if (isCancel(err)) {
+				return;
+			}
 			console.error('error reading backup', err);
 		}
 	};
