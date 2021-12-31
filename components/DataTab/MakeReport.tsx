@@ -15,6 +15,7 @@ import {
 import DateTimePicker, { Event } from '@react-native-community/datetimepicker';
 import RNFetchBlob from 'rn-fetch-blob';
 import { MakeReportProps, shift } from '../../types';
+import { softHaptic } from '../../helperFunctions/hapticFeedback';
 const MakeReport: FC<MakeReportProps> = () => {
 	const [periodFilter, setPeriodFilter] = useState<'all' | 'custom'>('all');
 	const [startPickerVisible, setStartPickerVisible] = useState(false);
@@ -107,7 +108,10 @@ const MakeReport: FC<MakeReportProps> = () => {
 					<View style={{ flexDirection: 'row', flex: 5 }}>
 						<TouchableOpacity
 							style={{ flex: 1 }}
-							onPress={() => setPeriodFilter('all')}
+							onPress={() => {
+								softHaptic();
+								setPeriodFilter('all');
+							}}
 						>
 							<View
 								style={{
@@ -124,7 +128,10 @@ const MakeReport: FC<MakeReportProps> = () => {
 						</TouchableOpacity>
 						<TouchableOpacity
 							style={{ alignSelf: 'flex-end', flex: 1 }}
-							onPress={() => setPeriodFilter('custom')}
+							onPress={() => {
+								softHaptic();
+								setPeriodFilter('custom');
+							}}
 						>
 							<View
 								style={{
@@ -179,7 +186,10 @@ const MakeReport: FC<MakeReportProps> = () => {
 										padding: 8,
 										borderRadius: 10,
 									}}
-									onPress={() => setStartPickerVisible(true)}
+									onPress={() => {
+										softHaptic();
+										setStartPickerVisible(true);
+									}}
 								>
 									<Text style={{ fontWeight: 'bold' }}>
 										{stringDateFromDate(startDate)}
@@ -205,7 +215,10 @@ const MakeReport: FC<MakeReportProps> = () => {
 										padding: 8,
 										borderRadius: 10,
 									}}
-									onPress={() => setEndPickerVisible(true)}
+									onPress={() => {
+										softHaptic();
+										setEndPickerVisible(true);
+									}}
 								>
 									<Text style={{ fontWeight: 'bold' }}>
 										{stringDateFromDate(endDate)}
@@ -232,7 +245,10 @@ const MakeReport: FC<MakeReportProps> = () => {
 			>
 				<TouchableOpacity
 					style={{ backgroundColor: 'green', padding: 10, borderRadius: 5 }}
-					onPress={generateReport}
+					onPress={() => {
+						softHaptic();
+						generateReport();
+					}}
 				>
 					<View>
 						<Text style={{ color: 'white', fontWeight: 'bold', fontSize: 15 }}>
@@ -246,6 +262,7 @@ const MakeReport: FC<MakeReportProps> = () => {
 					mode="date"
 					value={startDate}
 					onChange={(e: Event, s: Date | undefined) => {
+						softHaptic();
 						setStartPickerVisible(false);
 						if (s) {
 							setStartDate(s);
@@ -258,6 +275,7 @@ const MakeReport: FC<MakeReportProps> = () => {
 					mode="date"
 					value={startDate}
 					onChange={(e: Event, s: Date | undefined) => {
+						softHaptic();
 						setEndPickerVisible(false);
 						if (s) {
 							setEndDate(s);
