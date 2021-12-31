@@ -70,6 +70,10 @@ const useShiftList = () => {
 			await saveShiftLogStorage();
 		}
 	};
+	const overwriteFromBackup = async (newData:shift[]): Promise<void> => {
+		setShiftList(newData);
+		await saveShiftLogStorage();
+	}
 	useEffect(() => {
 		refreshFromStorage();
 	}, []);
@@ -78,6 +82,7 @@ const useShiftList = () => {
 		modifyShifts: reducer,
 		loading,
 		refreshFromStorage,
+		overwriteFromBackup
 	};
 };
 export default useShiftList;

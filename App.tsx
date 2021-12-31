@@ -7,6 +7,8 @@ import { LogBox, Image, View } from 'react-native';
 import { RootStackParamList } from './types';
 LogBox.ignoreLogs([
 	'Non-serializable values were found in the navigation state',
+	'Remote debugger is in a background tab which may cause apps to perform slowly',
+	'Require cycle: node_modules\\rn-fetch-blob\\index.js',
 ]);
 const Tab = createBottomTabNavigator<RootStackParamList>();
 
