@@ -222,11 +222,11 @@ const MakeBackup: FC<MakeBackupProps> = () => {
 				style={{
 					flexDirection: 'row',
 					justifyContent: 'center',
-					marginTop: '20%',
+					marginTop: '5%',
 				}}
 			>
 				<TouchableOpacity
-					style={{ backgroundColor: '#26a5ff', padding: 10, borderRadius: 5 }}
+					style={{ backgroundColor: '#26a5ff', padding: 10, borderRadius: 10 }}
 					onPress={() => {
 						softHaptic();
 						generateReport();
