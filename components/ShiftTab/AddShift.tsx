@@ -67,7 +67,7 @@ const AddShift: FC<AddShiftProps> = ({ navigation, route }) => {
 		}
 	}
 	async function addShift() {
-		console.log("adding",showCustomBreakInput?customBreakTime: breakTime)
+		console.log('adding', showCustomBreakInput ? customBreakTime : breakTime);
 		let dateToAddStart = new Date(startDate);
 		dateToAddStart.setHours(startTime.getHours(), startTime.getMinutes(), 0, 0);
 		let dateToAddEnd = new Date(endDate);
@@ -82,7 +82,7 @@ const AddShift: FC<AddShiftProps> = ({ navigation, route }) => {
 					data: {
 						startTime: dateToAddStart.getTime(),
 						endTime: dateToAddEnd.getTime(),
-						break: showCustomBreakInput?customBreakTime: breakTime,
+						break: showCustomBreakInput ? customBreakTime : breakTime,
 						notes: notes,
 					},
 				},
@@ -94,7 +94,7 @@ const AddShift: FC<AddShiftProps> = ({ navigation, route }) => {
 					data: {
 						startTime: dateToAddStart.getTime(),
 						endTime: dateToAddEnd.getTime(),
-						break: showCustomBreakInput?customBreakTime: breakTime,
+						break: showCustomBreakInput ? customBreakTime : breakTime,
 						notes: notes,
 						index: params.current.index,
 					},
@@ -115,7 +115,14 @@ const AddShift: FC<AddShiftProps> = ({ navigation, route }) => {
 			});
 		}
 		let temp = params.current?.break;
-		if(temp!==60&&temp!==45&&temp!==30&&temp!==15&&temp!==0&&temp){
+		if (
+			temp !== 60 &&
+			temp !== 45 &&
+			temp !== 30 &&
+			temp !== 15 &&
+			temp !== 0 &&
+			temp
+		) {
 			setBreakTime(-1);
 			setShowCustomBreakInput(true);
 			setCustomBreakTime(temp);
@@ -244,13 +251,12 @@ const AddShift: FC<AddShiftProps> = ({ navigation, route }) => {
 								selectedValue={breakTime}
 								onValueChange={(value) => {
 									softHaptic();
-									if(value===-1){
+									if (value === -1) {
 										setShowCustomBreakInput(true);
-									}
-									else{
+									} else {
 										setShowCustomBreakInput(false);
 									}
-									setBreakTime(value)
+									setBreakTime(value);
 								}}
 							>
 								<Picker.Item label="0m" value={0} />
@@ -261,25 +267,30 @@ const AddShift: FC<AddShiftProps> = ({ navigation, route }) => {
 								<Picker.Item label="other" value={-1} />
 							</Picker>
 						</View>
-						{
-							showCustomBreakInput&&
+						{showCustomBreakInput && (
 							<View style={{ flexDirection: 'column', marginTop: 10 }}>
-							<Text style={{ fontWeight: 'bold' }}>Enter custom break time (minutes) : </Text>
-							<TextInput style={{
-									marginTop: 10,
-									backgroundColor: '#FFFFFF',
-									color: '#000000',
-									alignSelf: 'stretch',
-								}}
-								keyboardType= 'numeric'
-								placeholder="0"
-								defaultValue={customBreakTime.toString()}
-								onChangeText={val=>{
-									let noSymbols = val.toString().replace(/[^0-9]/g, '');
-									setCustomBreakTime(noSymbols.length?parseInt(noSymbols):0);
-								}}/>
-						</View>
-						}
+								<Text style={{ fontWeight: 'bold' }}>
+									Enter custom break time (minutes) :{' '}
+								</Text>
+								<TextInput
+									style={{
+										marginTop: 10,
+										backgroundColor: '#FFFFFF',
+										color: '#000000',
+										alignSelf: 'stretch',
+									}}
+									keyboardType="numeric"
+									placeholder="0"
+									defaultValue={customBreakTime.toString()}
+									onChangeText={(val) => {
+										let noSymbols = val.toString().replace(/[^0-9]/g, '');
+										setCustomBreakTime(
+											noSymbols.length ? parseInt(noSymbols) : 0
+										);
+									}}
+								/>
+							</View>
+						)}
 						<View
 							style={{
 								marginTop: 20,
@@ -335,10 +346,10 @@ const AddShift: FC<AddShiftProps> = ({ navigation, route }) => {
 					mode="date"
 					value={startDate}
 					onChange={(e: Event, s: Date | undefined) => {
-						if(!s) return;
+						if (!s) return;
 						softHaptic();
 						onSelect(e, s, setStartDate, setShowStartDateSelect);
-						if(s>endDate) setEndDate(s);
+						if (s > endDate) setEndDate(s);
 					}}
 				/>
 			)}
@@ -347,7 +358,7 @@ const AddShift: FC<AddShiftProps> = ({ navigation, route }) => {
 					mode="time"
 					value={startTime}
 					onChange={(e: Event, s: Date | undefined) => {
-						if(!s) return;
+						if (!s) return;
 						softHaptic();
 						onSelect(e, s, setStartTime, setShowStartTimeSelect);
 					}}
@@ -358,10 +369,10 @@ const AddShift: FC<AddShiftProps> = ({ navigation, route }) => {
 					mode="date"
 					value={endDate}
 					onChange={(e: Event, s: Date | undefined) => {
-						if(!s) return;
+						if (!s) return;
 						softHaptic();
 						onSelect(e, s, setEndDate, setShowEndDateSelect);
-						if(s<startDate) setStartDate(s);
+						if (s < startDate) setStartDate(s);
 					}}
 				/>
 			)}
@@ -370,7 +381,7 @@ const AddShift: FC<AddShiftProps> = ({ navigation, route }) => {
 					mode="time"
 					value={endTime}
 					onChange={(e: Event, s: Date | undefined) => {
-						if(!s) return;
+						if (!s) return;
 						softHaptic();
 						onSelect(e, s, setEndDateTime, setShowEndTimeSelect);
 					}}
