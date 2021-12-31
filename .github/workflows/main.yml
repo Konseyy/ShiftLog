@@ -79,3 +79,32 @@ jobs:
         run: | 
           cd android
           rm -f google_key.json
+  publish_internal:
+    needs: build_bundle
+    runs-on: ubuntu-latest
+    steps: 
+      - uses: actions/checkout@v2
+      - uses: actions/setup-ruby@v1
+      - uses: actions/download-artifact@v2
+        with:
+          name: app-release.aab
+          path: android/app/build/outputs/bundle/release/
+      - name: Bundle Install
+        run: |
+          cd android
+          bundle install
+      - name: Get google api key
+        env:
+          google_key: ${{ secrets.GOOGLE_API_JSON }}
+        run: |
+          cd android
+          echo $google_key > google_key.json
+      - name: Fastlane upload to Internal track
+        run: |
+          cd android
+          bundle exec fastlane alpha
+      - name: Remove google api key
+        if: always()
+        run: | 
+          cd android
+          rm -f google_key.json
