@@ -9,6 +9,7 @@ import {
 import useShiftList from '../../helperFunctions/useShiftList';
 import { AddShiftProps } from '../../types';
 import { softHaptic } from '../../helperFunctions/hapticFeedback';
+import { numericLiteral } from '@babel/types';
 const AddShift: FC<AddShiftProps> = ({ navigation, route }) => {
 	const params = route.params ?? {};
 	const [startDate, setStartDate] = useState(
@@ -23,10 +24,12 @@ const AddShift: FC<AddShiftProps> = ({ navigation, route }) => {
 	const [endTime, setEndDateTime] = useState(
 		params.current ? new Date(params.current.endTime) : new Date()
 	);
+	const [customBreakTime, setCustomBreakTime] = useState(0);
 	const [showStartDateSelect, setShowStartDateSelect] = useState(false);
 	const [showStartTimeSelect, setShowStartTimeSelect] = useState(false);
 	const [showEndDateSelect, setShowEndDateSelect] = useState(false);
 	const [showEndTimeSelect, setShowEndTimeSelect] = useState(false);
+	const [showCustomBreakInput, setShowCustomBreakInput] = useState(false);
 	const [breakTime, setBreakTime] = useState(
 		params.current ? params.current.break : 0
 	);
@@ -64,12 +67,12 @@ const AddShift: FC<AddShiftProps> = ({ navigation, route }) => {
 		}
 	}
 	async function addShift() {
+		console.log('adding', showCustomBreakInput ? customBreakTime : breakTime);
 		let dateToAddStart = new Date(startDate);
 		dateToAddStart.setHours(startTime.getHours(), startTime.getMinutes(), 0, 0);
 		let dateToAddEnd = new Date(endDate);
 		dateToAddEnd.setHours(endTime.getHours(), endTime.getMinutes(), 0, 0);
 		if (!dateCheck(dateToAddStart.getTime(), dateToAddEnd.getTime())) {
-			console.error('this is a problem');
 			return;
 		}
 		if (!params.current) {
@@ -79,7 +82,7 @@ const AddShift: FC<AddShiftProps> = ({ navigation, route }) => {
 					data: {
 						startTime: dateToAddStart.getTime(),
 						endTime: dateToAddEnd.getTime(),
-						break: breakTime,
+						break: showCustomBreakInput ? customBreakTime : breakTime,
 						notes: notes,
 					},
 				},
@@ -91,7 +94,7 @@ const AddShift: FC<AddShiftProps> = ({ navigation, route }) => {
 					data: {
 						startTime: dateToAddStart.getTime(),
 						endTime: dateToAddEnd.getTime(),
-						break: breakTime,
+						break: showCustomBreakInput ? customBreakTime : breakTime,
 						notes: notes,
 						index: params.current.index,
 					},
@@ -110,6 +113,19 @@ const AddShift: FC<AddShiftProps> = ({ navigation, route }) => {
 			navigation.setOptions({
 				title: 'Add new Shift',
 			});
+		}
+		let temp = params.current?.break;
+		if (
+			temp !== 60 &&
+			temp !== 45 &&
+			temp !== 30 &&
+			temp !== 15 &&
+			temp !== 0 &&
+			temp
+		) {
+			setBreakTime(-1);
+			setShowCustomBreakInput(true);
+			setCustomBreakTime(temp);
 		}
 		console.log('params', params);
 	}, []);
@@ -130,58 +146,102 @@ const AddShift: FC<AddShiftProps> = ({ navigation, route }) => {
 							alignSelf: 'stretch',
 						}}
 					>
-						<View style={{ flexDirection: 'column' }}>
-							<Text style={{ alignSelf: 'center', fontWeight: 'bold' }}>
+						<View style={{ flexDirection: 'column', marginBottom: 15 }}>
+							<Text
+								style={{
+									alignSelf: 'center',
+									fontWeight: 'bold',
+									fontSize: 20,
+								}}
+							>
 								Start of Shift
 							</Text>
 							<View style={{ flexDirection: 'row', marginTop: 10 }}>
-								<View style={{ flex: 1 }} />
-								<TouchableOpacity
-									style={{ flex: 2, alignItems: 'center' }}
-									onPress={() => {
-										softHaptic();
-										setShowStartDateSelect(true);
-									}}
-								>
-									<Text>{stringDateFromDate(startDate)}</Text>
-								</TouchableOpacity>
-								<TouchableOpacity
-									style={{ flex: 2, alignItems: 'center' }}
-									onPress={() => {
-										softHaptic();
-										setShowStartTimeSelect(true);
-									}}
-								>
-									<Text>{stringTimeFromDate(startTime)}</Text>
-								</TouchableOpacity>
-								<View style={{ flex: 1 }} />
+								<View style={{ flex: 1, alignItems: 'center', left: 10 }}>
+									<TouchableOpacity
+										style={{
+											alignItems: 'center',
+											backgroundColor: 'lightgray',
+											padding: 8,
+											borderRadius: 10,
+											width: 110,
+										}}
+										onPress={() => {
+											softHaptic();
+											setShowStartDateSelect(true);
+										}}
+									>
+										<Text style={{ fontSize: 15 }}>
+											{stringDateFromDate(startDate)}
+										</Text>
+									</TouchableOpacity>
+								</View>
+								<View style={{ flex: 1, alignItems: 'center', right: 10 }}>
+									<TouchableOpacity
+										style={{
+											alignItems: 'center',
+											backgroundColor: 'lightgray',
+											padding: 8,
+											borderRadius: 10,
+											width: 110,
+										}}
+										onPress={() => {
+											softHaptic();
+											setShowStartTimeSelect(true);
+										}}
+									>
+										<Text>{stringTimeFromDate(startTime)}</Text>
+									</TouchableOpacity>
+								</View>
 							</View>
 						</View>
-						<View style={{ flexDirection: 'column', marginVertical: 10 }}>
-							<Text style={{ alignSelf: 'center', fontWeight: 'bold' }}>
+						<View style={{ flexDirection: 'column', marginBottom: 15 }}>
+							<Text
+								style={{
+									alignSelf: 'center',
+									fontWeight: 'bold',
+									fontSize: 20,
+								}}
+							>
 								End of Shift
 							</Text>
 							<View style={{ flexDirection: 'row', marginTop: 10 }}>
-								<View style={{ flex: 1 }} />
-								<TouchableOpacity
-									style={{ flex: 2, alignItems: 'center' }}
-									onPress={() => {
-										softHaptic();
-										setShowEndDateSelect(true);
-									}}
-								>
-									<Text>{stringDateFromDate(endDate)}</Text>
-								</TouchableOpacity>
-								<TouchableOpacity
-									style={{ flex: 2, alignItems: 'center' }}
-									onPress={() => {
-										softHaptic();
-										setShowEndTimeSelect(true);
-									}}
-								>
-									<Text>{stringTimeFromDate(endTime)}</Text>
-								</TouchableOpacity>
-								<View style={{ flex: 1 }} />
+								<View style={{ flex: 1, alignItems: 'center', left: 10 }}>
+									<TouchableOpacity
+										style={{
+											alignItems: 'center',
+											backgroundColor: 'lightgray',
+											padding: 8,
+											borderRadius: 10,
+											width: 110,
+										}}
+										onPress={() => {
+											softHaptic();
+											setShowEndDateSelect(true);
+										}}
+									>
+										<Text style={{ fontSize: 15 }}>
+											{stringDateFromDate(endDate)}
+										</Text>
+									</TouchableOpacity>
+								</View>
+								<View style={{ flex: 1, alignItems: 'center', right: 10 }}>
+									<TouchableOpacity
+										style={{
+											alignItems: 'center',
+											backgroundColor: 'lightgray',
+											padding: 8,
+											borderRadius: 10,
+											width: 110,
+										}}
+										onPress={() => {
+											softHaptic();
+											setShowEndTimeSelect(true);
+										}}
+									>
+										<Text>{stringTimeFromDate(endTime)}</Text>
+									</TouchableOpacity>
+								</View>
 							</View>
 						</View>
 						<View style={{ flexDirection: 'column', marginTop: 10 }}>
@@ -189,15 +249,48 @@ const AddShift: FC<AddShiftProps> = ({ navigation, route }) => {
 							<Picker
 								style={{ backgroundColor: 'white', marginTop: 10 }}
 								selectedValue={breakTime}
-								onValueChange={(value) => setBreakTime(value)}
+								onValueChange={(value) => {
+									softHaptic();
+									if (value === -1) {
+										setShowCustomBreakInput(true);
+									} else {
+										setShowCustomBreakInput(false);
+									}
+									setBreakTime(value);
+								}}
 							>
 								<Picker.Item label="0m" value={0} />
 								<Picker.Item label="15m" value={15} />
 								<Picker.Item label="30m" value={30} />
 								<Picker.Item label="45m" value={45} />
 								<Picker.Item label="60m" value={60} />
+								<Picker.Item label="other" value={-1} />
 							</Picker>
 						</View>
+						{showCustomBreakInput && (
+							<View style={{ flexDirection: 'column', marginTop: 10 }}>
+								<Text style={{ fontWeight: 'bold' }}>
+									Enter custom break time (minutes) :{' '}
+								</Text>
+								<TextInput
+									style={{
+										marginTop: 10,
+										backgroundColor: '#FFFFFF',
+										color: '#000000',
+										alignSelf: 'stretch',
+									}}
+									keyboardType="numeric"
+									placeholder="0"
+									defaultValue={customBreakTime.toString()}
+									onChangeText={(val) => {
+										let noSymbols = val.toString().replace(/[^0-9]/g, '');
+										setCustomBreakTime(
+											noSymbols.length ? parseInt(noSymbols) : 0
+										);
+									}}
+								/>
+							</View>
+						)}
 						<View
 							style={{
 								marginTop: 20,
@@ -252,36 +345,46 @@ const AddShift: FC<AddShiftProps> = ({ navigation, route }) => {
 				<DateTimePicker
 					mode="date"
 					value={startDate}
-					onChange={(e: Event, s: Date | undefined) =>
-						onSelect(e, s, setStartDate, setShowStartDateSelect)
-					}
+					onChange={(e: Event, s: Date | undefined) => {
+						if (!s) return;
+						softHaptic();
+						onSelect(e, s, setStartDate, setShowStartDateSelect);
+						if (s > endDate) setEndDate(s);
+					}}
 				/>
 			)}
 			{showStartTimeSelect && (
 				<DateTimePicker
 					mode="time"
 					value={startTime}
-					onChange={(e: Event, s: Date | undefined) =>
-						onSelect(e, s, setStartTime, setShowStartTimeSelect)
-					}
+					onChange={(e: Event, s: Date | undefined) => {
+						if (!s) return;
+						softHaptic();
+						onSelect(e, s, setStartTime, setShowStartTimeSelect);
+					}}
 				/>
 			)}
 			{showEndDateSelect && (
 				<DateTimePicker
 					mode="date"
 					value={endDate}
-					onChange={(e: Event, s: Date | undefined) =>
-						onSelect(e, s, setEndDate, setShowEndDateSelect)
-					}
+					onChange={(e: Event, s: Date | undefined) => {
+						if (!s) return;
+						softHaptic();
+						onSelect(e, s, setEndDate, setShowEndDateSelect);
+						if (s < startDate) setStartDate(s);
+					}}
 				/>
 			)}
 			{showEndTimeSelect && (
 				<DateTimePicker
 					mode="time"
 					value={endTime}
-					onChange={(e: Event, s: Date | undefined) =>
-						onSelect(e, s, setEndDateTime, setShowEndTimeSelect)
-					}
+					onChange={(e: Event, s: Date | undefined) => {
+						if (!s) return;
+						softHaptic();
+						onSelect(e, s, setEndDateTime, setShowEndTimeSelect);
+					}}
 				/>
 			)}
 		</>
