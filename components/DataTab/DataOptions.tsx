@@ -1,5 +1,5 @@
 import React, { FC } from 'react';
-import { Alert, Button, View } from 'react-native';
+import { Alert, TouchableOpacity, View, Text, ViewStyle } from 'react-native';
 import { DataOptionsProps } from '../../types';
 import {pickSingle} from "react-native-document-picker";
 import useShiftList from '../../helperFunctions/useShiftList';
@@ -54,11 +54,22 @@ const DataOptions: FC<DataOptionsProps> = ({ navigation }) => {
 			console.error("error reading backup", err)
 		}
 	}
+	const ListItem:React.FC<{pressAction?: ()=>void, title:string, style?:ViewStyle, color?:string, textColor?:string}> = ({pressAction, title, style, color, textColor}) => {
+		return(
+			<View style={{marginBottom:10,marginHorizontal:15,...style}}>
+				<TouchableOpacity onPress={pressAction} style={{backgroundColor:color, padding:10, borderRadius:10}}>
+					<Text style={{fontSize:20, color:textColor??"white", fontWeight:"bold", marginLeft:3}}>
+						{title}
+					</Text>
+				</TouchableOpacity>
+			</View>
+		)
+	}
 	return (
-		<View>
-			<Button color="green" title={'Generate report'} onPress={goToReport} />
-			<Button color="darkgray" title={'Create backup'} onPress={goToBackup} />
-			<Button color="gray" title={'Import backup'} onPress={importBackup} />
+		<View style={{flexDirection:"column"}}>
+			<ListItem style={{marginTop:10}} color="green" title="Generate report" pressAction={goToReport}/>
+			<ListItem color='gray' title="Create backup" pressAction={goToBackup}/>
+			<ListItem color='darkgray' title="Import backup" pressAction={importBackup}/>
 		</View>
 	);
 };
