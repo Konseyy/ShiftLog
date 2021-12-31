@@ -33,3 +33,11 @@ export const getShiftDurationInMinutes = (shiftObject: shift) => {
 		shiftObject.break
 	);
 };
+export function dateDifference(
+	timeStamp1: number,
+	timeStamp2: number,
+	breakTime: number
+) {
+	const diffMinutes = differenceInMinutes(timeStamp1, timeStamp2) - breakTime;
+	return displayHoursAndMinutes(diffMinutes);
+}
