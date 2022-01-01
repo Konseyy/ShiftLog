@@ -21,10 +21,10 @@ import useColors from '../../helperFunctions/useColors';
 import useShifts from '../ShiftsProvider';
 const ShiftList: React.FC<ShiftListProps> = ({ navigation }) => {
 	const colors = useColors();
-	const [currentFilter, setCurrentFilter] = useState<'week' | 'month' | 'all'>(
-		'week'
-	);
-	const [sorter, setSorter] = useState<'start' | 'end' | 'duration'>('start');
+	type filter = 'week' | 'month' | 'all';
+	const [currentFilter, setCurrentFilter] = useState<filter>('week');
+	type sorter = 'start' | 'end' | 'duration';
+	const [sorter, setSorter] = useState<sorter>('start');
 	const [sortingDirection, setSortingDirection] = useState<
 		'descending' | 'ascending'
 	>('descending');
@@ -190,111 +190,94 @@ const ShiftList: React.FC<ShiftListProps> = ({ navigation }) => {
 		},
 		[currentFilter, colors]
 	);
+	const changeSorter = (sorterType: sorter) => {
+		if (sorterType === sorter) {
+			if (sortingDirection === 'ascending') {
+				setSortingDirection('descending');
+			} else {
+				setSortingDirection('ascending');
+			}
+		} else {
+			setSorter(sorterType);
+			setSortingDirection('descending');
+		}
+	};
 	const ListHeader = useMemo(
-		() =>
-			({ style }: { style?: object }) => {
-				return (
-					<View style={{ flexDirection: 'column' }}>
-						<View
+		() => () => {
+			return (
+				<View style={{ flexDirection: 'column' }}>
+					<View
+						style={{
+							flexDirection: 'row',
+							marginHorizontal: 2,
+							paddingBottom: 4,
+							paddingTop: 6,
+						}}
+					>
+						<TouchableOpacity
 							style={{
+								flex: 1,
+								justifyContent: 'center',
 								flexDirection: 'row',
-								marginHorizontal: 2,
-								paddingBottom: 4,
-								paddingTop: 6,
+							}}
+							onPress={() => changeSorter('start')}
+						>
+							<Text
+								style={{
+									fontWeight: 'bold',
+									color: colors.textColor,
+								}}
+							>
+								Shift Start
+							</Text>
+							<SortDisplay opacity={sorter === 'start' ? 1 : 0} />
+						</TouchableOpacity>
+						<TouchableOpacity
+							style={{
+								flex: 1,
+								justifyContent: 'center',
+								flexDirection: 'row',
+							}}
+							onPress={() => {
+								changeSorter('end');
 							}}
 						>
-							<TouchableOpacity
+							<Text
 								style={{
-									flex: 1,
-									justifyContent: 'center',
-									flexDirection: 'row',
-								}}
-								onPress={() => {
-									if (sorter === 'start') {
-										if (sortingDirection === 'ascending') {
-											setSortingDirection('descending');
-										} else {
-											setSortingDirection('ascending');
-										}
-									} else {
-										setSorter('start');
-									}
+									fontWeight: 'bold',
+									color: colors.textColor,
 								}}
 							>
-								<Text
-									style={{
-										fontWeight: 'bold',
-										color: colors.textColor,
-									}}
-								>
-									Shift Start
-								</Text>
-								<SortDisplay opacity={sorter === 'start' ? 1 : 0} />
-							</TouchableOpacity>
-							<TouchableOpacity
+								Shift End
+							</Text>
+							<SortDisplay opacity={sorter === 'end' ? 1 : 0} />
+						</TouchableOpacity>
+						<TouchableOpacity
+							style={{
+								flex: 2,
+								justifyContent: 'center',
+								flexDirection: 'row',
+								maxWidth: 150,
+								marginHorizontal: 5,
+							}}
+							onPress={() => {
+								changeSorter('duration');
+							}}
+						>
+							<Text
 								style={{
-									flex: 1,
-									justifyContent: 'center',
-									flexDirection: 'row',
-								}}
-								onPress={() => {
-									if (sorter === 'end') {
-										if (sortingDirection === 'ascending') {
-											setSortingDirection('descending');
-										} else {
-											setSortingDirection('ascending');
-										}
-									} else {
-										setSorter('end');
-										setSortingDirection('descending');
-									}
+									fontWeight: 'bold',
+									color: colors.textColor,
 								}}
 							>
-								<Text
-									style={{
-										fontWeight: 'bold',
-										color: colors.textColor,
-									}}
-								>
-									Shift End
-								</Text>
-								<SortDisplay opacity={sorter === 'end' ? 1 : 0} />
-							</TouchableOpacity>
-							<TouchableOpacity
-								style={{
-									flex: 2,
-									justifyContent: 'center',
-									flexDirection: 'row',
-									maxWidth: 150,
-									marginHorizontal: 5,
-								}}
-								onPress={() => {
-									if (sorter === 'duration') {
-										if (sortingDirection === 'ascending') {
-											setSortingDirection('descending');
-										} else {
-											setSortingDirection('ascending');
-										}
-									} else {
-										setSorter('duration');
-										setSortingDirection('descending');
-									}
-								}}
-							>
-								<Text
-									style={{
-										fontWeight: 'bold',
-										color: colors.textColor,
-									}}
-								>
-									Duration
-								</Text>
-								<SortDisplay opacity={sorter === 'duration' ? 1 : 0} />
-							</TouchableOpacity>
-						</View>
+								Duration
+							</Text>
+							<SortDisplay opacity={sorter === 'duration' ? 1 : 0} />
+						</TouchableOpacity>
 					</View>
-				);
-			},
+				</View>
+			);
+		},
 		[currentFilter, sortingDirection, sorter, colors]
 	);
 	const emptyComponent = useMemo(
@@ -337,7 +320,7 @@ const ShiftList: React.FC<ShiftListProps> = ({ navigation }) => {
 		>
 			<View style={{ flex: 1, flexDirection: 'column' }}>
 				<FilterSelect />
-				<ListHeader style={{ flex: 1 }} />
+				<ListHeader />
 				<View style={{ flex: 8 }}>
 					<FlatList
 						data={filteredData}
@@ -364,7 +347,7 @@ const ShiftList: React.FC<ShiftListProps> = ({ navigation }) => {
 				</View>
 			</View>
 			<TouchableOpacity
-			onPress={addShiftScene}
+				onPress={addShiftScene}
 				style={{
 					position: 'absolute',
 					bottom: 20,
