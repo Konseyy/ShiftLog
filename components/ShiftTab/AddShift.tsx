@@ -276,6 +276,7 @@ const AddShift: FC<AddShiftProps> = ({ navigation, route }) => {
 								Break Time
 							</Text>
 							<Picker
+								mode="dropdown"
 								style={{ backgroundColor: 'white', marginTop: 10 }}
 								selectedValue={breakTime}
 								onValueChange={(value) => {
