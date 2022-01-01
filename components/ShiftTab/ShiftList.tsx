@@ -2,17 +2,13 @@ import React, { useState, useEffect, useMemo } from 'react';
 import {
 	View,
 	Text,
-	Button,
 	FlatList,
 	Alert,
 	TouchableOpacity,
 	Image,
 } from 'react-native';
 import { softHaptic } from '../../helperFunctions/hapticFeedback';
-import {
-	getShiftDurationInMinutes,
-	displayHoursAndMinutes,
-} from '../../helperFunctions/dateFormatFunctions';
+import { getShiftDurationInMinutes } from '../../helperFunctions/dateFormatFunctions';
 import { Picker } from '@react-native-picker/picker';
 import { ShiftListProps } from '../../types';
 import ShiftItem from './ShiftItem';
@@ -28,7 +24,7 @@ const ShiftList: React.FC<ShiftListProps> = ({ navigation }) => {
 	const [sortingDirection, setSortingDirection] = useState<
 		'descending' | 'ascending'
 	>('descending');
-	const { shifts, loading, modifyShifts } = useShifts();
+	const { shifts, modifyShifts } = useShifts();
 	async function addShiftScene() {
 		softHaptic();
 		navigation.navigate('AddShift', { current: null });
@@ -55,6 +51,18 @@ const ShiftList: React.FC<ShiftListProps> = ({ navigation }) => {
 			current: shifts[index],
 		});
 	}
+	const changeSorter = (sorterType: sorter) => {
+		if (sorterType === sorter) {
+			if (sortingDirection === 'ascending') {
+				setSortingDirection('descending');
+			} else {
+				setSortingDirection('ascending');
+			}
+		} else {
+			setSorter(sorterType);
+			setSortingDirection('descending');
+		}
+	};
 	function filterData(
 		data: shift[],
 		filter = currentFilter,
@@ -190,18 +198,6 @@ const ShiftList: React.FC<ShiftListProps> = ({ navigation }) => {
 		},
 		[currentFilter, colors]
 	);
-	const changeSorter = (sorterType: sorter) => {
-		if (sorterType === sorter) {
-			if (sortingDirection === 'ascending') {
-				setSortingDirection('descending');
-			} else {
-				setSortingDirection('ascending');
-			}
-		} else {
-			setSorter(sorterType);
-			setSortingDirection('descending');
-		}
-	};
 	const ListHeader = useMemo(
 		() => () => {
 			return (
