@@ -33,7 +33,13 @@ const ShiftItem = ({ item, deleteShift, editShift }: Props) => {
 	const breakTime = ShiftData.break ?? 0;
 	return (
 		<TouchableOpacity
-			style={{ marginHorizontal: 2, paddingTop: 5 }}
+			style={{
+				marginHorizontal: 10,
+				padding: 5,
+				backgroundColor: colors.shiftBackground,
+				marginTop: 5,
+				borderRadius: 5,
+			}}
 			onPress={() => {
 				softHaptic();
 				setExpanded(!expanded);
@@ -77,8 +83,8 @@ const ShiftItem = ({ item, deleteShift, editShift }: Props) => {
 							flexDirection: 'row',
 						}}
 					>
-						<View style={{ flex: 2 }} />
-						<View style={{ flex: 5 }}>
+						<View style={{ flex: 6 }} />
+						<View style={{ flex: 11 }}>
 							<Text style={{ color: colors.textColor }}>
 								{dateDifference(
 									ShiftData.startTime,
@@ -90,12 +96,13 @@ const ShiftItem = ({ item, deleteShift, editShift }: Props) => {
 					</View>
 				</View>
 				{expanded && (
-					<>
+					<View style={{ paddingBottom: 5 }}>
 						<View
 							style={{
 								flex: 2,
 								marginHorizontal: 25,
 								marginVertical: 10,
+								paddingTop: 5,
 							}}
 						>
 							<View>
@@ -124,22 +131,56 @@ const ShiftItem = ({ item, deleteShift, editShift }: Props) => {
 							</View>
 						</View>
 						<View style={{ flexDirection: 'row' }}>
-							<View style={{ flex: 1 }}>
-								<Button
-									color={'#8c8c8c'}
-									title="edit"
+							<View
+								style={{
+									flex: 1,
+									justifyContent: 'center',
+									alignItems: 'center',
+									flexDirection: 'row',
+								}}
+							>
+								<View style={{ flex: 1 }} />
+								<TouchableOpacity
 									onPress={() => editShift(ShiftData.index)}
-								/>
+									style={{
+										flex: 6,
+										backgroundColor: '#8c8c8c',
+										borderRadius: 10,
+										padding: 5,
+									}}
+								>
+									<View style={{ alignSelf: 'center' }}>
+										<Text style={{ color: 'white', fontSize: 17, letterSpacing:1, fontWeight:"bold"}}>Edit</Text>
+									</View>
+								</TouchableOpacity>
+								<View style={{ flex: 1 }} />
 							</View>
-							<View style={{ flex: 1 }}>
-								<Button
-									color={'#6e0006'}
-									title="delete"
+							<View
+								style={{
+									flex: 1,
+									justifyContent: 'center',
+									alignItems: 'center',
+									flexDirection: 'row',
+								}}
+							>
+								<View style={{ flex: 1 }} />
+								<TouchableOpacity
 									onPress={() => deleteShift(ShiftData.index)}
-								/>
+									style={{
+										flex: 6,
+										backgroundColor: '#6e0006',
+										borderRadius: 10,
+										padding: 5,
+									}}
+								>
+									<View style={{ alignSelf: 'center' }}>
+										<Text style={{ color: 'white', fontSize: 17, letterSpacing:1, fontWeight:"bold" }}>Delete</Text>
+									</View>
+								</TouchableOpacity>
+								<View style={{ flex: 1 }} />
 							</View>
 						</View>
-					</>
+					</View>
 				)}
 			</View>
 		</TouchableOpacity>
