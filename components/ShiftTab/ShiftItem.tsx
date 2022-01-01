@@ -150,7 +150,16 @@ const ShiftItem = ({ item, deleteShift, editShift }: Props) => {
 									}}
 								>
 									<View style={{ alignSelf: 'center' }}>
-										<Text style={{ color: 'white', fontSize: 17, letterSpacing:1, fontWeight:"bold"}}>Edit</Text>
+										<Text
+											style={{
+												color: 'white',
+												fontSize: 17,
+												letterSpacing: 1,
+												fontWeight: 'bold',
+											}}
+										>
+											Edit
+										</Text>
 									</View>
 								</TouchableOpacity>
 								<View style={{ flex: 1 }} />
@@ -174,7 +183,16 @@ const ShiftItem = ({ item, deleteShift, editShift }: Props) => {
 									}}
 								>
 									<View style={{ alignSelf: 'center' }}>
-										<Text style={{ color: 'white', fontSize: 17, letterSpacing:1, fontWeight:"bold" }}>Delete</Text>
+										<Text
+											style={{
+												color: 'white',
+												fontSize: 17,
+												letterSpacing: 1,
+												fontWeight: 'bold',
+											}}
+										>
+											Delete
+										</Text>
 									</View>
 								</TouchableOpacity>
 								<View style={{ flex: 1 }} />
