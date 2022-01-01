@@ -3,8 +3,7 @@ import ShiftList from './components/ShiftTab/ShiftList';
 import AddShift from './components/ShiftTab/AddShift';
 import DataOptions from './components/DataTab/DataOptions';
 import SettingsMain from './components/SettingsTab/SettingsMain';
-import MakeReport from './components/DataTab/MakeReport';
-import MakeBackup from './components/DataTab/MakeBackup';
+import ExportFile from './components/DataTab/ExportFile';
 import {
 	RootStackParamList,
 	ShiftStackParamList,
@@ -69,17 +68,10 @@ export const DataTab: DataTab[] = [
 		},
 	},
 	{
-		name: 'MakeReport',
-		component: MakeReport,
+		name: 'ExportFile',
+		component: ExportFile,
 		options: {
 			title: 'New Report',
-		},
-	},
-	{
-		name: 'MakeBackup',
-		component: MakeBackup,
-		options: {
-			title: 'Generate Backup',
 		},
 	},
 ];

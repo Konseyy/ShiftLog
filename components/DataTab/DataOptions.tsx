@@ -9,10 +9,10 @@ import { softHaptic } from '../../helperFunctions/hapticFeedback';
 const DataOptions: FC<DataOptionsProps> = ({ navigation }) => {
 	const { overwriteFromBackup } = useShiftList();
 	const goToReport = (): void => {
-		navigation.navigate('MakeReport');
+		navigation.navigate('ExportFile', {action:"report"});
 	};
 	const goToBackup = (): void => {
-		navigation.navigate('MakeBackup');
+		navigation.navigate('ExportFile', {action:"backup"});
 	};
 	const importBackup = async (): Promise<void> => {
 		const isDataRightType = (data: any): data is shift[] => {

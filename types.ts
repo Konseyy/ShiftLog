@@ -26,15 +26,15 @@ export type ShiftStackParamList = {
 export type ShiftListProps = NativeStackScreenProps<ShiftStackParamList, "ShiftList">
 export type AddShiftProps = NativeStackScreenProps<ShiftStackParamList, "AddShift">
 export type ShiftStackComponent = FC<ShiftListProps> | FC<AddShiftProps>
+
+export type exportScreenTypes = "backup" | "report";
 export type DataStackParamList = {
 	DataOptions: undefined,
-	MakeReport: undefined,
-	MakeBackup: undefined,
+	ExportFile: {action: exportScreenTypes},
 }
 export type DataOptionsProps = NativeStackScreenProps<DataStackParamList, "DataOptions">
-export type MakeReportProps = NativeStackScreenProps<DataStackParamList, "MakeReport">
-export type MakeBackupProps = NativeStackScreenProps<DataStackParamList, "MakeBackup">
-export type DataStackComponent = FC<DataOptionsProps> | FC<MakeReportProps> | FC<MakeBackupProps>
+export type ExportFileProps = NativeStackScreenProps<DataStackParamList, "ExportFile">
+export type DataStackComponent = FC<DataOptionsProps> | FC<ExportFileProps> 
 
 export type SettingsStackParamList = {
 	SettingsMain: undefined,
