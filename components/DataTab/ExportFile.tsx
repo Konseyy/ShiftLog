@@ -98,7 +98,9 @@ const ExportFile: FC<ExportFileProps> = ({ navigation, route }) => {
 					shift.startTime,
 					shift.endTime,
 					shift.break
-				)},${shift.notes.length ? shift.notes : 'no additional notes'}${lineNumber===0?","+totalTime:""}\n`;
+				)},${shift.notes.length ? shift.notes : 'no additional notes'}${
+					lineNumber === 0 ? ',' + totalTime : ''
+				}\n`;
 				saveString += line;
 			});
 		} else if (actionState === 'backup') {
