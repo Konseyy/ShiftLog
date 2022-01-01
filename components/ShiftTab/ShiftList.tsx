@@ -364,14 +364,15 @@ const ShiftList: React.FC<ShiftListProps> = ({ navigation }) => {
 				</View>
 			</View>
 			<TouchableOpacity
+			onPress={addShiftScene}
 				style={{
 					position: 'absolute',
 					bottom: 20,
 					right: 20,
 					backgroundColor: colors.buttonBlue,
-					height: 70,
-					width: 70,
-					borderRadius: 35,
+					height: 60,
+					width: 60,
+					borderRadius: 25,
 					justifyContent: 'center',
 				}}
 			>
