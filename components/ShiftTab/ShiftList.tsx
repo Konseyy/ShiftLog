@@ -332,7 +332,7 @@ const ShiftList: React.FC<ShiftListProps> = ({ navigation }) => {
 					</View>
 				);
 			},
-		[minutesInInterval, currentFilter, addShiftScene, colors]
+		[minutesInInterval, currentFilter, colors]
 	);
 	const emptyComponent = useMemo(
 		() => () => {
@@ -375,45 +375,43 @@ const ShiftList: React.FC<ShiftListProps> = ({ navigation }) => {
 				alignItems: 'stretch',
 			}}
 		>
-			{!loading && (
-				<View style={{ flex: 1, flexDirection: 'column' }}>
-					<FilterSelect />
-					<ListHeader style={{ flex: 1 }} />
-					<View style={{ flex: 8 }}>
-						<FlatList
-							data={loading ? null : filteredData}
-							renderItem={(item) => {
-								return (
-									<ShiftItem
-										item={item}
-										deleteShift={deleteShift}
-										editShift={editShift}
-									/>
-								);
-							}}
-							keyExtractor={(item, index) => {
-								return (
-									item.endTime.toString() +
-									item.startTime.toString() +
-									item.notes +
-									index.toString()
-								);
-							}}
-							contentContainerStyle={{ paddingBottom: 5, flexGrow: 1 }}
-							ListEmptyComponent={emptyComponent}
-						/>
-					</View>
-					<ListFooter
-						style={{
-							width: '100%',
-							flexDirection: 'column',
-							justifyContent: 'center',
-							borderTopColor: '#000000',
-							borderTopWidth: 0.6,
+			<View style={{ flex: 1, flexDirection: 'column' }}>
+				<FilterSelect />
+				<ListHeader style={{ flex: 1 }} />
+				<View style={{ flex: 8 }}>
+					<FlatList
+						data={filteredData}
+						renderItem={(item) => {
+							return (
+								<ShiftItem
+									item={item}
+									deleteShift={deleteShift}
+									editShift={editShift}
+								/>
+							);
 						}}
+						keyExtractor={(item, index) => {
+							return (
+								item.endTime.toString() +
+								item.startTime.toString() +
+								item.notes +
+								index.toString()
+							);
+						}}
+						contentContainerStyle={{ paddingBottom: 5, flexGrow: 1 }}
+						ListEmptyComponent={emptyComponent}
 					/>
 				</View>
-			)}
+				<ListFooter
+					style={{
+						width: '100%',
+						flexDirection: 'column',
+						justifyContent: 'center',
+						borderTopColor: '#000000',
+						borderTopWidth: 0.6,
+					}}
+				/>
+			</View>
 		</View>
 	);
 };
