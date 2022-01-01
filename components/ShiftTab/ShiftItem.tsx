@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { ListRenderItemInfo } from 'react-native';
-import { Text, TouchableOpacity, View, Button } from 'react-native';
+import { Text, TouchableOpacity, View } from 'react-native';
 import {
 	stringDateFromDate,
 	stringTimeFromDate,
