@@ -16,7 +16,7 @@ const darkColors = {
 	background: '#636363',
 	topBar: '#333333',
 	textColor: '#e6e6e6',
-	switchThumbColor: 'gray',
+	switchThumbColor: 'black',
 	dateSelectBackground: 'gray',
 	seperatorColor: 'gray',
 	selectedBackground: 'darkgray',
@@ -25,12 +25,7 @@ const darkColors = {
 };
 
 const getColors = (isDark = true) => {
-	let returnColors;
-	if (isDark) {
-		returnColors = darkColors;
-	} else {
-		returnColors = lightColors;
-	}
+	const  returnColors = isDark? darkColors : lightColors;
 	const customTheme: Theme = {
 		...DefaultTheme,
 		dark: isDark,

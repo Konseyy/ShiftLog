@@ -72,8 +72,10 @@ const ShiftsProvider: FC = ({ children }) => {
 		}
 	};
 	const saveShiftLogStorage = async (newData: shift[] = shiftList) => {
+		let today = new Date().getTime();
 		const JSONShifts = JSON.stringify({
 			shifts: newData,
+			lastUpdated: today,
 		});
 		setLoading(true);
 		await AsyncStorage.setItem('savedShifts', JSONShifts).then(() =>
