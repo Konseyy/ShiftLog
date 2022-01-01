@@ -108,6 +108,7 @@ const DataOptions: FC<DataOptionsProps> = ({ navigation }) => {
 							color: textColor ?? 'white',
 							fontWeight: 'bold',
 							marginLeft: 3,
+							letterSpacing:.2,
 						}}
 					>
 						{title}
@@ -133,19 +134,19 @@ const DataOptions: FC<DataOptionsProps> = ({ navigation }) => {
 			<ListItem
 				style={{ marginTop: 10 }}
 				color="green"
-				title="Generate report"
+				title="New Report"
 				pressAction={goToReport}
 				imgPath={require('../../img/icons-report.png')}
 			/>
 			<ListItem
 				color="gray"
-				title="Create backup"
+				title="Create Backup"
 				pressAction={goToBackup}
 				imgPath={require('../../img/icons-backup.png')}
 			/>
 			<ListItem
 				color="darkgray"
-				title="Import backup"
+				title="Import Backup"
 				pressAction={importBackup}
 				imgPath={require('../../img/icons-restore-backup.png')}
 			/>
