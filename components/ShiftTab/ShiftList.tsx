@@ -14,11 +14,13 @@ import {
 	displayHoursAndMinutes,
 } from '../../helperFunctions/dateFormatFunctions';
 import { Picker } from '@react-native-picker/picker';
-import useShiftList from '../../helperFunctions/useShiftList';
 import { ShiftListProps } from '../../types';
 import ShiftItem from './ShiftItem';
 import { shift } from '../../types';
+import useColors from '../../helperFunctions/useColors';
+import useShifts from '../ShiftsProvider';
 const ShiftList: React.FC<ShiftListProps> = ({ navigation }) => {
+	const colors = useColors();
 	const [currentFilter, setCurrentFilter] = useState<'week' | 'month' | 'all'>(
 		'week'
 	);
@@ -27,7 +29,7 @@ const ShiftList: React.FC<ShiftListProps> = ({ navigation }) => {
 	const [sortingDirection, setSortingDirection] = useState<
 		'descending' | 'ascending'
 	>('descending');
-	const { shifts, loading, refreshFromStorage, modifyShifts } = useShiftList();
+	const { shifts, loading, modifyShifts } = useShifts();
 	async function addShiftScene() {
 		softHaptic();
 		navigation.navigate('AddShift', { current: null });
@@ -51,10 +53,7 @@ const ShiftList: React.FC<ShiftListProps> = ({ navigation }) => {
 	async function editShift(index: number) {
 		softHaptic();
 		navigation.navigate('AddShift', {
-			current: {
-				...filteredData[index],
-				index: filteredData[index].index,
-			},
+			current: shifts[index],
 		});
 	}
 	function filterData(
@@ -134,6 +133,7 @@ const ShiftList: React.FC<ShiftListProps> = ({ navigation }) => {
 	}
 	// const filteredData = useMemo(()=>filterData(shifts),[shifts,sortingDirection,sorter,currentFilter]);
 	const filteredData = filterData(shifts);
+	// const filteredData = shifts;
 	function updateTimeClocked(shifts = filteredData) {
 		let newMinutes = 0;
 		filterData(shifts, currentFilter).forEach((shiftObject) => {
@@ -141,14 +141,6 @@ const ShiftList: React.FC<ShiftListProps> = ({ navigation }) => {
 		});
 		setMinutesInInterval(displayHoursAndMinutes(newMinutes));
 	}
-
-	useEffect(() => {
-		//Refresh every time load this scene
-		const unsubscribe = navigation.addListener('focus', () => {
-			refreshFromStorage();
-		});
-		return unsubscribe;
-	}, [navigation]);
 	useEffect(() => {
 		updateTimeClocked();
 	}, [shifts, currentFilter]);
@@ -172,18 +164,21 @@ const ShiftList: React.FC<ShiftListProps> = ({ navigation }) => {
 							marginTop: 5,
 							...style,
 							opacity: opacity,
+							tintColor: colors.textColor,
 						}}
-						source={require('../../img/icons8-triangle-96.png')}
+						source={require('../../img/icons-sorter.png')}
 					/>
 				);
 			},
-		[sortingDirection]
+		[sortingDirection, colors]
 	);
 	const FilterSelect = useMemo(
 		() => () => {
 			return (
 				<View style={{ height: 50, marginHorizontal: 5 }}>
 					<Picker
+						mode="dropdown"
+						style={{ color: colors.textColor }}
 						selectedValue={currentFilter}
 						onValueChange={(value) => {
 							softHaptic();
@@ -197,7 +192,7 @@ const ShiftList: React.FC<ShiftListProps> = ({ navigation }) => {
 				</View>
 			);
 		},
-		[currentFilter]
+		[currentFilter, colors]
 	);
 	const ListHeader = useMemo(
 		() =>
@@ -234,7 +229,14 @@ const ShiftList: React.FC<ShiftListProps> = ({ navigation }) => {
 									}
 								}}
 							>
-								<Text style={{ fontWeight: 'bold' }}>Shift Start</Text>
+								<Text
+									style={{
+										fontWeight: 'bold',
+										color: colors.textColor,
+									}}
+								>
+									Shift Start
+								</Text>
 								<SortDisplay opacity={sorter === 'start' ? 1 : 0} />
 							</TouchableOpacity>
 							<TouchableOpacity
@@ -256,7 +258,14 @@ const ShiftList: React.FC<ShiftListProps> = ({ navigation }) => {
 									}
 								}}
 							>
-								<Text style={{ fontWeight: 'bold' }}>Shift End</Text>
+								<Text
+									style={{
+										fontWeight: 'bold',
+										color: colors.textColor,
+									}}
+								>
+									Shift End
+								</Text>
 								<SortDisplay opacity={sorter === 'end' ? 1 : 0} />
 							</TouchableOpacity>
 							<TouchableOpacity
@@ -280,14 +289,21 @@ const ShiftList: React.FC<ShiftListProps> = ({ navigation }) => {
 									}
 								}}
 							>
-								<Text style={{ fontWeight: 'bold' }}>Duration</Text>
+								<Text
+									style={{
+										fontWeight: 'bold',
+										color: colors.textColor,
+									}}
+								>
+									Duration
+								</Text>
 								<SortDisplay opacity={sorter === 'duration' ? 1 : 0} />
 							</TouchableOpacity>
 						</View>
 					</View>
 				);
 			},
-		[currentFilter, sortingDirection, sorter]
+		[currentFilter, sortingDirection, sorter, colors]
 	);
 	const ListFooter = useMemo(
 		() =>
@@ -296,6 +312,7 @@ const ShiftList: React.FC<ShiftListProps> = ({ navigation }) => {
 					<View style={{ ...style }}>
 						<Text
 							style={{
+								color: colors.textColor,
 								fontSize: 15,
 								fontWeight: 'bold',
 								marginLeft: 15,
@@ -305,14 +322,14 @@ const ShiftList: React.FC<ShiftListProps> = ({ navigation }) => {
 							{`Selected Period: ${minutesInInterval}`}
 						</Text>
 						<Button
-							color={'#26a5ff'}
+							color={colors.buttonBlue}
 							title="add shift"
 							onPress={() => addShiftScene()}
 						/>
 					</View>
 				);
 			},
-		[minutesInInterval, currentFilter, addShiftScene]
+		[minutesInInterval, currentFilter, colors]
 	);
 	const emptyComponent = useMemo(
 		() => () => {
@@ -342,7 +359,7 @@ const ShiftList: React.FC<ShiftListProps> = ({ navigation }) => {
 				</View>
 			);
 		},
-		[addShiftScene]
+		[addShiftScene, colors]
 	);
 	return (
 		<View
@@ -352,45 +369,43 @@ const ShiftList: React.FC<ShiftListProps> = ({ navigation }) => {
 				alignItems: 'stretch',
 			}}
 		>
-			{!loading && (
-				<View style={{ flex: 1, flexDirection: 'column' }}>
-					<FilterSelect />
-					<ListHeader style={{ flex: 1 }} />
-					<View style={{ flex: 8 }}>
-						<FlatList
-							data={loading ? null : filteredData}
-							renderItem={(item) => {
-								return (
-									<ShiftItem
-										item={item}
-										deleteShift={deleteShift}
-										editShift={editShift}
-									/>
-								);
-							}}
-							keyExtractor={(item, index) => {
-								return (
-									item.endTime.toString() +
-									item.startTime.toString() +
-									item.notes +
-									index.toString()
-								);
-							}}
-							contentContainerStyle={{ paddingBottom: 5, flexGrow: 1 }}
-							ListEmptyComponent={emptyComponent}
-						/>
-					</View>
-					<ListFooter
-						style={{
-							width: '100%',
-							flexDirection: 'column',
-							justifyContent: 'center',
-							borderTopColor: '#000000',
-							borderTopWidth: 0.6,
+			<View style={{ flex: 1, flexDirection: 'column' }}>
+				<FilterSelect />
+				<ListHeader style={{ flex: 1 }} />
+				<View style={{ flex: 8 }}>
+					<FlatList
+						data={filteredData}
+						renderItem={(item) => {
+							return (
+								<ShiftItem
+									item={item}
+									deleteShift={deleteShift}
+									editShift={editShift}
+								/>
+							);
 						}}
+						keyExtractor={(item, index) => {
+							return (
+								item.endTime.toString() +
+								item.startTime.toString() +
+								item.notes +
+								index.toString()
+							);
+						}}
+						contentContainerStyle={{ paddingBottom: 5, flexGrow: 1 }}
+						ListEmptyComponent={emptyComponent}
 					/>
 				</View>
-			)}
+				<ListFooter
+					style={{
+						width: '100%',
+						flexDirection: 'column',
+						justifyContent: 'center',
+						borderTopColor: '#000000',
+						borderTopWidth: 0.6,
+					}}
+				/>
+			</View>
 		</View>
 	);
 };

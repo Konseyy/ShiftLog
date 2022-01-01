@@ -1,67 +1,142 @@
-import React, { FC, useState } from 'react';
+import React, { FC, useEffect, useState } from 'react';
 import {
 	Text,
-	TouchableOpacity,
 	View,
+	TouchableOpacity,
 	PermissionsAndroid,
 	Alert,
 } from 'react-native';
-import useShiftList from '../../helperFunctions/useShiftList';
+import {
+	dateDifference,
+	stringDateFromDate,
+	stringTimeFromDate,
+} from '../../helperFunctions/dateFormatFunctions';
 import DateTimePicker, { Event } from '@react-native-community/datetimepicker';
-import { MakeBackupProps } from '../../types';
-import { stringDateFromDate } from '../../helperFunctions/dateFormatFunctions';
 import RNFetchBlob from 'rn-fetch-blob';
+import { ExportFileProps, shift, exportScreenTypes } from '../../types';
 import { softHaptic } from '../../helperFunctions/hapticFeedback';
-const MakeBackup: FC<MakeBackupProps> = () => {
+import useColors from '../../helperFunctions/useColors';
+import useShifts from '../ShiftsProvider';
+const ExportFile: FC<ExportFileProps> = ({ navigation, route }) => {
+	const colors = useColors();
 	const [periodFilter, setPeriodFilter] = useState<'all' | 'custom'>('all');
 	const [startPickerVisible, setStartPickerVisible] = useState(false);
 	const [enddPickerVisible, setEndPickerVisible] = useState(false);
 	const [startDate, setStartDate] = useState(new Date());
 	const [endDate, setEndDate] = useState(new Date());
-	const { shifts, refreshFromStorage } = useShiftList();
+	const [actionState, setActionState] = useState<exportScreenTypes>('backup');
+	const [description, setDescription] = useState('');
+	const [buttonText, setButtonText] = useState('');
+	const { shifts, refreshFromStorage } = useShifts();
+	useEffect(() => {
+		if (route.params.action === 'backup') {
+			navigation.setOptions({
+				title: 'Create Backup',
+			});
+			setActionState('backup');
+			setDescription(
+				'This action will generate a backup file containing all locally saved data in your selected period'
+			);
+			setButtonText('Create Backup');
+		} else if (route.params.action === 'report') {
+			navigation.setOptions({
+				title: 'New Report',
+			});
+			setActionState('report');
+			setDescription(
+				'This action will generate a report file containing all locally saved data in your selected period'
+			);
+			setButtonText('Generate Report');
+		}
+	}, []);
 	const generateReport = async (): Promise<void> => {
 		await refreshFromStorage();
 		const today = new Date();
 		const fileName =
-			`ShiftLogBackup-${today.toLocaleDateString()}-${today.getTime()}`.replace(
-				/\//g,
-				'-'
-			);
+			actionState === 'report'
+				? `Report-ShiftLog-${today.toLocaleDateString()}-${today.getTime()}`.replace(
+						/\//g,
+						'-'
+				  )
+				: `ShiftLogBackup-${today.toLocaleDateString()}-${today.getTime()}`.replace(
+						/\//g,
+						'-'
+				  );
 		let saveString = '';
-		if (periodFilter === 'all') {
-			saveString = JSON.stringify(shifts);
-		} else if (periodFilter === 'custom') {
-			let startTime = startDate.setHours(0, 0, 0, 0);
-			let tempEndDate = new Date(endDate);
-			tempEndDate.setDate(tempEndDate.getDate() + 1);
-			tempEndDate.setHours(0, 0, 0, 0);
-			tempEndDate.setMilliseconds(tempEndDate.getMilliseconds() - 1);
-			let endTime = tempEndDate.getTime();
-			saveString = JSON.stringify(
-				shifts.filter((shift) => {
+		if (actionState === 'report') {
+			let shiftsInReport: shift[] = [];
+			if (periodFilter === 'all') {
+				shiftsInReport = shifts;
+			} else if (periodFilter === 'custom') {
+				let startTime = startDate.setHours(0, 0, 0, 0);
+				let tempEndDate = new Date(endDate);
+				tempEndDate.setDate(tempEndDate.getDate() + 1);
+				tempEndDate.setHours(0, 0, 0, 0);
+				tempEndDate.setMilliseconds(tempEndDate.getMilliseconds() - 1);
+				let endTime = tempEndDate.getTime();
+				shiftsInReport = shifts.filter((shift) => {
 					return shift.startTime >= startTime && shift.startTime <= endTime;
-				})
-			);
+				});
+			}
+			saveString =
+				'Start Date, Start Time, End Date, End Time, Duration, Notes\n';
+			shiftsInReport.forEach((shift) => {
+				let line = `${stringDateFromDate(
+					new Date(shift.startTime)
+				)}, ${stringTimeFromDate(
+					new Date(shift.startTime)
+				)}, ${stringDateFromDate(
+					new Date(shift.endTime)
+				)}, ${stringTimeFromDate(new Date(shift.endTime))}, ${dateDifference(
+					shift.startTime,
+					shift.endTime,
+					shift.break
+				)},${shift.notes.length ? shift.notes : 'no additional notes'}\n`;
+				saveString += line;
+			});
+		} else if (actionState === 'backup') {
+			if (periodFilter === 'all') {
+				saveString = JSON.stringify(shifts);
+			} else if (periodFilter === 'custom') {
+				let startTime = startDate.setHours(0, 0, 0, 0);
+				let tempEndDate = new Date(endDate);
+				tempEndDate.setDate(tempEndDate.getDate() + 1);
+				tempEndDate.setHours(0, 0, 0, 0);
+				tempEndDate.setMilliseconds(tempEndDate.getMilliseconds() - 1);
+				let endTime = tempEndDate.getTime();
+				saveString = JSON.stringify(
+					shifts.filter((shift) => {
+						return shift.startTime >= startTime && shift.startTime <= endTime;
+					})
+				);
+			}
 		}
+
 		try {
 			const granted = await PermissionsAndroid.request(
 				PermissionsAndroid.PERMISSIONS.WRITE_EXTERNAL_STORAGE
 			);
 			if (granted === PermissionsAndroid.RESULTS.GRANTED) {
 				const dirs = RNFetchBlob.fs.dirs;
-				console.log(dirs);
 				const fs = RNFetchBlob.fs;
-				const NEW_FILE_PATH = `${dirs.DownloadDir}/${fileName}.txt`;
-				console.log('dir', NEW_FILE_PATH);
+				const NEW_FILE_PATH =
+					actionState === 'report'
+						? `${dirs.DownloadDir}/${fileName}.csv`
+						: `${dirs.DownloadDir}/${fileName}.txt`;
 				await fs.createFile(NEW_FILE_PATH, saveString, 'utf8');
 				Alert.alert(
-					'Backup generated',
-					`Backup has been downloaded to \n ${NEW_FILE_PATH}`
+					actionState === 'report' ? 'Report generated' : 'Backup created',
+					actionState === 'report'
+						? `Report has been downloaded to \n ${NEW_FILE_PATH}`
+						: `Backup has been downloaded to \n ${NEW_FILE_PATH}`
 				);
+				// RNFetchBlob.android.actionViewIntent(NEW_FILE_PATH, 'text/plain');
 			} else {
 				Alert.alert(
 					'Permission required',
-					'Permission to store files is required in order to store the backup'
+					actionState === 'report'
+						? 'Permission to store files is required in order to store the Report'
+						: 'Permission to store files is required in order to store the Backup'
 				);
 				console.warn('Permission denied');
 			}
@@ -83,7 +158,13 @@ const MakeBackup: FC<MakeBackupProps> = () => {
 			>
 				<View style={{ flexDirection: 'row', alignItems: 'center' }}>
 					<View style={{ flex: 2 }}>
-						<Text style={{ fontSize: 15, fontWeight: 'bold' }}>
+						<Text
+							style={{
+								fontSize: 15,
+								fontWeight: 'bold',
+								color: colors.textColor,
+							}}
+						>
 							Select Period :
 						</Text>
 					</View>
@@ -97,7 +178,10 @@ const MakeBackup: FC<MakeBackupProps> = () => {
 						>
 							<View
 								style={{
-									backgroundColor: periodFilter === 'all' ? 'gray' : 'darkgray',
+									backgroundColor:
+										periodFilter === 'all'
+											? colors.selectedBackground
+											: colors.notSelectedBackground,
 									padding: 8,
 									borderRadius: 5,
 									alignSelf: 'center',
@@ -118,7 +202,9 @@ const MakeBackup: FC<MakeBackupProps> = () => {
 							<View
 								style={{
 									backgroundColor:
-										periodFilter === 'custom' ? 'gray' : 'darkgray',
+										periodFilter === 'custom'
+											? colors.selectedBackground
+											: colors.notSelectedBackground,
 									padding: 8,
 									borderRadius: 5,
 									alignSelf: 'center',
@@ -157,6 +243,7 @@ const MakeBackup: FC<MakeBackupProps> = () => {
 									fontSize: 15,
 									fontWeight: 'bold',
 									minWidth: 20,
+									color: colors.textColor,
 								}}
 							>
 								Select start date:
@@ -164,7 +251,7 @@ const MakeBackup: FC<MakeBackupProps> = () => {
 							<View style={{ flex: 2, alignItems: 'flex-start' }}>
 								<TouchableOpacity
 									style={{
-										backgroundColor: 'lightgray',
+										backgroundColor: colors.dateSelectBackground,
 										padding: 8,
 										borderRadius: 10,
 									}}
@@ -173,7 +260,7 @@ const MakeBackup: FC<MakeBackupProps> = () => {
 										setStartPickerVisible(true);
 									}}
 								>
-									<Text style={{ fontWeight: 'bold' }}>
+									<Text style={{ fontWeight: 'bold', color: colors.textColor }}>
 										{stringDateFromDate(startDate)}
 									</Text>
 								</TouchableOpacity>
@@ -186,6 +273,7 @@ const MakeBackup: FC<MakeBackupProps> = () => {
 									fontSize: 15,
 									fontWeight: 'bold',
 									minWidth: 20,
+									color: colors.textColor,
 								}}
 							>
 								Select end date:
@@ -193,7 +281,7 @@ const MakeBackup: FC<MakeBackupProps> = () => {
 							<View style={{ flex: 2, alignItems: 'flex-start' }}>
 								<TouchableOpacity
 									style={{
-										backgroundColor: 'lightgray',
+										backgroundColor: colors.dateSelectBackground,
 										padding: 8,
 										borderRadius: 10,
 									}}
@@ -202,7 +290,7 @@ const MakeBackup: FC<MakeBackupProps> = () => {
 										setEndPickerVisible(true);
 									}}
 								>
-									<Text style={{ fontWeight: 'bold' }}>
+									<Text style={{ fontWeight: 'bold', color: colors.textColor }}>
 										{stringDateFromDate(endDate)}
 									</Text>
 								</TouchableOpacity>
@@ -213,10 +301,7 @@ const MakeBackup: FC<MakeBackupProps> = () => {
 			</View>
 
 			<View style={{ marginTop: 10 }}>
-				<Text>
-					This action will generate a backup file containing all locally saved
-					data in your selected period
-				</Text>
+				<Text style={{ color: colors.textColor }}>{description}</Text>
 			</View>
 			<View
 				style={{
@@ -226,7 +311,11 @@ const MakeBackup: FC<MakeBackupProps> = () => {
 				}}
 			>
 				<TouchableOpacity
-					style={{ backgroundColor: '#26a5ff', padding: 10, borderRadius: 10 }}
+					style={{
+						backgroundColor: actionState === 'report' ? 'green' : '#26a5ff',
+						padding: 10,
+						borderRadius: 10,
+					}}
 					onPress={() => {
 						softHaptic();
 						generateReport();
@@ -234,7 +323,7 @@ const MakeBackup: FC<MakeBackupProps> = () => {
 				>
 					<View>
 						<Text style={{ color: 'white', fontWeight: 'bold', fontSize: 15 }}>
-							Generate Backup
+							{buttonText}
 						</Text>
 					</View>
 				</TouchableOpacity>
@@ -268,4 +357,4 @@ const MakeBackup: FC<MakeBackupProps> = () => {
 		</View>
 	);
 };
-export default MakeBackup;
+export default ExportFile;
