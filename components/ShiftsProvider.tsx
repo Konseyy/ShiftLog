@@ -86,7 +86,6 @@ const ShiftsProvider: FC = ({ children }) => {
 			await saveShiftLogStorage();
 		}
 		if (isDelete(action)) {
-			console.log('from len', shiftList.length, 'delete ', action.value.index);
 			shiftList.splice(action.value.index, 1);
 			shiftList.forEach((i, x) => (i.index = x));
 			await saveShiftLogStorage();

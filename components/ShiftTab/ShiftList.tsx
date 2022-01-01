@@ -361,9 +361,6 @@ const ShiftList: React.FC<ShiftListProps> = ({ navigation }) => {
 		},
 		[addShiftScene, colors]
 	);
-	useEffect(() => {
-		console.log('shifts', shifts.length);
-	}, [shifts]);
 	return (
 		<View
 			style={{
