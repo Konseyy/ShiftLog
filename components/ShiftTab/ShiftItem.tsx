@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { ListRenderItemInfo } from 'react-native';
 import { Text, TouchableOpacity, View } from 'react-native';
+import Collapsible from 'react-native-collapsible';
 import {
 	stringDateFromDate,
 	stringTimeFromDate,
@@ -99,8 +100,8 @@ const ShiftItem = ({ item, deleteShift, editShift }: Props) => {
 						</View>
 					</View>
 				</View>
-				{expanded && (
-					<View style={{ paddingBottom: 5 }}>
+				<Collapsible collapsed={!expanded} duration={200}>
+				<View style={{ paddingBottom: 5 }}>
 						<View
 							style={{
 								flex: 2,
@@ -149,7 +150,7 @@ const ShiftItem = ({ item, deleteShift, editShift }: Props) => {
 									style={{
 										flex: 6,
 										backgroundColor: colors.buttonGray,
-										borderRadius: 10,
+										borderRadius: 5,
 										padding: 5,
 									}}
 								>
@@ -182,7 +183,7 @@ const ShiftItem = ({ item, deleteShift, editShift }: Props) => {
 									style={{
 										flex: 6,
 										backgroundColor: '#6e0006',
-										borderRadius: 10,
+										borderRadius: 5,
 										padding: 5,
 									}}
 								>
@@ -203,7 +204,7 @@ const ShiftItem = ({ item, deleteShift, editShift }: Props) => {
 							</View>
 						</View>
 					</View>
-				)}
+				</Collapsible>
 			</View>
 		</TouchableOpacity>
 	);
