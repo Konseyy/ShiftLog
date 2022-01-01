@@ -1,6 +1,6 @@
 import { DefaultTheme, Theme } from '@react-navigation/native';
 const lightColors = {
-	background: 'lightgray',
+	background: '#e6e6e6',
 	textColor: 'black',
 	buttonBlue: '#26a5ff',
 	topBar: 'white',
