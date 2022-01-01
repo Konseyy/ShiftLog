@@ -39,6 +39,10 @@ const ShiftItem = ({ item, deleteShift, editShift }: Props) => {
 				backgroundColor: colors.shiftBackground,
 				marginTop: 5,
 				borderRadius: 5,
+				borderBottomWidth:.8,
+				borderLeftWidth:.5,
+				borderRightWidth:.5,
+				borderColor:"black"
 			}}
 			onPress={() => {
 				softHaptic();
