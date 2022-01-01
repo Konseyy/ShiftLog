@@ -11,6 +11,7 @@ const lightColors = {
 	selectedBackground: 'gray',
 	notSelectedBackground: 'darkgray',
 	selectedNav: '#26a5ff',
+	shiftBackground: '#d6d6d6',
 };
 const darkColors = {
 	buttonBlue: '#0076c9',
@@ -24,6 +25,7 @@ const darkColors = {
 	selectedBackground: 'darkgray',
 	notSelectedBackground: 'gray',
 	selectedNav: 'white',
+	shiftBackground: 'gray',
 };
 
 const getColors = (isDark = true) => {

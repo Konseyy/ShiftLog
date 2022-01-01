@@ -1,5 +1,5 @@
-import React, { FC, useContext, useEffect } from 'react';
-import { Button, Switch, Text, View } from 'react-native';
+import React, { FC } from 'react';
+import { Switch, Text, View } from 'react-native';
 import { softHaptic } from '../../helperFunctions/hapticFeedback';
 import useColors from '../../helperFunctions/useColors';
 import { SettingsMainProps } from '../../types';
