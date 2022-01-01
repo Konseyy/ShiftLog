@@ -57,24 +57,23 @@ const AddShift: FC<AddShiftProps> = ({ navigation, route }) => {
 				'Shift end time must be greater than shift start time'
 			);
 			return false;
-		} 
-		if(showCustomBreakInput){
+		}
+		if (showCustomBreakInput) {
 			if (!(end - customBreakTime * 60 * 1000 > start)) {
 				Alert.alert(
 					'Shift Time Negative',
 					'Change Start/End times or adjust break time'
 				);
 				return false;
-			} 
-		}
-		else{
+			}
+		} else {
 			if (!(end - breakTime * 60 * 1000 > start)) {
 				Alert.alert(
 					'Shift Time Negative',
 					'Change Start/End times or adjust break time'
 				);
 				return false;
-			} 
+			}
 		}
 		return true;
 	}
@@ -303,8 +302,8 @@ const AddShift: FC<AddShiftProps> = ({ navigation, route }) => {
 									Enter custom Break Time (minutes) :{' '}
 								</Text>
 								<TextInput
-										selectTextOnFocus={true}
-										style={{
+									selectTextOnFocus={true}
+									style={{
 										marginTop: 10,
 										paddingLeft: 10,
 										backgroundColor: '#FFFFFF',
@@ -347,7 +346,7 @@ const AddShift: FC<AddShiftProps> = ({ navigation, route }) => {
 								defaultValue={notes}
 								style={{
 									marginTop: 10,
-									paddingHorizontal:10,
+									paddingHorizontal: 10,
 									backgroundColor: '#FFFFFF',
 									color: '#000000',
 									alignSelf: 'stretch',
