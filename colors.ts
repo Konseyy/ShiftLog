@@ -16,7 +16,7 @@ const darkColors = {
 	background: '#636363',
 	topBar: '#333333',
 	textColor: '#e6e6e6',
-	switchThumbColor: 'gray',
+	switchThumbColor: 'black',
 	dateSelectBackground: 'gray',
 	seperatorColor: 'gray',
 	selectedBackground: 'darkgray',
