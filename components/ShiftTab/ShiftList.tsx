@@ -371,7 +371,7 @@ const ShiftList: React.FC<ShiftListProps> = ({ navigation }) => {
 					backgroundColor: colors.buttonBlue,
 					height: 70,
 					width: 70,
-					borderRadius: 30,
+					borderRadius: 35,
 					justifyContent: 'center',
 				}}
 			>
