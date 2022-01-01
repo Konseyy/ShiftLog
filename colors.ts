@@ -25,12 +25,7 @@ const darkColors = {
 };
 
 const getColors = (isDark = true) => {
-	let returnColors;
-	if (isDark) {
-		returnColors = darkColors;
-	} else {
-		returnColors = lightColors;
-	}
+	const  returnColors = isDark? darkColors : lightColors;
 	const customTheme: Theme = {
 		...DefaultTheme,
 		dark: isDark,
