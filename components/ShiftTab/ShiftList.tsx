@@ -53,10 +53,7 @@ const ShiftList: React.FC<ShiftListProps> = ({ navigation }) => {
 	async function editShift(index: number) {
 		softHaptic();
 		navigation.navigate('AddShift', {
-			current: {
-				...filteredData[index],
-				index: filteredData[index].index,
-			},
+			current: shifts[index],
 		});
 	}
 	function filterData(
