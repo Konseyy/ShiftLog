@@ -144,7 +144,7 @@ const ShiftItem = ({ item, deleteShift, editShift }: Props) => {
 									onPress={() => editShift(ShiftData.index)}
 									style={{
 										flex: 6,
-										backgroundColor: '#8c8c8c',
+										backgroundColor: colors.buttonGray,
 										borderRadius: 10,
 										padding: 5,
 									}}
