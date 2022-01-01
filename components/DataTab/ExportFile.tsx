@@ -98,7 +98,7 @@ const ExportFile: FC<ExportFileProps> = ({ navigation, route }) => {
 					shift.startTime,
 					shift.endTime,
 					shift.break
-				)},${shift.notes.length ? shift.notes : 'no additional notes'}${
+				)},${shift.notes.length ? shift.notes : ''}${
 					lineNumber === 0 ? ',' + totalTime : ''
 				}\n`;
 				saveString += line;
