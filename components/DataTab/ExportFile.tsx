@@ -321,7 +321,7 @@ const ExportFile: FC<ExportFileProps> = ({ navigation, route }) => {
 			>
 				<TouchableOpacity
 					style={{
-						backgroundColor: actionState === 'report' ? 'green' : '#26a5ff',
+						backgroundColor: actionState === 'report' ? colors.buttonGreen : colors.buttonBlue,
 						padding: 10,
 						borderRadius: 10,
 					}}
