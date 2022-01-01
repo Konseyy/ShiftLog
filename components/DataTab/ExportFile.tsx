@@ -8,6 +8,8 @@ import {
 } from 'react-native';
 import {
 	dateDifference,
+	displayHoursAndMinutes,
+	getShiftDurationInMinutes,
 	stringDateFromDate,
 	stringTimeFromDate,
 } from '../../helperFunctions/dateFormatFunctions';
@@ -79,8 +81,13 @@ const ExportFile: FC<ExportFileProps> = ({ navigation, route }) => {
 				});
 			}
 			saveString =
-				'Start Date, Start Time, End Date, End Time, Duration, Notes\n';
-			shiftsInReport.forEach((shift) => {
+				'Start Date, Start Time, End Date, End Time, Duration, Notes, Total time\n';
+			let minutes = 0;
+			shiftsInReport.forEach((shiftObject) => {
+				minutes += getShiftDurationInMinutes(shiftObject);
+			});
+			const totalTime = displayHoursAndMinutes(minutes);
+			shiftsInReport.forEach((shift, lineNumber) => {
 				let line = `${stringDateFromDate(
 					new Date(shift.startTime)
 				)}, ${stringTimeFromDate(
@@ -91,7 +98,9 @@ const ExportFile: FC<ExportFileProps> = ({ navigation, route }) => {
 					shift.startTime,
 					shift.endTime,
 					shift.break
-				)},${shift.notes.length ? shift.notes : 'no additional notes'}\n`;
+				)},${shift.notes.length ? shift.notes : 'no additional notes'}${
+					lineNumber === 0 ? ',' + totalTime : ''
+				}\n`;
 				saveString += line;
 			});
 		} else if (actionState === 'backup') {
@@ -312,7 +321,7 @@ const ExportFile: FC<ExportFileProps> = ({ navigation, route }) => {
 			>
 				<TouchableOpacity
 					style={{
-						backgroundColor: actionState === 'report' ? 'green' : '#26a5ff',
+						backgroundColor: actionState === 'report' ? colors.buttonGreen : colors.buttonBlue,
 						padding: 10,
 						borderRadius: 10,
 					}}

@@ -1,8 +1,9 @@
 import { DefaultTheme, Theme } from '@react-navigation/native';
 const lightColors = {
-	background: 'lightgray',
+	background: '#e6e6e6',
 	textColor: 'black',
 	buttonBlue: '#26a5ff',
+	buttonGreen: 'green',
 	topBar: 'white',
 	switchThumbColor: 'black',
 	dateSelectBackground: 'lightgray',
@@ -12,7 +13,8 @@ const lightColors = {
 	selectedNav: '#26a5ff',
 };
 const darkColors = {
-	buttonBlue: '#0768ad',
+	buttonBlue: '#0076c9',
+	buttonGreen: '#006e1d',
 	background: '#636363',
 	topBar: '#333333',
 	textColor: '#e6e6e6',
@@ -25,7 +27,7 @@ const darkColors = {
 };
 
 const getColors = (isDark = true) => {
-	const  returnColors = isDark? darkColors : lightColors;
+	const returnColors = isDark ? darkColors : lightColors;
 	const customTheme: Theme = {
 		...DefaultTheme,
 		dark: isDark,
