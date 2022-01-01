@@ -147,24 +147,26 @@ const AddShift: FC<AddShiftProps> = ({ navigation, route }) => {
 						}}
 					>
 						<View style={{ flexDirection: 'column', marginBottom: 15 }}>
-							<Text
-								style={{
-									alignSelf: 'center',
-									fontWeight: 'bold',
-									fontSize: 20,
-								}}
-							>
-								Start of Shift
-							</Text>
 							<View style={{ flexDirection: 'row', marginTop: 10 }}>
-								<View style={{ flex: 1, alignItems: 'center', left: 10 }}>
+								<Text
+									style={{
+										flex: 1,
+										alignSelf: 'center',
+										fontWeight: 'bold',
+										fontSize: 15,
+										minWidth: 30,
+									}}
+								>
+									Start of Shift
+								</Text>
+								<View style={{ flex: 2, alignItems: 'center' }}>
 									<TouchableOpacity
 										style={{
 											alignItems: 'center',
 											backgroundColor: 'lightgray',
 											padding: 8,
 											borderRadius: 10,
-											width: 110,
+											width: 100,
 										}}
 										onPress={() => {
 											softHaptic();
@@ -176,14 +178,14 @@ const AddShift: FC<AddShiftProps> = ({ navigation, route }) => {
 										</Text>
 									</TouchableOpacity>
 								</View>
-								<View style={{ flex: 1, alignItems: 'center', right: 10 }}>
+								<View style={{ flex: 2, alignItems: 'center' }}>
 									<TouchableOpacity
 										style={{
 											alignItems: 'center',
 											backgroundColor: 'lightgray',
 											padding: 8,
 											borderRadius: 10,
-											width: 110,
+											width: 100,
 										}}
 										onPress={() => {
 											softHaptic();
@@ -195,25 +197,34 @@ const AddShift: FC<AddShiftProps> = ({ navigation, route }) => {
 								</View>
 							</View>
 						</View>
-						<View style={{ flexDirection: 'column', marginBottom: 15 }}>
-							<Text
-								style={{
-									alignSelf: 'center',
-									fontWeight: 'bold',
-									fontSize: 20,
-								}}
-							>
-								End of Shift
-							</Text>
+						<View
+							style={{
+								flexDirection: 'column',
+								borderBottomWidth: 0.5,
+								borderBottomColor: 'lightgray',
+								paddingBottom: 15,
+							}}
+						>
 							<View style={{ flexDirection: 'row', marginTop: 10 }}>
-								<View style={{ flex: 1, alignItems: 'center', left: 10 }}>
+								<Text
+									style={{
+										flex: 1,
+										alignSelf: 'center',
+										fontWeight: 'bold',
+										fontSize: 15,
+										minWidth: 30,
+									}}
+								>
+									End of Shift
+								</Text>
+								<View style={{ flex: 2, alignItems: 'center' }}>
 									<TouchableOpacity
 										style={{
 											alignItems: 'center',
 											backgroundColor: 'lightgray',
 											padding: 8,
 											borderRadius: 10,
-											width: 110,
+											width: 100,
 										}}
 										onPress={() => {
 											softHaptic();
@@ -225,14 +236,14 @@ const AddShift: FC<AddShiftProps> = ({ navigation, route }) => {
 										</Text>
 									</TouchableOpacity>
 								</View>
-								<View style={{ flex: 1, alignItems: 'center', right: 10 }}>
+								<View style={{ flex: 2, alignItems: 'center' }}>
 									<TouchableOpacity
 										style={{
 											alignItems: 'center',
 											backgroundColor: 'lightgray',
 											padding: 8,
 											borderRadius: 10,
-											width: 110,
+											width: 100,
 										}}
 										onPress={() => {
 											softHaptic();
@@ -270,7 +281,7 @@ const AddShift: FC<AddShiftProps> = ({ navigation, route }) => {
 						{showCustomBreakInput && (
 							<View style={{ flexDirection: 'column', marginTop: 10 }}>
 								<Text style={{ fontWeight: 'bold' }}>
-									Enter custom break time (minutes) :{' '}
+									Enter custom Break Time (minutes) :{' '}
 								</Text>
 								<TextInput
 									style={{
