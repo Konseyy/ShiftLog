@@ -1,5 +1,13 @@
 import React, { FC } from 'react';
-import { Alert, TouchableOpacity, View, Text, ViewStyle } from 'react-native';
+import {
+	Alert,
+	TouchableOpacity,
+	View,
+	Text,
+	ViewStyle,
+	Image,
+	ImageSourcePropType,
+} from 'react-native';
 import { DataOptionsProps } from '../../types';
 import { pickSingle, isCancel } from 'react-native-document-picker';
 import { shift } from '../../types';
@@ -77,7 +85,8 @@ const DataOptions: FC<DataOptionsProps> = ({ navigation }) => {
 		style?: ViewStyle;
 		color?: string;
 		textColor?: string;
-	}> = ({ pressAction, title, style, color, textColor }) => {
+		imgPath?: ImageSourcePropType;
+	}> = ({ pressAction, title, style, color, textColor, imgPath }) => {
 		return (
 			<View style={{ marginBottom: 10, marginHorizontal: 15, ...style }}>
 				<TouchableOpacity
@@ -85,10 +94,16 @@ const DataOptions: FC<DataOptionsProps> = ({ navigation }) => {
 						softHaptic();
 						pressAction();
 					}}
-					style={{ backgroundColor: color, padding: 10, borderRadius: 10 }}
+					style={{
+						backgroundColor: color,
+						padding: 10,
+						borderRadius: 10,
+						flexDirection: 'row',
+					}}
 				>
 					<Text
 						style={{
+							flex: 1,
 							fontSize: 20,
 							color: textColor ?? 'white',
 							fontWeight: 'bold',
@@ -97,6 +112,18 @@ const DataOptions: FC<DataOptionsProps> = ({ navigation }) => {
 					>
 						{title}
 					</Text>
+					{imgPath && (
+						<Image
+							style={{
+								marginRight: 5,
+								alignSelf: 'center',
+								height: 25,
+								width: 25,
+								tintColor: 'white',
+							}}
+							source={imgPath}
+						/>
+					)}
 				</TouchableOpacity>
 			</View>
 		);
@@ -108,12 +135,19 @@ const DataOptions: FC<DataOptionsProps> = ({ navigation }) => {
 				color="green"
 				title="Generate report"
 				pressAction={goToReport}
+				imgPath={require('../../img/icons-report.png')}
 			/>
-			<ListItem color="gray" title="Create backup" pressAction={goToBackup} />
+			<ListItem
+				color="gray"
+				title="Create backup"
+				pressAction={goToBackup}
+				imgPath={require('../../img/icons-backup.png')}
+			/>
 			<ListItem
 				color="darkgray"
 				title="Import backup"
 				pressAction={importBackup}
+				imgPath={require('../../img/icons-restore-backup.png')}
 			/>
 		</View>
 	);
