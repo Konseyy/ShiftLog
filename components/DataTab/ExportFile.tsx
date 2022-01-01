@@ -6,7 +6,6 @@ import {
 	PermissionsAndroid,
 	Alert,
 } from 'react-native';
-import useShiftList from '../../helperFunctions/useShiftList';
 import {
 	dateDifference,
 	stringDateFromDate,
@@ -16,31 +15,38 @@ import DateTimePicker, { Event } from '@react-native-community/datetimepicker';
 import RNFetchBlob from 'rn-fetch-blob';
 import { ExportFileProps, shift, exportScreenTypes } from '../../types';
 import { softHaptic } from '../../helperFunctions/hapticFeedback';
+import useColors from '../../helperFunctions/useColors';
+import useShifts from '../ShiftsProvider';
 const ExportFile: FC<ExportFileProps> = ({ navigation, route }) => {
+	const colors = useColors();
 	const [periodFilter, setPeriodFilter] = useState<'all' | 'custom'>('all');
 	const [startPickerVisible, setStartPickerVisible] = useState(false);
 	const [enddPickerVisible, setEndPickerVisible] = useState(false);
 	const [startDate, setStartDate] = useState(new Date());
 	const [endDate, setEndDate] = useState(new Date());
 	const [actionState, setActionState] = useState<exportScreenTypes>('backup');
-	const [description, setDescription] = useState("");
-	const [buttonText, setButtonText] = useState("");
-	const { shifts, refreshFromStorage } = useShiftList();
+	const [description, setDescription] = useState('');
+	const [buttonText, setButtonText] = useState('');
+	const { shifts, refreshFromStorage } = useShifts();
 	useEffect(() => {
 		if (route.params.action === 'backup') {
 			navigation.setOptions({
 				title: 'Create Backup',
 			});
 			setActionState('backup');
-			setDescription("This action will generate a backup file containing all locally saved data in your selected period");
-			setButtonText("Create Backup");
+			setDescription(
+				'This action will generate a backup file containing all locally saved data in your selected period'
+			);
+			setButtonText('Create Backup');
 		} else if (route.params.action === 'report') {
 			navigation.setOptions({
 				title: 'New Report',
 			});
 			setActionState('report');
-			setDescription("This action will generate a report file containing all locally saved data in your selected period");
-			setButtonText("Generate Report");
+			setDescription(
+				'This action will generate a report file containing all locally saved data in your selected period'
+			);
+			setButtonText('Generate Report');
 		}
 	}, []);
 	const generateReport = async (): Promise<void> => {
@@ -152,7 +158,13 @@ const ExportFile: FC<ExportFileProps> = ({ navigation, route }) => {
 			>
 				<View style={{ flexDirection: 'row', alignItems: 'center' }}>
 					<View style={{ flex: 2 }}>
-						<Text style={{ fontSize: 15, fontWeight: 'bold' }}>
+						<Text
+							style={{
+								fontSize: 15,
+								fontWeight: 'bold',
+								color: colors.textColor,
+							}}
+						>
 							Select Period :
 						</Text>
 					</View>
@@ -166,7 +178,10 @@ const ExportFile: FC<ExportFileProps> = ({ navigation, route }) => {
 						>
 							<View
 								style={{
-									backgroundColor: periodFilter === 'all' ? 'gray' : 'darkgray',
+									backgroundColor:
+										periodFilter === 'all'
+											? colors.selectedBackground
+											: colors.notSelectedBackground,
 									padding: 8,
 									borderRadius: 5,
 									alignSelf: 'center',
@@ -187,7 +202,9 @@ const ExportFile: FC<ExportFileProps> = ({ navigation, route }) => {
 							<View
 								style={{
 									backgroundColor:
-										periodFilter === 'custom' ? 'gray' : 'darkgray',
+										periodFilter === 'custom'
+											? colors.selectedBackground
+											: colors.notSelectedBackground,
 									padding: 8,
 									borderRadius: 5,
 									alignSelf: 'center',
@@ -226,6 +243,7 @@ const ExportFile: FC<ExportFileProps> = ({ navigation, route }) => {
 									fontSize: 15,
 									fontWeight: 'bold',
 									minWidth: 20,
+									color: colors.textColor,
 								}}
 							>
 								Select start date:
@@ -233,7 +251,7 @@ const ExportFile: FC<ExportFileProps> = ({ navigation, route }) => {
 							<View style={{ flex: 2, alignItems: 'flex-start' }}>
 								<TouchableOpacity
 									style={{
-										backgroundColor: 'lightgray',
+										backgroundColor: colors.dateSelectBackground,
 										padding: 8,
 										borderRadius: 10,
 									}}
@@ -242,7 +260,7 @@ const ExportFile: FC<ExportFileProps> = ({ navigation, route }) => {
 										setStartPickerVisible(true);
 									}}
 								>
-									<Text style={{ fontWeight: 'bold' }}>
+									<Text style={{ fontWeight: 'bold', color: colors.textColor }}>
 										{stringDateFromDate(startDate)}
 									</Text>
 								</TouchableOpacity>
@@ -255,6 +273,7 @@ const ExportFile: FC<ExportFileProps> = ({ navigation, route }) => {
 									fontSize: 15,
 									fontWeight: 'bold',
 									minWidth: 20,
+									color: colors.textColor,
 								}}
 							>
 								Select end date:
@@ -262,7 +281,7 @@ const ExportFile: FC<ExportFileProps> = ({ navigation, route }) => {
 							<View style={{ flex: 2, alignItems: 'flex-start' }}>
 								<TouchableOpacity
 									style={{
-										backgroundColor: 'lightgray',
+										backgroundColor: colors.dateSelectBackground,
 										padding: 8,
 										borderRadius: 10,
 									}}
@@ -271,7 +290,7 @@ const ExportFile: FC<ExportFileProps> = ({ navigation, route }) => {
 										setEndPickerVisible(true);
 									}}
 								>
-									<Text style={{ fontWeight: 'bold' }}>
+									<Text style={{ fontWeight: 'bold', color: colors.textColor }}>
 										{stringDateFromDate(endDate)}
 									</Text>
 								</TouchableOpacity>
@@ -282,9 +301,7 @@ const ExportFile: FC<ExportFileProps> = ({ navigation, route }) => {
 			</View>
 
 			<View style={{ marginTop: 10 }}>
-				<Text>
-					{description}
-				</Text>
+				<Text style={{ color: colors.textColor }}>{description}</Text>
 			</View>
 			<View
 				style={{

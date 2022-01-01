@@ -2,17 +2,17 @@ import React, { FC } from 'react';
 import { Alert, TouchableOpacity, View, Text, ViewStyle } from 'react-native';
 import { DataOptionsProps } from '../../types';
 import { pickSingle, isCancel } from 'react-native-document-picker';
-import useShiftList from '../../helperFunctions/useShiftList';
 import { shift } from '../../types';
 import RNFetchBlob from 'rn-fetch-blob';
 import { softHaptic } from '../../helperFunctions/hapticFeedback';
+import useShifts from '../ShiftsProvider';
 const DataOptions: FC<DataOptionsProps> = ({ navigation }) => {
-	const { overwriteFromBackup } = useShiftList();
+	const { overwriteFromBackup } = useShifts();
 	const goToReport = (): void => {
-		navigation.navigate('ExportFile', {action:"report"});
+		navigation.navigate('ExportFile', { action: 'report' });
 	};
 	const goToBackup = (): void => {
-		navigation.navigate('ExportFile', {action:"backup"});
+		navigation.navigate('ExportFile', { action: 'backup' });
 	};
 	const importBackup = async (): Promise<void> => {
 		const isDataRightType = (data: any): data is shift[] => {

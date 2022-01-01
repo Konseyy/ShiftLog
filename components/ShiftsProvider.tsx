@@ -1,27 +1,52 @@
-import { useState, useEffect } from 'react';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { shiftToAdd, shift } from '../types';
-
-const useShiftList = () => {
-	type actionTypeAdd = {
-		type: 'add';
-		value: {
-			data: shiftToAdd;
-		};
+import React, {
+	createContext,
+	FC,
+	useContext,
+	useEffect,
+	useState,
+} from 'react';
+import { shift, shiftToAdd } from '../types';
+type actionTypeAdd = {
+	type: 'add';
+	value: {
+		data: shiftToAdd;
 	};
-	type actionTypeDelete = {
-		type: 'delete';
-		value: {
-			index: number;
-		};
+};
+type actionTypeDelete = {
+	type: 'delete';
+	value: {
+		index: number;
 	};
-	type actionTypeEdit = {
-		type: 'edit';
-		value: {
-			data: shift;
-		};
+};
+type actionTypeEdit = {
+	type: 'edit';
+	value: {
+		data: shift;
 	};
-	type actionAll = actionTypeAdd | actionTypeDelete | actionTypeEdit;
+};
+type actionAll = actionTypeAdd | actionTypeDelete | actionTypeEdit;
+interface shiftsContext {
+	shifts: shift[];
+	modifyShifts: (action: actionAll) => Promise<void>;
+	loading: boolean;
+	refreshFromStorage: () => Promise<void>;
+	overwriteFromBackup: (newShifts: shift[]) => Promise<void>;
+}
+const ShiftsContext = createContext<shiftsContext>({
+	shifts: [],
+	modifyShifts: (a) => {
+		return new Promise((r) => r);
+	},
+	loading: true,
+	refreshFromStorage: () => {
+		return new Promise((r) => r);
+	},
+	overwriteFromBackup: (a) => {
+		return new Promise((r) => r);
+	},
+});
+const ShiftsProvider: FC = ({ children }) => {
 	const isAdd = (action: actionAll): action is actionTypeAdd => {
 		return action.type === 'add';
 	};
@@ -46,9 +71,9 @@ const useShiftList = () => {
 			await AsyncStorage.setItem('savedShifts', JSON.stringify(defaultStorage));
 		}
 	};
-	const saveShiftLogStorage = async () => {
+	const saveShiftLogStorage = async (newData: shift[] = shiftList) => {
 		const JSONShifts = JSON.stringify({
-			shifts: shiftList,
+			shifts: newData,
 		});
 		setLoading(true);
 		await AsyncStorage.setItem('savedShifts', JSONShifts).then(() =>
@@ -57,11 +82,11 @@ const useShiftList = () => {
 	};
 	const reducer = async (action: actionAll) => {
 		if (isAdd(action)) {
-			await refreshFromStorage();
 			shiftList.push({ ...action.value.data, index: shiftList.length });
 			await saveShiftLogStorage();
 		}
 		if (isDelete(action)) {
+			console.log('from len', shiftList.length, 'delete ', action.value.index);
 			shiftList.splice(action.value.index, 1);
 			await saveShiftLogStorage();
 		}
@@ -70,19 +95,27 @@ const useShiftList = () => {
 			await saveShiftLogStorage();
 		}
 	};
-	const overwriteFromBackup = async (newData:shift[]): Promise<void> => {
+	const overwriteFromBackup = async (newData: shift[]): Promise<void> => {
 		setShiftList(newData);
 		await saveShiftLogStorage();
-	}
+	};
 	useEffect(() => {
 		refreshFromStorage();
 	}, []);
-	return {
-		shifts: shiftList,
-		modifyShifts: reducer,
-		loading,
-		refreshFromStorage,
-		overwriteFromBackup
-	};
+	return (
+		<ShiftsContext.Provider
+			value={{
+				shifts: shiftList,
+				modifyShifts: reducer,
+				loading,
+				overwriteFromBackup,
+				refreshFromStorage,
+			}}
+		>
+			{children}
+		</ShiftsContext.Provider>
+	);
 };
-export default useShiftList;
+const useShifts = () => useContext(ShiftsContext);
+export default useShifts;
+export { ShiftsProvider };

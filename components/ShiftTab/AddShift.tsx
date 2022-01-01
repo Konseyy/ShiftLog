@@ -6,11 +6,12 @@ import {
 	stringDateFromDate,
 	stringTimeFromDate,
 } from '../../helperFunctions/dateFormatFunctions';
-import useShiftList from '../../helperFunctions/useShiftList';
 import { AddShiftProps } from '../../types';
 import { softHaptic } from '../../helperFunctions/hapticFeedback';
-import { numericLiteral } from '@babel/types';
+import useColors from '../../helperFunctions/useColors';
+import useShifts from '../ShiftsProvider';
 const AddShift: FC<AddShiftProps> = ({ navigation, route }) => {
+	const colors = useColors();
 	const params = route.params ?? {};
 	const [startDate, setStartDate] = useState(
 		params.current ? new Date(params.current.startTime) : new Date()
@@ -36,7 +37,7 @@ const AddShift: FC<AddShiftProps> = ({ navigation, route }) => {
 	const [notes, setNotes] = useState<string>(
 		params.current ? params.current.notes : ''
 	);
-	const { modifyShifts } = useShiftList();
+	const { modifyShifts } = useShifts();
 	function onSelect(
 		event: Event,
 		selectedDate: Date | undefined,
@@ -154,6 +155,7 @@ const AddShift: FC<AddShiftProps> = ({ navigation, route }) => {
 										fontWeight: 'bold',
 										fontSize: 15,
 										minWidth: 30,
+										color: colors.textColor,
 									}}
 								>
 									Start of Shift
@@ -162,7 +164,7 @@ const AddShift: FC<AddShiftProps> = ({ navigation, route }) => {
 									<TouchableOpacity
 										style={{
 											alignItems: 'center',
-											backgroundColor: 'lightgray',
+											backgroundColor: colors.dateSelectBackground,
 											padding: 8,
 											borderRadius: 10,
 											width: 100,
@@ -172,7 +174,7 @@ const AddShift: FC<AddShiftProps> = ({ navigation, route }) => {
 											setShowStartDateSelect(true);
 										}}
 									>
-										<Text style={{ fontSize: 15 }}>
+										<Text style={{ fontSize: 15, color: colors.textColor }}>
 											{stringDateFromDate(startDate)}
 										</Text>
 									</TouchableOpacity>
@@ -181,7 +183,7 @@ const AddShift: FC<AddShiftProps> = ({ navigation, route }) => {
 									<TouchableOpacity
 										style={{
 											alignItems: 'center',
-											backgroundColor: 'lightgray',
+											backgroundColor: colors.dateSelectBackground,
 											padding: 8,
 											borderRadius: 10,
 											width: 100,
@@ -191,7 +193,9 @@ const AddShift: FC<AddShiftProps> = ({ navigation, route }) => {
 											setShowStartTimeSelect(true);
 										}}
 									>
-										<Text>{stringTimeFromDate(startTime)}</Text>
+										<Text style={{ color: colors.textColor }}>
+											{stringTimeFromDate(startTime)}
+										</Text>
 									</TouchableOpacity>
 								</View>
 							</View>
@@ -200,7 +204,7 @@ const AddShift: FC<AddShiftProps> = ({ navigation, route }) => {
 							style={{
 								flexDirection: 'column',
 								borderBottomWidth: 0.5,
-								borderBottomColor: 'lightgray',
+								borderBottomColor: colors.seperatorColor,
 								paddingBottom: 15,
 							}}
 						>
@@ -212,6 +216,7 @@ const AddShift: FC<AddShiftProps> = ({ navigation, route }) => {
 										fontWeight: 'bold',
 										fontSize: 15,
 										minWidth: 30,
+										color: colors.textColor,
 									}}
 								>
 									End of Shift
@@ -220,7 +225,7 @@ const AddShift: FC<AddShiftProps> = ({ navigation, route }) => {
 									<TouchableOpacity
 										style={{
 											alignItems: 'center',
-											backgroundColor: 'lightgray',
+											backgroundColor: colors.dateSelectBackground,
 											padding: 8,
 											borderRadius: 10,
 											width: 100,
@@ -230,7 +235,7 @@ const AddShift: FC<AddShiftProps> = ({ navigation, route }) => {
 											setShowEndDateSelect(true);
 										}}
 									>
-										<Text style={{ fontSize: 15 }}>
+										<Text style={{ fontSize: 15, color: colors.textColor }}>
 											{stringDateFromDate(endDate)}
 										</Text>
 									</TouchableOpacity>
@@ -239,7 +244,7 @@ const AddShift: FC<AddShiftProps> = ({ navigation, route }) => {
 									<TouchableOpacity
 										style={{
 											alignItems: 'center',
-											backgroundColor: 'lightgray',
+											backgroundColor: colors.dateSelectBackground,
 											padding: 8,
 											borderRadius: 10,
 											width: 100,
@@ -249,13 +254,17 @@ const AddShift: FC<AddShiftProps> = ({ navigation, route }) => {
 											setShowEndTimeSelect(true);
 										}}
 									>
-										<Text>{stringTimeFromDate(endTime)}</Text>
+										<Text style={{ color: colors.textColor }}>
+											{stringTimeFromDate(endTime)}
+										</Text>
 									</TouchableOpacity>
 								</View>
 							</View>
 						</View>
 						<View style={{ flexDirection: 'column', marginTop: 10 }}>
-							<Text style={{ fontWeight: 'bold' }}>Break Time</Text>
+							<Text style={{ fontWeight: 'bold', color: colors.textColor }}>
+								Break Time
+							</Text>
 							<Picker
 								style={{ backgroundColor: 'white', marginTop: 10 }}
 								selectedValue={breakTime}
@@ -279,7 +288,7 @@ const AddShift: FC<AddShiftProps> = ({ navigation, route }) => {
 						</View>
 						{showCustomBreakInput && (
 							<View style={{ flexDirection: 'column', marginTop: 10 }}>
-								<Text style={{ fontWeight: 'bold' }}>
+								<Text style={{ fontWeight: 'bold', color: colors.textColor }}>
 									Enter custom Break Time (minutes) :{' '}
 								</Text>
 								<TextInput
@@ -310,7 +319,13 @@ const AddShift: FC<AddShiftProps> = ({ navigation, route }) => {
 								alignItems: 'center',
 							}}
 						>
-							<Text style={{ fontWeight: 'bold', alignSelf: 'flex-start' }}>
+							<Text
+								style={{
+									fontWeight: 'bold',
+									alignSelf: 'flex-start',
+									color: colors.textColor,
+								}}
+							>
 								Additional notes
 							</Text>
 							<TextInput
@@ -340,7 +355,7 @@ const AddShift: FC<AddShiftProps> = ({ navigation, route }) => {
 			>
 				<View
 					style={{
-						backgroundColor: '#26a5ff',
+						backgroundColor: colors.buttonBlue,
 						paddingVertical: 7,
 						paddingHorizontal: 18,
 						borderRadius: 8,
@@ -356,7 +371,10 @@ const AddShift: FC<AddShiftProps> = ({ navigation, route }) => {
 					mode="date"
 					value={startDate}
 					onChange={(e: Event, s: Date | undefined) => {
-						if (!s) return;
+						if (!s) {
+							setShowStartDateSelect(false);
+							return;
+						}
 						softHaptic();
 						onSelect(e, s, setStartDate, setShowStartDateSelect);
 						if (s > endDate) setEndDate(s);
@@ -368,7 +386,6 @@ const AddShift: FC<AddShiftProps> = ({ navigation, route }) => {
 					mode="time"
 					value={startTime}
 					onChange={(e: Event, s: Date | undefined) => {
-						if (!s) return;
 						softHaptic();
 						onSelect(e, s, setStartTime, setShowStartTimeSelect);
 					}}
@@ -379,7 +396,10 @@ const AddShift: FC<AddShiftProps> = ({ navigation, route }) => {
 					mode="date"
 					value={endDate}
 					onChange={(e: Event, s: Date | undefined) => {
-						if (!s) return;
+						if (!s) {
+							setShowEndDateSelect(false);
+							return;
+						}
 						softHaptic();
 						onSelect(e, s, setEndDate, setShowEndDateSelect);
 						if (s < startDate) setStartDate(s);
@@ -391,7 +411,6 @@ const AddShift: FC<AddShiftProps> = ({ navigation, route }) => {
 					mode="time"
 					value={endTime}
 					onChange={(e: Event, s: Date | undefined) => {
-						if (!s) return;
 						softHaptic();
 						onSelect(e, s, setEndDateTime, setShowEndTimeSelect);
 					}}

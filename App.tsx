@@ -1,74 +1,21 @@
 import 'react-native-gesture-handler';
 import React from 'react';
-import { NavigationContainer } from '@react-navigation/native';
-import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
-import { Tabs } from './scenes';
-import { LogBox, Image, View } from 'react-native';
-import { RootStackParamList } from './types';
+import { LogBox } from 'react-native';
+import SettingsProvider from './components/SettingsProvider';
+import Content from './Content';
+import { ShiftsProvider } from './components/ShiftsProvider';
 LogBox.ignoreLogs([
 	'Non-serializable values were found in the navigation state',
 	'Remote debugger is in a background tab which may cause apps to perform slowly',
 	'Require cycle: node_modules\\rn-fetch-blob\\index.js',
 ]);
-const Tab = createBottomTabNavigator<RootStackParamList>();
-
 const App = () => {
 	return (
-		<NavigationContainer>
-			<Tab.Navigator
-				screenOptions={({ route }) => {
-					return {
-						headerShown: false,
-						tabBarIcon: () => {
-							switch (route.name) {
-								case 'Shifts':
-									return (
-										<View>
-											<Image
-												style={{ height: 25, width: 25 }}
-												source={require('./img/icons8-list-90.png')}
-											/>
-										</View>
-									);
-								case 'Data':
-									return (
-										<View>
-											<Image
-												style={{ height: 25, width: 25 }}
-												source={require('./img/icons8-cloud-100.png')}
-											/>
-										</View>
-									);
-								case 'Settings':
-									return (
-										<View>
-											<Image
-												style={{ height: 25, width: 25 }}
-												source={require('./img/icons8-settings-150.png')}
-											/>
-										</View>
-									);
-								default:
-									return null;
-							}
-						},
-					};
-				}}
-				initialRouteName="Shifts"
-				backBehavior="history"
-			>
-				{Tabs.map((scene) => {
-					return (
-						<Tab.Screen
-							key={scene.name}
-							name={scene.name}
-							component={scene.component}
-							options={scene.options ?? {}}
-						/>
-					);
-				})}
-			</Tab.Navigator>
-		</NavigationContainer>
+		<SettingsProvider>
+			<ShiftsProvider>
+				<Content />
+			</ShiftsProvider>
+		</SettingsProvider>
 	);
 };
 
