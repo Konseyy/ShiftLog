@@ -143,7 +143,7 @@ const ShiftList: React.FC<ShiftListProps> = ({ navigation }) => {
 	}
 	useEffect(() => {
 		updateTimeClocked();
-	}, [shifts, currentFilter]);
+	}, [shifts, currentFilter, loading]);
 	useEffect(() => {
 		setSortingDirection('descending');
 	}, [sorter]);
