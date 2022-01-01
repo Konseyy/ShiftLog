@@ -99,7 +99,7 @@ const ShiftsProvider: FC = ({ children }) => {
 	};
 	const overwriteFromBackup = async (newData: shift[]): Promise<void> => {
 		setShiftList(newData);
-		await saveShiftLogStorage();
+		await saveShiftLogStorage(newData);
 	};
 	useEffect(() => {
 		refreshFromStorage();
