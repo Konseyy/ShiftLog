@@ -17,7 +17,7 @@ const SettingsMain: FC<SettingsMainProps> = () => {
 					alignItems: 'center',
 				}}
 			>
-				<Text style={{ fontSize: 15, fontWeight: 'bold' }}>
+				<Text style={{ fontSize: 15, fontWeight: 'bold', color:colors.textColor }}>
 					{'Toggle dark Mode'}
 				</Text>
 				<Switch
