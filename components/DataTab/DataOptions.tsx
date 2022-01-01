@@ -49,7 +49,6 @@ const DataOptions: FC<DataOptionsProps> = ({ navigation }) => {
 		try {
 			const resp = await pickSingle();
 			if (!resp) return;
-			console.log('res', resp);
 			if (resp.type !== 'text/plain') {
 				Alert.alert('Wrong file format', 'Backup should be a .txt file');
 				return;

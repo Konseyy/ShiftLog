@@ -49,10 +49,8 @@ const MakeBackup: FC<MakeBackupProps> = () => {
 			);
 			if (granted === PermissionsAndroid.RESULTS.GRANTED) {
 				const dirs = RNFetchBlob.fs.dirs;
-				console.log(dirs);
 				const fs = RNFetchBlob.fs;
 				const NEW_FILE_PATH = `${dirs.DownloadDir}/${fileName}.txt`;
-				console.log('dir', NEW_FILE_PATH);
 				await fs.createFile(NEW_FILE_PATH, saveString, 'utf8');
 				Alert.alert(
 					'Backup generated',

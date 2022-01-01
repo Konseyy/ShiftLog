@@ -67,7 +67,6 @@ const AddShift: FC<AddShiftProps> = ({ navigation, route }) => {
 		}
 	}
 	async function addShift() {
-		console.log('adding', showCustomBreakInput ? customBreakTime : breakTime);
 		let dateToAddStart = new Date(startDate);
 		dateToAddStart.setHours(startTime.getHours(), startTime.getMinutes(), 0, 0);
 		let dateToAddEnd = new Date(endDate);
