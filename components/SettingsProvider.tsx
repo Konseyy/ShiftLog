@@ -10,7 +10,10 @@ interface SettingsTemplate {
 	darkMode: boolean;
 	toggleDarkMode: () => void;
 }
-const SettingsContext = createContext<Partial<SettingsTemplate>>({});
+const SettingsContext = createContext<SettingsTemplate>({
+	darkMode:false,
+	toggleDarkMode: () => {}
+});
 const SettingsProvider: FC = ({ children }) => {
 	const [isDarkMode, setDarkMode] = useState(false);
 	const toggleDark = () => {
