@@ -4,7 +4,7 @@ const lightColors = {
 	textColor: 'black',
 	buttonBlue: '#26a5ff',
 	topBar: 'white',
-	switchThumbColor: 'lightgray',
+	switchThumbColor: 'black',
 	dateSelectBackground: 'lightgray',
 	seperatorColor: 'lightgray',
 	selectedBackground: 'gray',
