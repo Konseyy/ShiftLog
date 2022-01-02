@@ -115,7 +115,7 @@ const CustomPicker = <T,>({
 								width: 12,
 								top: 5,
 								left: 5,
-								tintColor: textStyle?.color ?? '',
+								tintColor: textStyle?.color ?? 'black',
 								transform: [
 									{
 										rotate: spin,
