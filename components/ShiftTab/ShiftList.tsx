@@ -15,6 +15,7 @@ import ShiftItem from './ShiftItem';
 import { shift } from '../../types';
 import useColors from '../../helperFunctions/useColors';
 import useShifts from '../ShiftsProvider';
+import CircleButton from '../CircleButton';
 const ShiftList: React.FC<ShiftListProps> = ({ navigation }) => {
 	const colors = useColors();
 	type filter = 'week' | 'month' | 'all';
@@ -176,8 +177,6 @@ const ShiftList: React.FC<ShiftListProps> = ({ navigation }) => {
 					style={{
 						height: 50,
 						marginHorizontal: 5,
-						borderBottomWidth: 1,
-						borderBottomColor: '#000000',
 					}}
 				>
 					<Picker
@@ -342,31 +341,24 @@ const ShiftList: React.FC<ShiftListProps> = ({ navigation }) => {
 					/>
 				</View>
 			</View>
-			<TouchableOpacity
+			<CircleButton
+				backgroundColor={colors.buttonBlue}
 				onPress={addShiftScene}
-				style={{
-					position: 'absolute',
-					bottom: 20,
-					right: 20,
-					backgroundColor: colors.buttonBlue,
-					height: 60,
-					width: 60,
-					borderRadius: 25,
-					justifyContent: 'center',
-				}}
-			>
-				<Text
-					style={{
-						fontSize: 40,
-						color: 'white',
-						fontWeight: '300',
-						position: 'absolute',
-						alignSelf: 'center',
-					}}
-				>
-					+
-				</Text>
-			</TouchableOpacity>
+				height={60}
+				centerElement={
+					<Text
+						style={{
+							fontSize: 40,
+							color: 'white',
+							fontWeight: '300',
+							position: 'absolute',
+							alignSelf: 'center',
+						}}
+					>
+						+
+					</Text>
+				}
+			/>
 		</View>
 	);
 };

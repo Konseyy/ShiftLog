@@ -15,7 +15,7 @@ const lightColors = {
 	buttonGray: '#8c8c8c',
 };
 const darkColors = {
-	buttonBlue: '#0076c9',
+	buttonBlue: '#430157',
 	buttonGreen: '#006e1d',
 	background: '#636363',
 	topBar: '#333333',

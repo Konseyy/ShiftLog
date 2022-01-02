@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import { ListRenderItemInfo } from 'react-native';
 import { Text, TouchableOpacity, View } from 'react-native';
 import Collapsible from 'react-native-collapsible';
@@ -24,10 +24,6 @@ const ShiftItem = ({ item, deleteShift, editShift }: Props) => {
 		}
 		return i;
 	}
-
-	useEffect(() => {
-		// console.log("current item is",item);
-	}, []);
 	const ShiftData = item.item;
 	const startDate = new Date(ShiftData.startTime);
 	const endDate = new Date(ShiftData.endTime);
@@ -38,17 +34,19 @@ const ShiftItem = ({ item, deleteShift, editShift }: Props) => {
 				marginHorizontal: 10,
 				padding: 5,
 				backgroundColor: colors.shiftBackground,
-				marginTop: 5,
+				marginTop: 8,
 				borderRadius: 5,
-				borderBottomWidth:.8,
-				borderLeftWidth:.5,
-				borderRightWidth:.5,
-				borderColor:"black"
+				borderBottomWidth: 0.5,
+				borderLeftWidth: 0.5,
+				borderRightWidth: 0.5,
+				borderColor: 'black',
 			}}
 			onPress={() => {
 				softHaptic();
 				setExpanded(!expanded);
 			}}
+			onLongPress={() => editShift(ShiftData.index)}
+			delayLongPress={500}
 		>
 			<View style={{ flexDirection: 'column' }}>
 				<View style={{ flexDirection: 'row' }}>
@@ -101,7 +99,7 @@ const ShiftItem = ({ item, deleteShift, editShift }: Props) => {
 					</View>
 				</View>
 				<Collapsible collapsed={!expanded} duration={200}>
-				<View style={{ paddingBottom: 5 }}>
+					<View style={{ paddingBottom: 5 }}>
 						<View
 							style={{
 								flex: 2,
