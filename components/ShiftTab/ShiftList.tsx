@@ -16,6 +16,7 @@ import { shift } from '../../types';
 import useColors from '../../helperFunctions/useColors';
 import useShifts from '../ShiftsProvider';
 import CircleButton from '../CircleButton';
+import CustomPicker from '../CustomPicker';
 const ShiftList: React.FC<ShiftListProps> = ({ navigation }) => {
 	const colors = useColors();
 	type filter = 'week' | 'month' | 'all';
@@ -153,7 +154,8 @@ const ShiftList: React.FC<ShiftListProps> = ({ navigation }) => {
 							width: 12,
 							transform: [
 								{
-									rotateX: sortingDirection === 'ascending' ? '0deg' : '180deg',
+									rotateX:
+										sortingDirection === 'descending' ? '0deg' : '180deg',
 								},
 							],
 							marginLeft: 5,
@@ -173,27 +175,43 @@ const ShiftList: React.FC<ShiftListProps> = ({ navigation }) => {
 			return (
 				<View
 					style={{
-						height: 50,
 						marginHorizontal: 5,
 					}}
 				>
-					<Picker
-						mode="dropdown"
-						style={{ color: colors.textColor }}
-						selectedValue={currentFilter}
-						onValueChange={(value) => {
+					<CustomPicker<filter>
+						textStyle={{ fontSize: 15, color: colors.textColor }}
+						containerStyle={{
+							marginHorizontal: 10,
+							backgroundColor: colors.shiftBackground,
+						}}
+						dropDownItemStyle={{
+							borderTopWidth: 0.5,
+							borderTopColor: colors.seperatorColor,
+						}}
+						onChange={(value) => {
 							softHaptic();
 							setCurrentFilter(value);
 						}}
-					>
-						<Picker.Item label="Current week" value={'week'} />
-						<Picker.Item label="Current month" value={'month'} />
-						<Picker.Item label="All" value={'all'} />
-					</Picker>
+						value={currentFilter}
+						items={[
+							{
+								label: 'Current Week',
+								value: 'week',
+							},
+							{
+								label: 'Current Month',
+								value: 'month',
+							},
+							{
+								label: 'All',
+								value: 'all',
+							},
+						]}
+					/>
 				</View>
 			);
 		},
-		[currentFilter, colors]
+		[colors, currentFilter]
 	);
 	const ListHeader = useMemo(
 		() => () => {
