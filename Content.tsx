@@ -23,7 +23,7 @@ const Content = () => {
 				screenOptions={({ route }) => {
 					return {
 						headerShown: false,
-						tabBarLabelStyle: { fontSize: 12 },
+						tabBarLabelStyle: { fontSize: 12, marginBottom: 2 },
 						tabBarIcon: () => {
 							switch (route.name) {
 								case 'Shifts':
