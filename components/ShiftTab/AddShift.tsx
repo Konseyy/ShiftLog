@@ -318,6 +318,8 @@ const AddShift: FC<AddShiftProps> = ({ navigation, route }) => {
 										backgroundColor: '#FFFFFF',
 										color: '#000000',
 										alignSelf: 'stretch',
+										borderRadius:5,
+										fontSize:15
 									}}
 									keyboardType="numeric"
 									placeholder="0"
@@ -359,6 +361,7 @@ const AddShift: FC<AddShiftProps> = ({ navigation, route }) => {
 									backgroundColor: '#FFFFFF',
 									color: '#000000',
 									alignSelf: 'stretch',
+									borderRadius:5
 								}}
 								onChangeText={(txt) => setNotes(txt)}
 							/>
