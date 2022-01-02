@@ -64,6 +64,9 @@ const ShiftsProvider: FC = ({ children }) => {
 		if (savedShiftsRetrieved) {
 			const convertedShifts = JSON.parse(savedShiftsRetrieved);
 			setShiftList(convertedShifts.shifts);
+			convertedShifts.shifts.forEach((i: shift, x: number) => {
+				i.index = x;
+			});
 		} else {
 			const defaultStorage = {
 				shifts: [],
@@ -102,7 +105,10 @@ const ShiftsProvider: FC = ({ children }) => {
 		await saveShiftLogStorage(newData);
 	};
 	useEffect(() => {
-		refreshFromStorage();
+		const refreshAndReindex = async () => {
+			await refreshFromStorage();
+		};
+		refreshAndReindex();
 	}, []);
 	return (
 		<ShiftsContext.Provider
