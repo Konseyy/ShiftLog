@@ -40,6 +40,7 @@ const ShiftList: React.FC<ShiftListProps> = ({ navigation }) => {
 				{
 					text: 'Yes',
 					onPress: async () => {
+						softHaptic();
 						modifyShifts({ type: 'delete', value: { index: index } });
 					},
 				},
@@ -140,7 +141,11 @@ const ShiftList: React.FC<ShiftListProps> = ({ navigation }) => {
 		});
 		return returnData;
 	}
-	const filteredData = filterData(shifts);
+	// const filteredData = filterData(shifts);
+	const filteredData = useMemo(
+		() => filterData(shifts),
+		[shifts, currentFilter, sorter, sortingDirection, colors]
+	);
 	useEffect(() => {
 		setSortingDirection('descending');
 	}, [sorter]);
@@ -179,7 +184,11 @@ const ShiftList: React.FC<ShiftListProps> = ({ navigation }) => {
 					}}
 				>
 					<CustomPicker<filter>
-						textStyle={{ fontSize: 15, color: colors.textColor }}
+						textStyle={{
+							fontSize: 15,
+							color: colors.textColor,
+							fontWeight: 'bold',
+						}}
 						containerStyle={{
 							marginHorizontal: 10,
 							backgroundColor: colors.background,
