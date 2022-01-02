@@ -38,9 +38,9 @@ const ShiftItem = ({ item, deleteShift, editShift }: Props) => {
 				marginHorizontal: 10,
 				padding: 5,
 				backgroundColor: colors.shiftBackground,
-				marginTop: 5,
+				marginTop: 8,
 				borderRadius: 5,
-				borderBottomWidth:.8,
+				borderBottomWidth:.5,
 				borderLeftWidth:.5,
 				borderRightWidth:.5,
 				borderColor:"black"
