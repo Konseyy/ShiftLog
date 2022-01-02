@@ -1,4 +1,4 @@
-import React, {  useState } from 'react';
+import React, { useState } from 'react';
 import { ListRenderItemInfo } from 'react-native';
 import { Text, TouchableOpacity, View } from 'react-native';
 import Collapsible from 'react-native-collapsible';
