@@ -1,5 +1,5 @@
 import React, { useEffect, useState, FC } from 'react';
-import { View, Text, TextInput, TouchableOpacity, Alert } from 'react-native';
+import { View, Text, TextInput, TouchableOpacity, Alert, Image } from 'react-native';
 import { Picker } from '@react-native-picker/picker';
 import DateTimePicker, { Event } from '@react-native-community/datetimepicker';
 import {
@@ -10,6 +10,7 @@ import { AddShiftProps } from '../../types';
 import { softHaptic } from '../../helperFunctions/hapticFeedback';
 import useColors from '../../helperFunctions/useColors';
 import useShifts from '../ShiftsProvider';
+import CircleButton from '../circleButton';
 const AddShift: FC<AddShiftProps> = ({ navigation, route }) => {
 	const colors = useColors();
 	const params = route.params ?? {};
@@ -359,7 +360,7 @@ const AddShift: FC<AddShiftProps> = ({ navigation, route }) => {
 				</View>
 			</View>
 			{/* <Button title="Save" onPress={()=>addShift()}/> */}
-			<TouchableOpacity
+			{/* <TouchableOpacity
 				onPress={() => addShift()}
 				style={{
 					position: 'absolute',
@@ -379,7 +380,24 @@ const AddShift: FC<AddShiftProps> = ({ navigation, route }) => {
 						Save
 					</Text>
 				</View>
-			</TouchableOpacity>
+			</TouchableOpacity> */}
+			<CircleButton
+				backgroundColor={colors.buttonBlue}
+				onPress={addShift}
+				height={60}
+				centerElement={
+					<Image
+						style={{
+							tintColor: 'white',
+							position: 'absolute',
+							alignSelf: 'center',
+							height:30,
+							width:30
+						}}
+						source={require("../../img/icons-checkmark.png")}
+					/>
+				}
+			/>
 			{showStartDateSelect && (
 				<DateTimePicker
 					mode="date"
