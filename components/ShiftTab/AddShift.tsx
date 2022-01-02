@@ -7,6 +7,7 @@ import {
 	Alert,
 	Image,
 } from 'react-native';
+import Collapsible from 'react-native-collapsible';
 import { Picker } from '@react-native-picker/picker';
 import DateTimePicker, { Event } from '@react-native-community/datetimepicker';
 import {
@@ -305,7 +306,7 @@ const AddShift: FC<AddShiftProps> = ({ navigation, route }) => {
 								<Picker.Item label="other" value={-1} />
 							</Picker>
 						</View>
-						{showCustomBreakInput && (
+						<Collapsible collapsed={!showCustomBreakInput} duration={100}>
 							<View style={{ flexDirection: 'column', marginTop: 10 }}>
 								<Text style={{ fontWeight: 'bold', color: colors.textColor }}>
 									Enter custom Break Time (minutes) :{' '}
@@ -332,7 +333,7 @@ const AddShift: FC<AddShiftProps> = ({ navigation, route }) => {
 									}}
 								/>
 							</View>
-						)}
+						</Collapsible>
 						<View
 							style={{
 								marginTop: 20,
