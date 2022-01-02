@@ -141,11 +141,11 @@ const ShiftList: React.FC<ShiftListProps> = ({ navigation }) => {
 		});
 		return returnData;
 	}
-	// const filteredData = filterData(shifts);
-	const filteredData = useMemo(
-		() => filterData(shifts),
-		[shifts, currentFilter, sorter, sortingDirection, colors]
-	);
+	const filteredData = filterData(shifts);
+	// const filteredData = useMemo(
+	// 	() => filterData(shifts),
+	// 	[shifts, currentFilter, sorter, sortingDirection, colors]
+	// );
 	useEffect(() => {
 		setSortingDirection('descending');
 	}, [sorter]);
