@@ -20,12 +20,12 @@ export interface Tab {
 }
 export const Tabs: Tab[] = [
 	{
-		name: 'Shifts',
-		component: ShiftsScene,
-	},
-	{
 		name: 'Data',
 		component: DataScene,
+	},
+	{
+		name: 'Shifts',
+		component: ShiftsScene,
 	},
 	{
 		name: 'Settings',

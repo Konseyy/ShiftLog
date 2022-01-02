@@ -7,6 +7,7 @@ import {
 	Alert,
 	Image,
 } from 'react-native';
+import Collapsible from 'react-native-collapsible';
 import { Picker } from '@react-native-picker/picker';
 import DateTimePicker, { Event } from '@react-native-community/datetimepicker';
 import {
@@ -18,6 +19,7 @@ import { softHaptic } from '../../helperFunctions/hapticFeedback';
 import useColors from '../../helperFunctions/useColors';
 import useShifts from '../ShiftsProvider';
 import CircleButton from '../CircleButton';
+import CustomPicker from '../CustomPicker';
 const AddShift: FC<AddShiftProps> = ({ navigation, route }) => {
 	const colors = useColors();
 	const params = route.params ?? {};
@@ -283,11 +285,13 @@ const AddShift: FC<AddShiftProps> = ({ navigation, route }) => {
 							<Text style={{ fontWeight: 'bold', color: colors.textColor }}>
 								Break Time
 							</Text>
-							<Picker
-								mode="dropdown"
-								style={{ backgroundColor: 'white', marginTop: 10 }}
-								selectedValue={breakTime}
-								onValueChange={(value) => {
+							<CustomPicker
+								dropDownItemStyle={{
+									borderTopWidth: 0.5,
+									borderTopColor: colors.seperatorColor,
+								}}
+								displayBoxStyle={{ marginTop: 10 }}
+								onChange={(value) => {
 									softHaptic();
 									if (value === -1) {
 										setShowCustomBreakInput(true);
@@ -296,16 +300,37 @@ const AddShift: FC<AddShiftProps> = ({ navigation, route }) => {
 									}
 									setBreakTime(value);
 								}}
-							>
-								<Picker.Item label="0m" value={0} />
-								<Picker.Item label="15m" value={15} />
-								<Picker.Item label="30m" value={30} />
-								<Picker.Item label="45m" value={45} />
-								<Picker.Item label="60m" value={60} />
-								<Picker.Item label="other" value={-1} />
-							</Picker>
+								containerStyle={{ backgroundColor: 'white' }}
+								value={breakTime}
+								items={[
+									{
+										value: 0,
+										label: '0m',
+									},
+									{
+										value: 15,
+										label: '15m',
+									},
+									{
+										value: 30,
+										label: '30m',
+									},
+									{
+										value: 45,
+										label: '45m',
+									},
+									{
+										value: 60,
+										label: '60m',
+									},
+									{
+										value: -1,
+										label: 'Other',
+									},
+								]}
+							/>
 						</View>
-						{showCustomBreakInput && (
+						<Collapsible collapsed={!showCustomBreakInput} duration={100}>
 							<View style={{ flexDirection: 'column', marginTop: 10 }}>
 								<Text style={{ fontWeight: 'bold', color: colors.textColor }}>
 									Enter custom Break Time (minutes) :{' '}
@@ -332,7 +357,7 @@ const AddShift: FC<AddShiftProps> = ({ navigation, route }) => {
 									}}
 								/>
 							</View>
-						)}
+						</Collapsible>
 						<View
 							style={{
 								marginTop: 20,

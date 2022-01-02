@@ -1,5 +1,5 @@
-import React, { useState } from 'react';
-import { ListRenderItemInfo } from 'react-native';
+import React, { FC, useEffect, useState } from 'react';
+import { Image, ListRenderItemInfo, ViewStyle } from 'react-native';
 import { Text, TouchableOpacity, View } from 'react-native';
 import Collapsible from 'react-native-collapsible';
 import {
@@ -9,6 +9,7 @@ import {
 } from '../../helperFunctions/dateFormatFunctions';
 import { softHaptic } from '../../helperFunctions/hapticFeedback';
 import { shift } from '../../types';
+import { useSettings } from '../SettingsProvider';
 import useColors from '../../helperFunctions/useColors';
 interface Props {
 	item: ListRenderItemInfo<shift>;
@@ -16,18 +17,32 @@ interface Props {
 	editShift: (index: number) => Promise<void>;
 }
 const ShiftItem = ({ item, deleteShift, editShift }: Props) => {
+	const { darkMode } = useSettings();
 	const colors = useColors();
 	const [expanded, setExpanded] = useState(false);
-	function addZero(i: number) {
-		if (i < 10) {
-			return '0' + i;
-		}
-		return i;
-	}
 	const ShiftData = item.item;
 	const startDate = new Date(ShiftData.startTime);
 	const endDate = new Date(ShiftData.endTime);
 	const breakTime = ShiftData.break ?? 0;
+	interface actionButtonsProps {
+		onPress?: () => void;
+		style?: ViewStyle;
+		centerElement: JSX.Element;
+	}
+	const ActionButton: FC<actionButtonsProps> = ({
+		onPress,
+		style,
+		centerElement,
+	}) => {
+		return (
+			<TouchableOpacity onPress={onPress} style={style}>
+				<View style={{ alignSelf: 'center' }}>{centerElement}</View>
+			</TouchableOpacity>
+		);
+	};
+	useEffect(() => {
+		setExpanded(false);
+	}, [darkMode]);
 	return (
 		<TouchableOpacity
 			style={{
@@ -143,7 +158,7 @@ const ShiftItem = ({ item, deleteShift, editShift }: Props) => {
 								}}
 							>
 								<View style={{ flex: 1 }} />
-								<TouchableOpacity
+								<ActionButton
 									onPress={() => editShift(ShiftData.index)}
 									style={{
 										flex: 6,
@@ -151,8 +166,7 @@ const ShiftItem = ({ item, deleteShift, editShift }: Props) => {
 										borderRadius: 5,
 										padding: 5,
 									}}
-								>
-									<View style={{ alignSelf: 'center' }}>
+									centerElement={
 										<Text
 											style={{
 												color: 'white',
@@ -163,8 +177,8 @@ const ShiftItem = ({ item, deleteShift, editShift }: Props) => {
 										>
 											Edit
 										</Text>
-									</View>
-								</TouchableOpacity>
+									}
+								/>
 								<View style={{ flex: 1 }} />
 							</View>
 							<View
@@ -176,28 +190,21 @@ const ShiftItem = ({ item, deleteShift, editShift }: Props) => {
 								}}
 							>
 								<View style={{ flex: 1 }} />
-								<TouchableOpacity
-									onPress={() => deleteShift(ShiftData.index)}
+								<ActionButton
 									style={{
 										flex: 6,
 										backgroundColor: '#6e0006',
 										borderRadius: 5,
 										padding: 5,
 									}}
-								>
-									<View style={{ alignSelf: 'center' }}>
-										<Text
-											style={{
-												color: 'white',
-												fontSize: 17,
-												letterSpacing: 1,
-												fontWeight: 'bold',
-											}}
-										>
-											Delete
-										</Text>
-									</View>
-								</TouchableOpacity>
+									onPress={() => deleteShift(ShiftData.index)}
+									centerElement={
+										<Image
+											style={{ height: 25, width: 25, tintColor: 'white' }}
+											source={require('../../img/icons-delete.png')}
+										/>
+									}
+								/>
 								<View style={{ flex: 1 }} />
 							</View>
 						</View>

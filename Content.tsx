@@ -1,10 +1,6 @@
 import 'react-native-gesture-handler';
-import React, { useEffect, useMemo, useState } from 'react';
-import {
-	NavigationContainer,
-	DefaultTheme,
-	Theme,
-} from '@react-navigation/native';
+import React from 'react';
+import { NavigationContainer } from '@react-navigation/native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { Tabs } from './scenes';
 import { LogBox, Image, View } from 'react-native';
@@ -27,6 +23,7 @@ const Content = () => {
 				screenOptions={({ route }) => {
 					return {
 						headerShown: false,
+						tabBarLabelStyle: { fontSize: 12 },
 						tabBarIcon: () => {
 							switch (route.name) {
 								case 'Shifts':

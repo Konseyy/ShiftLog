@@ -24,7 +24,7 @@ const CircleButton: FC<Props> = ({
 				backgroundColor: backgroundColor,
 				height: height,
 				width: height,
-				borderRadius: height / 2 - 5,
+				borderRadius: height / 2 - 8,
 				justifyContent: 'center',
 				...style,
 			}}
