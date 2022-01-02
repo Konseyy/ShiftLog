@@ -218,7 +218,7 @@ const ShiftItem = ({ item, deleteShift, editShift }: Props) => {
 				</View>
 			</TouchableOpacity>
 		),
-		[item, expanded, colors]
+		[item.item, expanded, colors]
 	);
 };
 export default ShiftItem;
