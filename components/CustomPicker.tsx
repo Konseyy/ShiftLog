@@ -1,8 +1,6 @@
-import { PickerItemProps } from '@react-native-picker/picker';
-import React, { FC, useEffect, useRef, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import {
 	Animated,
-	Image,
 	Text,
 	TextStyle,
 	TouchableOpacity,

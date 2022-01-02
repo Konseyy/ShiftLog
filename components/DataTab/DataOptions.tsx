@@ -7,6 +7,7 @@ import {
 	ViewStyle,
 	Image,
 	ImageSourcePropType,
+	PermissionsAndroid,
 } from 'react-native';
 import { DataOptionsProps } from '../../types';
 import { pickSingle, isCancel } from 'react-native-document-picker';
@@ -23,60 +24,70 @@ const DataOptions: FC<DataOptionsProps> = ({ navigation }) => {
 		navigation.navigate('ExportFile', { action: 'backup' });
 	};
 	const importBackup = async (): Promise<void> => {
-		const isDataRightType = (data: any): data is shift[] => {
-			if (Array.isArray(data)) {
-				if (data[0]) {
-					let isCorrect = true;
-					data.forEach((item) => {
-						if (
-							item.startTime === undefined ||
-							item.endTime === undefined ||
-							item.break === undefined ||
-							item.index === undefined ||
-							item.notes === undefined
-						) {
-							isCorrect = false;
-							console.warn('incorrect item', item);
-						} else {
+		const granted = await PermissionsAndroid.request(
+			PermissionsAndroid.PERMISSIONS.WRITE_EXTERNAL_STORAGE
+		);
+		if (granted === PermissionsAndroid.RESULTS.GRANTED) {
+			const isDataRightType = (data: any): data is shift[] => {
+				if (Array.isArray(data)) {
+					if (data[0]) {
+						let isCorrect = true;
+						data.forEach((item) => {
 							if (
-								typeof item.startTime !== 'number' ||
-								typeof item.endTime !== 'number' ||
-								typeof item.break !== 'number' ||
-								typeof item.notes !== 'string'
+								item.startTime === undefined ||
+								item.endTime === undefined ||
+								item.break === undefined ||
+								item.index === undefined ||
+								item.notes === undefined
 							) {
-								console.warn('incorrect item format');
 								isCorrect = false;
+								console.warn('incorrect item', item);
+							} else {
+								if (
+									typeof item.startTime !== 'number' ||
+									typeof item.endTime !== 'number' ||
+									typeof item.break !== 'number' ||
+									typeof item.notes !== 'string'
+								) {
+									console.warn('incorrect item format');
+									isCorrect = false;
+								}
 							}
-						}
-					});
-					return isCorrect;
+						});
+						return isCorrect;
+					}
 				}
+				return false;
+			};
+			try {
+				const resp = await pickSingle();
+				if (!resp) return;
+				if (resp.type !== 'text/plain') {
+					Alert.alert('Wrong file format', 'Backup should be a .txt file');
+					return;
+				}
+				const backupFile = await RNFetchBlob.fs.readFile(resp.uri, 'utf8');
+				let readData = JSON.parse(backupFile);
+				if (!isDataRightType(readData)) {
+					Alert.alert(
+						'Incorrect data',
+						'Backup file contains incorrect data format'
+					);
+					return;
+				}
+				await overwriteFromBackup(readData);
+				Alert.alert('Backup restored', 'Backup successfully restored');
+			} catch (err) {
+				if (isCancel(err)) {
+					return;
+				}
+				console.error('error reading backup', err);
 			}
-			return false;
-		};
-		try {
-			const resp = await pickSingle();
-			if (!resp) return;
-			if (resp.type !== 'text/plain') {
-				Alert.alert('Wrong file format', 'Backup should be a .txt file');
-				return;
-			}
-			const backupFile = await RNFetchBlob.fs.readFile(resp.uri, 'utf8');
-			let readData = JSON.parse(backupFile);
-			if (!isDataRightType(readData)) {
-				Alert.alert(
-					'Incorrect data',
-					'Backup file contains incorrect data format'
-				);
-				return;
-			}
-			await overwriteFromBackup(readData);
-			Alert.alert('Backup restored', 'Backup successfully restored');
-		} catch (err) {
-			if (isCancel(err)) {
-				return;
-			}
-			console.error('error reading backup', err);
+		} else {
+			Alert.alert(
+				'Permission required',
+				'Permission to read files is required in order to read the Backup'
+			);
 		}
 	};
 	const ListItem: React.FC<{
@@ -108,7 +119,7 @@ const DataOptions: FC<DataOptionsProps> = ({ navigation }) => {
 							color: textColor ?? 'white',
 							fontWeight: 'bold',
 							marginLeft: 3,
-							letterSpacing:.2,
+							letterSpacing: 0.2,
 						}}
 					>
 						{title}
