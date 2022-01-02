@@ -298,16 +298,10 @@ const ShiftList: React.FC<ShiftListProps> = ({ navigation }) => {
 					style={{ height: '100%', position: 'relative', alignItems: 'center' }}
 				>
 					<View style={{ marginTop: '15%' }}>
-						<Text
-							style={{
-								fontSize: 20,
-								fontStyle: 'italic',
-								fontWeight: 'bold',
-								color: '#a3a3a3',
-							}}
-						>
-							No entries
-						</Text>
+						<Image
+							style={{ tintColor: '#a3a3a3', height: 60, width: 60 }}
+							source={require('../../img/icons-nodata.png')}
+						/>
 					</View>
 					<View style={{ marginTop: '5%' }}>
 						<Text
@@ -319,7 +313,36 @@ const ShiftList: React.FC<ShiftListProps> = ({ navigation }) => {
 				</View>
 			);
 		},
-		[addShiftScene, colors]
+		[]
+	);
+	const emptyFilterComponent = useMemo(
+		() => () => {
+			return (
+				<View
+					style={{ height: '100%', position: 'relative', alignItems: 'center' }}
+				>
+					<View style={{ marginTop: '15%' }}>
+						<Image
+							style={{ tintColor: '#a3a3a3', height: 60, width: 60 }}
+							source={require('../../img/icons-nodata.png')}
+						/>
+					</View>
+					<View style={{ marginTop: '5%', alignItems: 'center' }}>
+						<Text
+							style={{ fontSize: 15, fontWeight: 'bold', color: '#a3a3a3' }}
+						>
+							Switch Filter or
+						</Text>
+						<Text
+							style={{ fontSize: 15, fontWeight: 'bold', color: '#a3a3a3' }}
+						>
+							Add new entry bellow
+						</Text>
+					</View>
+				</View>
+			);
+		},
+		[]
 	);
 	return (
 		<View
@@ -354,7 +377,9 @@ const ShiftList: React.FC<ShiftListProps> = ({ navigation }) => {
 							);
 						}}
 						contentContainerStyle={{ paddingBottom: 5, flexGrow: 1 }}
-						ListEmptyComponent={emptyComponent}
+						ListEmptyComponent={
+							shifts.length === 0 ? emptyComponent : emptyFilterComponent
+						}
 					/>
 				</View>
 			</View>
