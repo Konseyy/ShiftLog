@@ -145,11 +145,17 @@ const CustomPicker = <T,>({
 									...containerStyle,
 									...dropDownItemStyle,
 									borderBottomLeftRadius:
-										idx !== items.length - 1
+										idx !==
+										(selectedIndex === items.length - 1
+											? items.length - 2
+											: items.length - 1)
 											? 0
 											: displayBoxStyle?.borderBottomLeftRadius ?? 5,
 									borderBottomRightRadius:
-										idx !== items.length - 1
+										idx !==
+										(selectedIndex === items.length - 1
+											? items.length - 2
+											: items.length - 1)
 											? 0
 											: displayBoxStyle?.borderBottomRightRadius ?? 5,
 								}}
