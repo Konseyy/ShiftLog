@@ -15,7 +15,7 @@ import ShiftItem from './ShiftItem';
 import { shift } from '../../types';
 import useColors from '../../helperFunctions/useColors';
 import useShifts from '../ShiftsProvider';
-import CircleButton from '../circleButton';
+import CircleButton from '../CircleButton';
 const ShiftList: React.FC<ShiftListProps> = ({ navigation }) => {
 	const colors = useColors();
 	type filter = 'week' | 'month' | 'all';

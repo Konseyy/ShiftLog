@@ -17,7 +17,7 @@ import { AddShiftProps } from '../../types';
 import { softHaptic } from '../../helperFunctions/hapticFeedback';
 import useColors from '../../helperFunctions/useColors';
 import useShifts from '../ShiftsProvider';
-import CircleButton from '../circleButton';
+import CircleButton from '../CircleButton';
 const AddShift: FC<AddShiftProps> = ({ navigation, route }) => {
 	const colors = useColors();
 	const params = route.params ?? {};
