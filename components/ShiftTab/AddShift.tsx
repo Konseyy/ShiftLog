@@ -8,7 +8,6 @@ import {
 	Image,
 } from 'react-native';
 import Collapsible from 'react-native-collapsible';
-import { Picker } from '@react-native-picker/picker';
 import DateTimePicker, { Event } from '@react-native-community/datetimepicker';
 import {
 	stringDateFromDate,
@@ -95,6 +94,7 @@ const AddShift: FC<AddShiftProps> = ({ navigation, route }) => {
 		if (!dateCheck(dateToAddStart.getTime(), dateToAddEnd.getTime())) {
 			return;
 		}
+		softHaptic();
 		if (!params.current) {
 			await modifyShifts({
 				type: 'add',

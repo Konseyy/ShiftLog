@@ -57,7 +57,7 @@ const ShiftItem = ({ item, deleteShift, editShift }: Props) => {
 				borderColor: 'black',
 			}}
 			onPress={() => {
-				softHaptic();
+				// softHaptic();
 				setExpanded(!expanded);
 			}}
 			onLongPress={() => editShift(ShiftData.index)}
