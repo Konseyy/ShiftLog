@@ -19,6 +19,7 @@ import { ExportFileProps, shift, exportScreenTypes } from '../../types';
 import { softHaptic } from '../../helperFunctions/hapticFeedback';
 import useColors from '../../helperFunctions/useColors';
 import useShifts from '../ShiftsProvider';
+import Collapsible from 'react-native-collapsible';
 const ExportFile: FC<ExportFileProps> = ({ navigation, route }) => {
 	const colors = useColors();
 	const [periodFilter, setPeriodFilter] = useState<'all' | 'custom'>('all');
@@ -139,7 +140,6 @@ const ExportFile: FC<ExportFileProps> = ({ navigation, route }) => {
 						? `Report has been downloaded to \n ${NEW_FILE_PATH}`
 						: `Backup has been downloaded to \n ${NEW_FILE_PATH}`
 				);
-				// RNFetchBlob.android.actionViewIntent(NEW_FILE_PATH, 'text/plain');
 			} else {
 				Alert.alert(
 					'Permission required',
@@ -232,7 +232,7 @@ const ExportFile: FC<ExportFileProps> = ({ navigation, route }) => {
 						</TouchableOpacity>
 					</View>
 				</View>
-				{periodFilter === 'custom' && (
+				<Collapsible collapsed={periodFilter !== 'custom'} duration={200}>
 					<View
 						style={{
 							flexDirection: 'column',
@@ -306,7 +306,7 @@ const ExportFile: FC<ExportFileProps> = ({ navigation, route }) => {
 							</View>
 						</View>
 					</View>
-				)}
+				</Collapsible>
 			</View>
 
 			<View style={{ marginTop: 10 }}>
