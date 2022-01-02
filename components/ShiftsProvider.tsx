@@ -58,15 +58,15 @@ const ShiftsProvider: FC = ({ children }) => {
 	};
 	const [shiftList, setShiftList] = useState<shift[]>([]);
 	const [loading, setLoading] = useState(true);
+	useEffect(() => {
+		shiftList.forEach((i, x) => (i.index = x));
+	}, [shiftList.length]);
 	const refreshFromStorage = async () => {
 		const savedShiftsRetrieved = await AsyncStorage.getItem('savedShifts');
 		setLoading(false);
 		if (savedShiftsRetrieved) {
 			const convertedShifts = JSON.parse(savedShiftsRetrieved);
 			setShiftList(convertedShifts.shifts);
-			convertedShifts.shifts.forEach((i: shift, x: number) => {
-				i.index = x;
-			});
 		} else {
 			const defaultStorage = {
 				shifts: [],
@@ -92,7 +92,6 @@ const ShiftsProvider: FC = ({ children }) => {
 		}
 		if (isDelete(action)) {
 			shiftList.splice(action.value.index, 1);
-			shiftList.forEach((i, x) => (i.index = x));
 			await saveShiftLogStorage();
 		}
 		if (isEdit(action)) {
