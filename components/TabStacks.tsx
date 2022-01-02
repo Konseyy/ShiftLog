@@ -11,7 +11,13 @@ const DataStack = createNativeStackNavigator<DataStackParamList>();
 const SettingsStack = createNativeStackNavigator<SettingsStackParamList>();
 export const ShiftsScene = () => {
 	return (
-		<ShiftStack.Navigator>
+		<ShiftStack.Navigator
+			screenOptions={({ route }) => {
+				return {
+					headerShown: false,
+				};
+			}}
+		>
 			{ShiftTab.map((scene) => {
 				return (
 					<ShiftStack.Screen
@@ -27,7 +33,13 @@ export const ShiftsScene = () => {
 };
 export const DataScene = () => {
 	return (
-		<DataStack.Navigator>
+		<DataStack.Navigator
+			screenOptions={({ route }) => {
+				return {
+					headerShown: false,
+				};
+			}}
+		>
 			{DataTab.map((scene) => {
 				return (
 					<DataStack.Screen
