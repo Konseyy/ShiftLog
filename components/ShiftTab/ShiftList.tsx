@@ -99,10 +99,10 @@ const ShiftList: React.FC<ShiftListProps> = ({ navigation }) => {
 				});
 				break;
 			case 'all':
-				returnData = data;
+				returnData = [...data];
 				break;
 			default:
-				returnData = data;
+				returnData = [...data];
 				break;
 		}
 		returnData.sort((first, second) => {
