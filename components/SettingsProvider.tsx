@@ -1,4 +1,5 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import { Appearance } from 'react-native';
 import React, {
 	createContext,
 	FC,
@@ -6,16 +7,17 @@ import React, {
 	useEffect,
 	useState,
 } from 'react';
+const systemDark = Appearance.getColorScheme() === 'dark';
 interface SettingsTemplate {
 	darkMode: boolean;
 	toggleDarkMode: () => void;
 }
 const SettingsContext = createContext<SettingsTemplate>({
-	darkMode:false,
-	toggleDarkMode: () => {}
+	darkMode: systemDark,
+	toggleDarkMode: () => {},
 });
 const SettingsProvider: FC = ({ children }) => {
-	const [isDarkMode, setDarkMode] = useState(false);
+	const [isDarkMode, setDarkMode] = useState(systemDark);
 	const toggleDark = () => {
 		let newDark = !isDarkMode;
 		setDarkMode(newDark);
