@@ -10,7 +10,7 @@ interface Props {
 const CircleButton: FC<Props> = ({
 	onPress,
 	backgroundColor,
-	height=60,
+	height = 60,
 	centerElement,
 	style,
 }) => {

@@ -1,5 +1,12 @@
 import React, { useEffect, useState, FC } from 'react';
-import { View, Text, TextInput, TouchableOpacity, Alert, Image } from 'react-native';
+import {
+	View,
+	Text,
+	TextInput,
+	TouchableOpacity,
+	Alert,
+	Image,
+} from 'react-native';
 import { Picker } from '@react-native-picker/picker';
 import DateTimePicker, { Event } from '@react-native-community/datetimepicker';
 import {
@@ -359,28 +366,6 @@ const AddShift: FC<AddShiftProps> = ({ navigation, route }) => {
 					</View>
 				</View>
 			</View>
-			{/* <Button title="Save" onPress={()=>addShift()}/> */}
-			{/* <TouchableOpacity
-				onPress={() => addShift()}
-				style={{
-					position: 'absolute',
-					right: 15,
-					bottom: 15,
-				}}
-			>
-				<View
-					style={{
-						backgroundColor: colors.buttonBlue,
-						paddingVertical: 7,
-						paddingHorizontal: 18,
-						borderRadius: 8,
-					}}
-				>
-					<Text style={{ fontSize: 18, color: 'white', fontWeight: 'bold' }}>
-						Save
-					</Text>
-				</View>
-			</TouchableOpacity> */}
 			<CircleButton
 				backgroundColor={colors.buttonBlue}
 				onPress={addShift}
@@ -391,10 +376,10 @@ const AddShift: FC<AddShiftProps> = ({ navigation, route }) => {
 							tintColor: 'white',
 							position: 'absolute',
 							alignSelf: 'center',
-							height:30,
-							width:30
+							height: 30,
+							width: 30,
 						}}
-						source={require("../../img/icons-checkmark.png")}
+						source={require('../../img/icons-checkmark.png')}
 					/>
 				}
 			/>

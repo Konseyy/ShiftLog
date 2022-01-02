@@ -45,7 +45,7 @@ const ShiftItem = ({ item, deleteShift, editShift }: Props) => {
 				softHaptic();
 				setExpanded(!expanded);
 			}}
-			onLongPress={()=>editShift(ShiftData.index)}
+			onLongPress={() => editShift(ShiftData.index)}
 			delayLongPress={500}
 		>
 			<View style={{ flexDirection: 'column' }}>
