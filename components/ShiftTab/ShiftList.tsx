@@ -182,7 +182,7 @@ const ShiftList: React.FC<ShiftListProps> = ({ navigation }) => {
 						textStyle={{ fontSize: 15, color: colors.textColor }}
 						containerStyle={{
 							marginHorizontal: 10,
-							backgroundColor: colors.shiftBackground,
+							backgroundColor: colors.background,
 						}}
 						dropDownItemStyle={{
 							borderTopWidth: 0.5,
