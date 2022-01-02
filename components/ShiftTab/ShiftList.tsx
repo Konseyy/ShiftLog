@@ -9,7 +9,6 @@ import {
 } from 'react-native';
 import { softHaptic } from '../../helperFunctions/hapticFeedback';
 import { getShiftDurationInMinutes } from '../../helperFunctions/dateFormatFunctions';
-import { Picker } from '@react-native-picker/picker';
 import { ShiftListProps } from '../../types';
 import ShiftItem from './ShiftItem';
 import { shift } from '../../types';
