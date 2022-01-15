@@ -14,7 +14,7 @@ Before executing further instructions it is necessary to [set up](https://reactn
 ```npx react-native run-android```
 # Privacy Policy
 
-I built the Shift Log app as a Free app. This service is provided by Konsey at no cost and is intended for use as is.
+I built the Shift Log app as a Free app. This service is provided by me at no cost and is intended for use as is.
 
 This page is used to inform visitors regarding my policies with the collection, use, and disclosure of Personal Information if anyone decided to use my Service.
 
