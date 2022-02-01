@@ -82,13 +82,13 @@ const ExportFile: FC<ExportFileProps> = ({ navigation, route }) => {
 				});
 			}
 			saveString =
-				'Start Date, Start Time, End Date, End Time, Duration, Notes, Total time\n';
+				'Start Date, Start Time, End Date, End Time, Duration, Notes\n';
 			let minutes = 0;
 			shiftsInReport.forEach((shiftObject) => {
 				minutes += getShiftDurationInMinutes(shiftObject);
 			});
 			const totalTime = displayHoursAndMinutes(minutes);
-			shiftsInReport.forEach((shift, lineNumber) => {
+			shiftsInReport.forEach((shift) => {
 				let line = `${stringDateFromDate(
 					new Date(shift.startTime)
 				)}, ${stringTimeFromDate(
@@ -99,11 +99,10 @@ const ExportFile: FC<ExportFileProps> = ({ navigation, route }) => {
 					shift.startTime,
 					shift.endTime,
 					shift.break
-				)},"${shift.notes.length ? shift.notes : ''}"${
-					lineNumber === 0 ? ',' + totalTime : ''
-				}\n`;
+				)},"${shift.notes.length ? shift.notes : ''}"\n`;
 				saveString += line;
 			});
+			saveString += `Total:, ${totalTime}\n`;
 		} else if (actionState === 'backup') {
 			if (periodFilter === 'all') {
 				saveString = JSON.stringify(shifts);
